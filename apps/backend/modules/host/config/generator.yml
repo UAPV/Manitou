@@ -14,8 +14,15 @@ generator:
     config:
       actions: ~
       fields:  ~
-      list:    ~
-      filter:  ~
+      list:
+        title: Gestion des machines
+        display: [=hostname, ip_address, mac_address]
+        max_per_page: 50
+        batch_actions:
+          _delete:    ~
+          deploy: { label: Deployer les images }
+      filter:
+        display: [profile_id, room_id, ip_address, mac_address, pxe_file_id]
       form:    ~
       edit:    ~
       new:     ~

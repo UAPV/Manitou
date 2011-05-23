@@ -19,4 +19,12 @@
  */
 class Host extends BaseHost {
 
+  public function __toString () {
+    return $this->getHostname ();
+  }
+
+  public function getHostname () {
+    return $this->getProfile().'-'.$this->getRoom ().'-'.$this->getNumber ();
+  }
+
 } // Host

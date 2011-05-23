@@ -14,7 +14,9 @@ generator:
     config:
       actions: ~
       fields:  ~
-      list:    ~
+      list:
+        title: Gestion des fichiers PXE
+        display: [=filename]
       filter:  ~
       form:    ~
       edit:    ~

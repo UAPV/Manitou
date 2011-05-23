@@ -19,4 +19,8 @@
  */
 class Room extends BaseRoom {
 
+  public function __toString () {
+    return $this->getName ();
+  }
+
 } // Room

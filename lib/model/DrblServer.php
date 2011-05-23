@@ -19,4 +19,8 @@
  */
 class DrblServer extends BaseDrblServer {
 
+  public function __toString () {
+    return $this->getName ();
+  }
+
 } // DrblServer
