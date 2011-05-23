@@ -1,0 +1,33 @@
+propel:
+
+  drbl_server:
+    id: ~
+    name: { type: varchar, size: 30 }
+    host: { type: varchar,size: 30 }
+
+  room:
+    id: ~
+    name: { type: varchar, size: 30 }
+    drbl_server_id: ~
+
+  host:
+    id: ~
+    profile_id: ~
+    room_id: ~
+    number:         { type: varchar, size: 10 }
+    ip_address:     { type: char, size: 15, required: true }
+    mac_address:    { type: char, size: 17, required: true }
+    comment:        { type: longvarchar }
+    custom_conf:    { type: longvarchar }
+    pxe_file_id: ~
+    created_at: ~
+    updated_at: ~
+
+  profile:
+    id: ~
+    name: { type: varchar, size: 20 }
+
+  pxe_file:
+    id: ~
+    filename: { type: varchar, size: 50 }
+
