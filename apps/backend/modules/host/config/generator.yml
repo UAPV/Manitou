@@ -1,0 +1,21 @@
+generator:
+  class: sfPropelGenerator
+  param:
+    model_class:           Host
+    theme:                 admin15
+    non_verbose_templates: true
+    with_show:             false
+    singular:              Host
+    plural:                Hosts
+    route_prefix:          host
+    with_propel_route:     1
+    actions_base_class:    sfActions
+
+    config:
+      actions: ~
+      fields:  ~
+      list:    ~
+      filter:  ~
+      form:    ~
+      edit:    ~
+      new:     ~

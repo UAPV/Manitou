@@ -1,0 +1,21 @@
+generator:
+  class: sfPropelGenerator
+  param:
+    model_class:           DrblServer
+    theme:                 admin15
+    non_verbose_templates: true
+    with_show:             false
+    singular:              DrblServer
+    plural:                DrblServers
+    route_prefix:          drbl_server
+    with_propel_route:     1
+    actions_base_class:    sfActions
+
+    config:
+      actions: ~
+      fields:  ~
+      list:    ~
+      filter:  ~
+      form:    ~
+      edit:    ~
+      new:     ~
