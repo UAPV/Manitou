@@ -1,0 +1,65 @@
+DrblServer:
+  DrblServer_1:
+    name: 'Centre ville'
+    host: drbl01c
+  DrblServer_2:
+    name: Agroparc
+    host: drbl02c
+Room:
+  Room_1:
+    name: 2W18
+    drbl_server_id: DrblServer_1
+  Room_2:
+    name: 2W19
+    drbl_server_id: DrblServer_1
+  Room_3:
+    name: station1
+    drbl_server_id: DrblServer_2
+  Room_4:
+    name: station2
+    drbl_server_id: DrblServer_2
+PxeFile:
+  PxeFile_1:
+    filename: /usr/local/pxe/boot1.pxe
+  PxeFile_2:
+    filename: /usr/local/pxe/boot2.pxe
+Profile:
+  Profile_1:
+    name: etd
+  Profile_2:
+    name: adm
+  Profile_3:
+    name: ens
+Host:
+  Host_1:
+    profile_id: Profile_1
+    room_id: Room_1
+    number: '108'
+    ip_address: 192.168.1.108
+    mac_address: '00:00:00:00:00:00'
+    comment: ''
+    custom_conf: ''
+    created_at: '2011-05-23 22:08:23'
+    updated_at: '2011-05-23 22:08:23'
+  Host_2:
+    profile_id: Profile_2
+    room_id: Room_2
+    number: '1'
+    ip_address: 192.168.1.1
+    mac_address: '00:00:00:00:00:00'
+    comment: ''
+    custom_conf: ''
+    pxe_file_id: PxeFile_2
+    created_at: '2011-05-23 22:24:11'
+    updated_at: '2011-05-23 22:24:15'
+  Host_3:
+    profile_id: Profile_2
+    room_id: Room_2
+    number: 1bis
+    ip_address: 192.168.1.1
+    mac_address: '00:00:00:00:00:00'
+    comment: ''
+    custom_conf: ''
+    pxe_file_id: PxeFile_2
+    created_at: '2011-05-23 22:25:26'
+    updated_at: '2011-05-23 22:25:26'
