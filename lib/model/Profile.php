@@ -19,4 +19,12 @@
  */
 class Profile extends BaseProfile {
 
+  public function __toString () {
+    return $this->getName ();
+  }
+
+  public function setName ($name) {
+    return parent::setName (strtolower ($name));
+  }
+
 } // Profile

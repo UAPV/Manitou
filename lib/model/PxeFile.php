@@ -19,4 +19,8 @@
  */
 class PxeFile extends BasePxeFile {
 
+  public function __toString () {
+    return $this->getFilename ();
+  }
+
 } // PxeFile
