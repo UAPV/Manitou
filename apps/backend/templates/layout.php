@@ -5,6 +5,8 @@
     <?php include_metas() ?>
     <?php include_title() ?>
     <link rel="shortcut icon" href="/favicon.ico" />
+    <?php use_stylesheet('/sfPropel15Plugin/css/default.css') ?>
+    <?php use_stylesheet('/sfPropel15Plugin/css/global.css') ?>
     <?php use_stylesheet('admin.css') ?>
     <?php include_stylesheets() ?>
     <?php include_javascripts() ?>
@@ -19,6 +21,7 @@
         <li><?php echo link_to ('Hôtes DRBL', 'drbl_server') ?></li>
         <li><?php echo link_to ('Subnets', 'subnet') ?></li>
         <li><?php echo link_to ('Fichiers PXE', 'pxe_file') ?></li>
+        <li><?php echo link_to ('Conf Dhcp', 'dhcpd/index') ?></li>
       </ul>
     </div>
     <div id="content">
