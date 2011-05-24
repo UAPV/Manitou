@@ -1,5 +1,11 @@
 propel:
 
+  subnet:
+    id: ~
+    name: { type: varchar, size: 30 }
+    ip_address: { type: char, size: 15, required: true }
+    netmask:    { type: char, size: 15, required: true }
+
   drbl_server:
     id: ~
     name: { type: varchar, size: 30 }
@@ -19,6 +25,7 @@ propel:
     mac_address:    { type: char, size: 17, required: true }
     comment:        { type: longvarchar }
     custom_conf:    { type: longvarchar }
+    subnet_id: ~
     pxe_file_id: ~
     created_at: ~
     updated_at: ~
@@ -31,3 +38,8 @@ propel:
     id: ~
     filename: { type: varchar, size: 50 }
 
+  image:
+    id: ~
+    name:     { type: varchar, size: 30 }
+    filename: { type: varchar,size: 50 }
+    restart:  { type: boolean, default: true }

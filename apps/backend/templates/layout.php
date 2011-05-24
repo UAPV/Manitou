@@ -17,6 +17,7 @@
         <li><?php echo link_to ('Salles', 'room') ?></li>
         <li><?php echo link_to ('Profils', 'profile') ?></li>
         <li><?php echo link_to ('Hôtes DRBL', 'drbl_server') ?></li>
+        <li><?php echo link_to ('Subnets', 'subnet') ?></li>
         <li><?php echo link_to ('Fichiers PXE', 'pxe_file') ?></li>
       </ul>
     </div>

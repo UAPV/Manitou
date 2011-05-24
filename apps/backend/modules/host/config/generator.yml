@@ -20,7 +20,12 @@ generator:
         max_per_page: 50
         batch_actions:
           _delete:    ~
-          deploy: { label: Deployer les images }
+          restore:    { label: Restaurer une image }
+          ping:       { label: Tester le DNS et l\'état des machines }
+        object_actions:
+          extend:     { label: Créer une image }
+          _edit:      ~
+          _delete:    ~
       filter:
         display: [profile_id, room_id, ip_address, mac_address, pxe_file_id]
       form:    ~
