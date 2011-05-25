@@ -6,14 +6,23 @@ body {
 	padding: 30px;
 }
 #header {
-	padding-top: 10px;
-	padding-bottom: 10px;
-	background: rgba(0, 0, 0, 0.8);
+    padding-left: 80px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	background: rgba(0, 0, 0, 0.8) url(../images/logo.png) no-repeat 15px  center;
 }
 #header h1 {
-	margin: 0; padding: 0;
-	color: #DDD;
-	text-shadow: 2px 2px 2px #000;
+    font-family: 'Carter One', serif;
+	margin: 0; padding: 0 0 5px 0;
+	color: #EEE;
+	text-shadow: 1px 1px 1px #000;
+    font-weight: normal;
+    font-size: 1.5em;
+}
+#header h1 #remi-joke {
+    padding-left: 10px;
+    color: #111;
+	text-shadow: 1px 1px 1px #555;
 }
 #header ul {
 	margin: 0;
@@ -23,13 +32,14 @@ body {
 	padding-right: 10px;
 }
 #header ul li + li {
-	border-left: 1px solid rgba(255,255,255,.2);
+	border-left: 1px solid #181818;
 	padding-left: 10px;
 }
 #header ul li a {
 	text-decoration: none;
-	text-shadow: 2px 2px 2px #000;
-	color: #268BCC;
+	text-shadow: 1px 1px 1px #000;
+	color: #888;
+    font-weight: bold;
 }
 #header ul li a:hover {
 	color: white;
