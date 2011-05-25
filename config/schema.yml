@@ -3,8 +3,11 @@ propel:
   subnet:
     id: ~
     name: { type: varchar, size: 30 }
-    ip_address: { type: char, size: 15, required: true }
-    netmask:    { type: char, size: 15, required: true }
+    ip_address: { type: varchar, size: 15, required: true }
+    netmask:    { type: varchar, size: 15, required: true }
+    server_interface:  { type: varchar, size: 5,  required: true }
+    drbl_server_id: ~
+    pxe_file_id: ~
 
   drbl_server:
     id: ~
@@ -14,7 +17,6 @@ propel:
   room:
     id: ~
     name: { type: varchar, size: 30 }
-    drbl_server_id: ~
 
   host:
     id: ~
