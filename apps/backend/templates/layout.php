@@ -10,10 +10,11 @@
     <?php use_stylesheet('admin.css') ?>
     <?php include_stylesheets() ?>
     <?php include_javascripts() ?>
+    <link  href="http://fonts.googleapis.com/css?family=Carter+One:regular" rel="stylesheet" type="text/css" >
   </head>
   <body>
     <div id="header">
-      <h1>DRBL Admin</h1>
+      <h1>Manitou ! <span id="remi-joke">mais pas n'importe quoi !</span></h1>
       <ul>
         <li><?php echo link_to ('Machines', 'host') ?></li>
         <li><?php echo link_to ('Salles', 'room') ?></li>
