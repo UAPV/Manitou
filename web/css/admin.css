@@ -1,4 +1,14 @@
 
+h1 {
+    font-family: 'Carter One', serif;
+    font-weight: normal;
+    color: #555;
+	text-shadow: 2px 2px 0px #FFF;
+    font-size: 1.6em;
+}
+h2 {
+}
+
 body {
 	padding: 0;
 }
@@ -9,20 +19,18 @@ body {
     padding-left: 80px;
 	padding-top: 15px;
 	padding-bottom: 15px;
-	background: rgba(0, 0, 0, 0.8) url(../images/logo.png) no-repeat 15px  center;
+	background: rgba(0, 0, 0, 0.75) url(../images/logo.png) no-repeat 15px  center;
 }
 #header h1 {
-    font-family: 'Carter One', serif;
 	margin: 0; padding: 0 0 5px 0;
 	color: #EEE;
 	text-shadow: 1px 1px 1px #000;
-    font-weight: normal;
     font-size: 1.5em;
 }
 #header h1 #remi-joke {
     padding-left: 10px;
     color: #111;
-	text-shadow: 1px 1px 1px #555;
+	text-shadow: 1px 1px 0px #555;
 }
 #header ul {
 	margin: 0;

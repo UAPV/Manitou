@@ -6,10 +6,10 @@ propel:
     ip_address: { type: varchar, size: 15, required: true }
     netmask:    { type: varchar, size: 15, required: true }
     server_interface:  { type: varchar, size: 5,  required: true }
-    drbl_server_id: ~
+    image_server_id: ~
     pxe_file_id: ~
 
-  drbl_server:
+  image_server:
     id: ~
     name: { type: varchar, size: 30 }
     host: { type: varchar,size: 30 }
@@ -17,6 +17,8 @@ propel:
   room:
     id: ~
     name: { type: varchar, size: 30 }
+    subnet_id: ~
+    ip_address: { type: char, size: 15, required: true }
 
   host:
     id: ~
@@ -27,7 +29,6 @@ propel:
     mac_address:    { type: char, size: 17, required: true }
     comment:        { type: longvarchar }
     custom_conf:    { type: longvarchar }
-    subnet_id: ~
     pxe_file_id: ~
     created_at: ~
     updated_at: ~
@@ -38,6 +39,7 @@ propel:
 
   pxe_file:
     id: ~
+    name:     { type: varchar, size: 50 }
     filename: { type: varchar, size: 50 }
 
   image:
@@ -45,3 +47,15 @@ propel:
     name:     { type: varchar, size: 30 }
     filename: { type: varchar,size: 50 }
     restart:  { type: boolean, default: true }
+
+  command:
+    id: ~
+    created_at:   ~
+    updated_at:   ~ # date de fin d'exécution en théorie...
+    command:      { type: varchar, size: 200 }
+    std_out_file: { type: varchar,size: 50 }
+    std_err_file: { type: varchar,size: 50 }
+    std_out:      { type: longvarchar }
+    std_err:      { type: longvarchar }
+    return_code:  { type: smallint, default: null }
+    user_id:      { type: integer }

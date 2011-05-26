@@ -19,7 +19,7 @@
         <li><?php echo link_to ('Machines', 'host') ?></li>
         <li><?php echo link_to ('Salles', 'room') ?></li>
         <li><?php echo link_to ('Profils', 'profile') ?></li>
-        <li><?php echo link_to ('Hôtes DRBL', 'drbl_server') ?></li>
+        <li><?php echo link_to ('Serveurs d\'image', 'image_server') ?></li>
         <li><?php echo link_to ('Subnets', 'subnet') ?></li>
         <li><?php echo link_to ('Fichiers PXE', 'pxe_file') ?></li>
         <li><?php echo link_to ('Conf Dhcp', 'dhcpd/index') ?></li>

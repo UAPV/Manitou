@@ -1,3 +1,12 @@
+image_server:
+  class: sfPropel15RouteCollection
+  options:
+    model:                ImageServer
+    module:               image_server
+    prefix_path:          /image_server
+    column:               id
+    with_wildcard_routes: true
+
 subnet:
   class: sfPropel15RouteCollection
   options:
@@ -43,17 +52,23 @@ room:
     column:               id
     with_wildcard_routes: true
 
-drbl_server:
-  class: sfPropel15RouteCollection
-  options:
-    model:                DrblServer
-    module:               drbl_server
-    prefix_path:          /drbl_server
-    column:               id
-    with_wildcard_routes: true
+command_start:
+  url:     /command/:id
+  class:   sfPropel15Route
+  options: { model: Command, type: object }
+  param:   { module: command, action: start }
+  requirements:
+    id: \d+
+    sf_method: [get]
 
-# You can find more information about this file on the symfony website:
-# http://www.symfony-project.org/reference/1_4/en/10-Routing
+command_stop:
+  url:     /command/:id
+  class:   sfPropel15Route
+  options: { model: Command, type: object }
+  param:   { module: command, action: stop }
+  requirements:
+    id: \d+
+    sf_method: [get]
 
 # default rules
 homepage:

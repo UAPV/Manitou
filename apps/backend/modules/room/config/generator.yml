@@ -16,7 +16,7 @@ generator:
       fields:  ~
       list:
         title: Gestion des salles
-        display: [=name, drbl_server]
+        display: [=name, subnet, ip_address]
       filter:  ~
       form:    ~
       edit:    ~

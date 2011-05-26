@@ -1,11 +1,11 @@
-DrblServer:
-  DrblServer_1:
+ImageServer:
+  ImageServer_1:
     name: Maquette
     host: drbl00c.univ-avignon.fr
-  DrblServer_11:
+  ImageServer_2:
     name: CERI
     host: drbl01a.univ-avignon.fr
-  DrblServer_21:
+  ImageServer_3:
     name: 'Centre ville'
     host: drbl01c.univ-avignon.fr
 Subnet:
@@ -14,40 +14,61 @@ Subnet:
     ip_address: 10.4.0.0
     netmask: 255.255.0.0
     server_interface: eth1
-    drbl_server_id: DrblServer_21
-  Subnet_11:
+    image_server_id: ImageServer_3
+  Subnet_2:
     name: pasnet-cv
     ip_address: 10.3.0.0
     netmask: 255.255.0.0
     server_interface: eth1
-    drbl_server_id: DrblServer_21
-  Subnet_21:
+    image_server_id: ImageServer_3
+  Subnet_3:
     name: ens
     ip_address: 195.83.164.0
     netmask: 255.255.255.0
     server_interface: eth1
-    drbl_server_id: DrblServer_21
-  Subnet_31:
+    image_server_id: ImageServer_3
+  Subnet_4:
     name: rec
     ip_address: 195.83.163.0
     netmask: 255.255.255.0
     server_interface: eth1
-    drbl_server_id: DrblServer_21
-  Subnet_41:
+    image_server_id: ImageServer_3
+  Subnet_5:
     name: etd-agro
     ip_address: 10.104.0.0
     netmask: 255.255.0.0
     server_interface: eth0
-    drbl_server_id: DrblServer_11
-  Subnet_51:
+    image_server_id: ImageServer_2
+  Subnet_6:
     name: captif-fil-agro
     ip_address: 10.120.0.0
     netmask: 255.255.0.0
     server_interface: eth0
-    drbl_server_id: DrblServer_11
-  Subnet_61:
+    image_server_id: ImageServer_2
+  Subnet_7:
     name: 'Maquette 1'
     ip_address: 10.4.0.0
     netmask: 255.255.0.0
     server_interface: eth0
-    drbl_server_id: DrblServer_1
+    image_server_id: ImageServer_1
+Room:
+  Room_1:
+    name: 2W28
+    subnet_id: Subnet_1
+    ip_address: 10.4.228.0
+Profile:
+  Profile_1:
+    name: etd
+  Profile_2:
+    name: adm
+Host:
+  Host_1:
+    profile_id: Profile_1
+    room_id: Room_1
+    number: '101'
+    ip_address: 10.4.228.101
+    mac_address: '00:00:00:00:00'
+    comment: test
+    custom_conf: ''
+    created_at: '2011-05-25 22:52:29'
+    updated_at: '2011-05-25 22:52:29'
