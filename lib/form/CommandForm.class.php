@@ -1,13 +1,13 @@
 <?php
 
 /**
- * DrblServer form.
+ * Command form.
  *
- * @package    Arnaud Didry <arnaud.didry@univ-avignon.fr>
+ * @package    DRBL Admin 2
  * @subpackage form
  * @author     Arnaud Didry <arnaud.didry@univ-avignon.fr>
  */
-class DrblServerForm extends BaseDrblServerForm
+class CommandForm extends BaseCommandForm
 {
   public function configure()
   {

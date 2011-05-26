@@ -1,0 +1,4 @@
+all:
+  manitou:
+    create_image_command:  /media/data/dev/drbladmin2/t.sh
+    restore_image_command: /media/data/dev/drbladmin2/t.sh

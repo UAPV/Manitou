@@ -19,4 +19,8 @@
  */
 class Subnet extends BaseSubnet {
 
+  public function __toString () {
+    return $this->getName ();
+  }
+  
 } // Subnet

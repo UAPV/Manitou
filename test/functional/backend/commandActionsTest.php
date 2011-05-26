@@ -5,10 +5,10 @@ include(dirname(__FILE__).'/../../bootstrap/functional.php');
 $browser = new sfTestFunctional(new sfBrowser());
 
 $browser->
-  get('/image_server/index')->
+  get('/command/index')->
 
   with('request')->begin()->
-    isParameter('module', 'image_server')->
+    isParameter('module', 'command')->
     isParameter('action', 'index')->
   end()->
 

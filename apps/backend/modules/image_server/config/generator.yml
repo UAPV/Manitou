@@ -1,22 +1,20 @@
 generator:
   class: sfPropelGenerator
   param:
-    model_class:           DrblServer
+    model_class:           ImageServer
     theme:                 admin15
     non_verbose_templates: true
     with_show:             false
-    singular:              DrblServer
-    plural:                DrblServers
-    route_prefix:          drbl_server
+    singular:              ImageServer
+    plural:                ImageServers
+    route_prefix:          image_server
     with_propel_route:     1
     actions_base_class:    sfActions
 
     config:
       actions: ~
       fields:  ~
-      list:
-        title: Gestion des serveurs DRBL
-        display: [=name, host]
+      list:    ~
       filter:  ~
       form:    ~
       edit:    ~

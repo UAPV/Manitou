@@ -23,7 +23,7 @@ generator:
           restore:    { label: Restaurer une image }
           ping:       { label: Tester le DNS et l\'état des machines }
         object_actions:
-          extend:     { label: Créer une image }
+          createImage:     { label: Créer une image }
           _edit:      ~
           _delete:    ~
       filter:

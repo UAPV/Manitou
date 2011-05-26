@@ -28,4 +28,23 @@ class hostActions extends autoHostActions
     $filename = sfConfig::get('sf_data_dir').'/dhcpd/dhcpd.conf';
     file_put_contents ($filename, $conf);
   }
+
+  public function executeListCreateImage(sfWebRequest $request)
+  {
+    $host = $this->getRoute()->getObject();
+
+    $script = sfConfig::get('sf_manitou_create_image_command');
+
+    $command = new Command();
+    $command->setCommand($script);
+    // $command->setUserId (); // TODO
+    $command->save();
+
+    // Kind of fork... pour éviter de se casser la tête avec pcntl_fork
+    $startUrl = $this->getContext()->getController()->genUrl('@command_start?id='.$command->getId(), true);
+    exec ('wget "'.$startUrl."\"  > /dev/null &");
+
+    $this->getUser()->setFlash('notice', 'La commande création a été lancée, vérifiez les logs.');
+    $this->redirect('host');
+  }
 }

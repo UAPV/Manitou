@@ -14,7 +14,9 @@ generator:
     config:
       actions: ~
       fields:  ~
-      list:    ~
+      list:
+        title: Gestion des subnets
+        display: [=name, ip_address, netmask, server_interface, image_server, pxe_file]
       filter:  ~
       form:    ~
       edit:    ~
