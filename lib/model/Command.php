@@ -20,10 +20,13 @@
 class Command extends BaseCommand {
 
   /**
-   * Exécute la commande en créant un fork et en redirigeant la sortie standart et d'errreur vers
-   * des fichiers temporaires.
+   * Exécute la commande en redirigeant la sortie standart et d'errreur vers
+   * des fichiers temporaires afin de pouvoir surveiller leur contenu en "temps réel".
    *
-   * Enregistre la commande en base également
+   * Une fois la commande terminée, son résultat est sauvegardé en BDD et les fichiers
+   * temporaires sont supprimés.
+   *
+   * Cette fonction est potentiellement bloquante !
    *
    * @return void
    */
@@ -31,6 +34,7 @@ class Command extends BaseCommand {
   {
     $this->setStdErrFile (tempnam ('/tmp','manitou_cmd_'));
     $this->setStdOutFile (tempnam ('/tmp','manitou_cmd_'));
+    $this->setStartedAt  (time());
     $this->save();
 
     $command = $this->getCommand()
@@ -39,8 +43,8 @@ class Command extends BaseCommand {
 
     exec($command, $result, $returnVal);
 
-    $this->setStdErr (file_get_contents ($this->getStdErrFile()));
-    $this->setStdOut (file_get_contents ($this->getStdOutFile()));
+    $this->setFinishedAt (time());
+    $this->syncTmpOutput ();
     $this->setReturnCode ($returnVal);
     $this->save();
 
@@ -48,9 +52,71 @@ class Command extends BaseCommand {
     unlink($this->getStdOutFile());
   }
 
+  /**
+   * Execute une commande en arrière plan et insère le résultat (code erreur, stdout stderr) en BDD.
+   *
+   * Pour ne pas avoir à utiliser pcntl_fork (module PHP à installer, mémoire partagée, connexion DB
+   * à réinitialiser, etc) on appelle en arrière plan une URL qui va exécuter un appel bloquant
+   * de la commande. C'est une bidouille mais ça marche...
+   *
+   * @return void
+   */
+  public function backgroundExec ()
+  {
+    $startUrl = sfContext::getInstance()->getController()->genUrl('@command_start?id='.$this->getId(), true);
+    exec ('wget "'.$startUrl."\"  > /dev/null &");
+  }
+
+  public function isStarted ()
+  {
+    return ($this->getStartedAt() !== null);
+  }
+
   public function isRunning ()
   {
-    return ($this->getReturnCode() === null);
+    return ($this->isStarted() && ! $this->isFinished() && ! $this->isStopped());
+  }
+
+  public function isStopped ()
+  {
+    return ($this->getFinishedAt() === null && $this->getReturnCode() !== null);
+  }
+
+  public function isFinished ()
+  {
+    return ($this->getFinishedAt() !== null);
+  }
+
+  public function hasErrors ()
+  {
+    $code = $this->getReturnCode() ;
+    
+    return (($code !== null && $code !== 0) || $this->getStdErr() != '');
+  }
+
+  public function syncTmpOutput ()
+  {
+    if (! $this->isRunning())
+      return;
+
+    $this->setStdErr (file_get_contents ($this->getStdErrFile()));
+    $this->setStdOut (file_get_contents ($this->getStdOutFile()));
+  }
+
+  public function stop ()
+  {
+    // TODO
+  }
+
+  /**
+   * @return DateInterval
+   */
+  public function getDuration ()
+  {
+    $startedAt = $this->getStartedAt(null);
+    $finishedAt = ($this->getFinishedAt() === null ? new DateTime() : $this->getFinishedAt(null));
+
+    return $finishedAt->diff($startedAt);
   }
 
 } // Command

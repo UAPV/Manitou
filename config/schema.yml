@@ -50,12 +50,12 @@ propel:
 
   command:
     id: ~
-    created_at:   ~
-    updated_at:   ~ # date de fin d'exécution en théorie...
+    started_at:   { type: timestamp }
+    finished_at:  { type: timestamp }
     command:      { type: varchar, size: 200 }
     std_out_file: { type: varchar,size: 50 }
     std_err_file: { type: varchar,size: 50 }
     std_out:      { type: longvarchar }
     std_err:      { type: longvarchar }
     return_code:  { type: smallint, default: null }
-    user_id:      { type: integer }
+    user_id:      { type: varchar,size: 50 } # user login

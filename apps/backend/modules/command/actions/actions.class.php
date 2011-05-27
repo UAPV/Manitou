@@ -11,7 +11,16 @@ class commandActions extends sfActions
 {
   public function executeIndex(sfWebRequest $request)
   {
-    $this->commands = $this->getRoute()->getCommand();
+    $this->commands = CommandQuery::create()
+        ->orderByStartedAt(Criteria::DESC)
+        ->limit(40)
+        ->find();
+
+    foreach ($this->commands as $command)
+    {
+      $command->syncTmpOutput();
+      $command->save();
+    }
   }
 
   public function executeStart (sfWebRequest $request)
@@ -24,6 +33,19 @@ class commandActions extends sfActions
   public function executeStop (sfWebRequest $request)
   {
     $this->command = $this->getRoute()->getCommand();
+    $this->command->stop();
     return sfView::NONE;
+  }
+
+  public function executeShow (sfWebRequest $request)
+  {
+    $this->command = $this->getRoute()->getCommand();
+    
+    if ($request->isXmlHttpRequest())
+    {
+      return $this->renderPartial ('commandInfo', array ('command' => $this->command));
+    }
+    else
+      return $this->renderText ('todo');
   }
 }

@@ -52,8 +52,12 @@ room:
     column:               id
     with_wildcard_routes: true
 
+command_list:
+  url:   /command
+  param: { module: command, action: index }
+
 command_start:
-  url:     /command/:id
+  url:     /command/:id/start
   class:   sfPropel15Route
   options: { model: Command, type: object }
   param:   { module: command, action: start }
@@ -61,8 +65,17 @@ command_start:
     id: \d+
     sf_method: [get]
 
-command_stop:
+command_show:
   url:     /command/:id
+  class:   sfPropel15Route
+  options: { model: Command, type: object }
+  param:   { module: command, action: show }
+  requirements:
+    id: \d+
+    sf_method: [get]
+
+command_stop:
+  url:     /command/:id/stop
   class:   sfPropel15Route
   options: { model: Command, type: object }
   param:   { module: command, action: stop }
@@ -73,7 +86,7 @@ command_stop:
 # default rules
 homepage:
   url:   /
-  param: { module: default, action: index }
+  param: { module: command, action: index }
 
 # generic rules
 # please, remove them by adding more specific rules
