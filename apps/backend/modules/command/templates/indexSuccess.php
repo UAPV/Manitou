@@ -12,12 +12,16 @@
     function updateRunningCommands () {
       $('#command_list li.is_running').each (function (e, command) {
         $.get ('<?php echo url_for('@command_list') ?>/'+$(command).data('commandId'), function (data) {
-          $(command).replaceWith(data);
+          newItem = $(data);
+          $(command).replaceWith(newItem);
+          $('.commandline, .stderr, .stdout', newItem).each (function () {
+              $(this).scrollTop ($('pre', this).outerHeight());
+          });
         });
       });
     }
 
-    setInterval (updateRunningCommands, 2000);
+    setInterval (updateRunningCommands, 1000);
 
   });
 

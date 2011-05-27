@@ -2,7 +2,8 @@
       data-command-id="<?php echo $command->getId() ?>">
     <p class="process_status">
       <?php if ($command->isRunning ()): ?>
-        En cours depuis <?php echo $command->getDuration()->format('%i min %s sec') ?>
+        En cours depuis <?php echo ($min = floor ($command->getDuration() / 60)) > 0 ? ($min.'min') : '' ?> <?php echo $command->getDuration() % 60 ?>sec 
+
         <a href="#">Arrêter</a>
       <?php elseif ($command->isFinished ()): ?>
         Terminée à <?php echo $command->getFinishedAt ('H:i:s') ?> [CODE <?php echo $command->getReturnCode() ?>]
@@ -16,9 +17,9 @@
     </p>
     <pre class="commandline"><?php echo $command->getCommand () ?></pre>
     <?php if (strlen ($command->getStdErr ())): ?>
-      <pre class="stderr"     ><?php echo $command->getStdErr ()  ?></pre>
+      <div class="stderr"     ><pre><?php echo $command->getStdErr ()  ?></pre></div>
     <?php endif ?>
     <?php if (strlen ($command->getStdOut ())): ?>
-      <pre class="stdout"     ><?php echo $command->getStdOut ()  ?></pre>
+      <div class="stdout"     ><pre><?php echo $command->getStdOut ()  ?></pre></div>
     <?php endif ?>
   </li>

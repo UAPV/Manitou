@@ -43,8 +43,8 @@ class Command extends BaseCommand {
 
     exec($command, $result, $returnVal);
 
-    $this->setFinishedAt (time());
     $this->syncTmpOutput ();
+    $this->setFinishedAt (time());
     $this->setReturnCode ($returnVal);
     $this->save();
 
@@ -109,14 +109,14 @@ class Command extends BaseCommand {
   }
 
   /**
-   * @return DateInterval
+   * @return integer Durée en secondes
    */
   public function getDuration ()
   {
-    $startedAt = $this->getStartedAt(null);
-    $finishedAt = ($this->getFinishedAt() === null ? new DateTime() : $this->getFinishedAt(null));
+    $startedAt = strtotime ($this->getStartedAt());
+    $finishedAt = ($this->getFinishedAt() === null ? time() : strtotime($this->getFinishedAt()));
 
-    return $finishedAt->diff($startedAt);
+    return ($finishedAt - $startedAt);
   }
 
 } // Command
