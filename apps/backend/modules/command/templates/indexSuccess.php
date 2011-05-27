@@ -1,36 +1,24 @@
-<h1>Commands List</h1>
+<h1>Commandes exécutées</h1>
+<ul id="command_list">
+  <?php foreach ($commands as $command): ?>
+    <?php include_partial('commandInfo', array('command' => $command)) ?>
+  <?php endforeach; ?>
+</ul>
 
-<table>
-  <thead>
-    <tr>
-      <th>Id</th>
-      <th>Created at</th>
-      <th>Updated at</th>
-      <th>Command</th>
-      <th>Std out file</th>
-      <th>Std err file</th>
-      <th>Std out</th>
-      <th>Std err</th>
-      <th>Return code</th>
-      <th>User</th>
-    </tr>
-  </thead>
-  <tbody>
-    <?php foreach ($Commands as $Command): ?>
-    <tr>
-      <td><a href="<?php echo url_for('command/show?id='.$Command->getId()) ?>"><?php echo $Command->getId() ?></a></td>
-      <td><?php echo $Command->getCreatedAt() ?></td>
-      <td><?php echo $Command->getUpdatedAt() ?></td>
-      <td><?php echo $Command->getCommand() ?></td>
-      <td><?php echo $Command->getStdOutFile() ?></td>
-      <td><?php echo $Command->getStdErrFile() ?></td>
-      <td><?php echo $Command->getStdOut() ?></td>
-      <td><?php echo $Command->getStdErr() ?></td>
-      <td><?php echo $Command->getReturnCode() ?></td>
-      <td><?php echo $Command->getUserId() ?></td>
-    </tr>
-    <?php endforeach; ?>
-  </tbody>
-</table>
+<script type="text/javascript">
 
-  <a href="<?php echo url_for('command/new') ?>">New</a>
+  $(document).ready (function () {
+
+    function updateRunningCommands () {
+      $('#command_list li.is_running').each (function (e, command) {
+        $.get ('<?php echo url_for('@command_list') ?>/'+$(command).data('commandId'), function (data) {
+          $(command).replaceWith(data);
+        });
+      });
+    }
+
+    setInterval (updateRunningCommands, 2000);
+
+  });
+
+</script>

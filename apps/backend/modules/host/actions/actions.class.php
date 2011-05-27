@@ -39,12 +39,9 @@ class hostActions extends autoHostActions
     $command->setCommand($script);
     // $command->setUserId (); // TODO
     $command->save();
-
-    // Kind of fork... pour éviter de se casser la tête avec pcntl_fork
-    $startUrl = $this->getContext()->getController()->genUrl('@command_start?id='.$command->getId(), true);
-    exec ('wget "'.$startUrl."\"  > /dev/null &");
+    $command->backgroundExec ();
 
     $this->getUser()->setFlash('notice', 'La commande création a été lancée, vérifiez les logs.');
-    $this->redirect('host');
+    $this->redirect('command_list');
   }
 }

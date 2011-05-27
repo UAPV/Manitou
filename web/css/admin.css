@@ -53,3 +53,50 @@ body {
 	color: white;
 }
 
+/* logs */
+
+ul#command_list {
+    padding: 0; margin: 0;
+}
+ul#command_list li {
+    padding: 0;
+    margin: 15px 0;
+    list-style: none;
+    position: relative;
+}
+ul#command_list li .process_status {
+    position: absolute;
+    top: 0px; right: 0px;
+}
+ul#command_list li .process_info ,
+ul#command_list li .process_status {
+    color: #777;
+    padding: 0;
+    margin: 0 0 3px 0;
+    font-size: 1.05em;
+    text-shadow: 2px 2px 1px #FFF;
+    font-weight: bold;
+}
+ul#command_list li pre {
+    color: #DDD;
+    background: #333;
+    margin: 0; padding: 8px;
+    max-height: 100px;
+    overflow-y: auto;
+}
+ul#command_list li pre.commandline {
+    border-left: 10px solid #73B65A;
+    color: #CCC;
+    background: #222;
+}
+ul#command_list li.is_running pre.commandline  {border-left-color: #ffd700;}
+ul#command_list li.has_errors pre.commandline  {border-left-color: #ff2222;}
+
+ul#command_list li pre.stderr {
+    color: #A00;
+    background: rgba(255, 20, 2, .1);
+}
+ul#command_list li pre.stdout {
+    color: #333;
+    background: #FFF;
+}
