@@ -40,11 +40,10 @@ class commandActions extends sfActions
   public function executeShow (sfWebRequest $request)
   {
     $this->command = $this->getRoute()->getCommand();
+    $this->command->syncTmpOutput();
     
     if ($request->isXmlHttpRequest())
-    {
       return $this->renderPartial ('commandInfo', array ('command' => $this->command));
-    }
     else
       return $this->renderText ('todo');
   }
