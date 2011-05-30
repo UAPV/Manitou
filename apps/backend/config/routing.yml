@@ -1,3 +1,12 @@
+image:
+  class: sfPropel15RouteCollection
+  options:
+    model:                Image
+    module:               image
+    prefix_path:          /image
+    column:               id
+    with_wildcard_routes: true
+
 image_server:
   class: sfPropel15RouteCollection
   options:
