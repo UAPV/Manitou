@@ -16,7 +16,7 @@ generator:
       fields:  ~
       list:
         title: Gestion des profils
-        display: [=name]
+        display: [=name, comment]
       filter:  ~
       form:    ~
       edit:    ~
