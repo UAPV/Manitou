@@ -16,9 +16,10 @@ propel:
 
   room:
     id: ~
-    name: { type: varchar, size: 30 }
-    subnet_id: ~
+    name:       { type: varchar, size: 30 }
+    subnet_id:  ~
     ip_address: { type: char, size: 15, required: true }
+    comment:    { type: longvarchar }
 
   host:
     id: ~
@@ -35,7 +36,8 @@ propel:
 
   profile:
     id: ~
-    name: { type: varchar, size: 20 }
+    name:    { type: varchar, size: 20 }
+    comment: { type: longvarchar }
 
   pxe_file:
     id: ~
