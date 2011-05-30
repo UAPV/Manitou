@@ -32,16 +32,6 @@ class hostActions extends autoHostActions
   public function executeListCreateImage(sfWebRequest $request)
   {
     $host = $this->getRoute()->getObject();
-
-    $script = sfConfig::get('sf_manitou_create_image_command');
-
-    $command = new Command();
-    $command->setCommand($script);
-    // $command->setUserId (); // TODO
-    $command->save();
-    $command->backgroundExec ();
-
-    $this->getUser()->setFlash('notice', 'La commande création a été lancée, vérifiez les logs.');
-    $this->redirect('command_list');
+    $this->redirect ('@image_new?host_id='.$host->getId());
   }
 }

@@ -1,0 +1,23 @@
+generator:
+  class: sfPropelGenerator
+  param:
+    model_class:           Image
+    theme:                 admin15
+    non_verbose_templates: true
+    with_show:             false
+    singular:              Image
+    plural:                Images
+    route_prefix:          image
+    with_propel_route:     1
+    actions_base_class:    sfActions
+
+    config:
+      actions: ~
+      fields:  ~
+      list:    ~
+      filter:  ~
+      form:    ~
+      edit:    ~
+      new:
+        actions:
+          save: { label: Créer }

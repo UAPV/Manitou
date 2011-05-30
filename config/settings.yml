@@ -1,4 +1,12 @@
 all:
   manitou:
-    create_image_command:  /media/data/dev/drbladmin2/trunk/t.sh
+    # params :
+    #   - %filename%
+    #   - %ip%
+    #   - %mac%
+    #   - %restart% (1 ou 0)
+    create_image_command:  /media/data/dev/Manitou/t.sh -f %filename% -m %mac% -i %ip% -r %restart%
+
+    # params :
+    #   - TODO
     restore_image_command: /media/data/dev/drbladmin2/trunk/t.sh
