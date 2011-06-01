@@ -7,6 +7,10 @@ image:
     column:               id
     with_wildcard_routes: true
 
+image_restore:
+  url:   /restore
+  param: { module: image, action: restore }
+
 image_server:
   class: sfPropel15RouteCollection
   options:

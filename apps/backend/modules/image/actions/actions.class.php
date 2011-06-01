@@ -42,19 +42,7 @@ class imageActions extends autoImageActions
 
       if ($isNew)
       {
-        $script = sfConfig::get('sf_manitou_create_image_command');
-        $script = str_replace(
-          array('%filename%', '%ip%', '%mac%', '%restart%'),
-          array($Image->getFilename(), $Image->getHost()->getIpAddress(), $Image->getHost()->getMacAddress(), $Image->getRestart()),
-          $script
-        );
-
-        $command = new Command();
-        $command->setCommand($script);
-        $command->setUserId ('foobar'); // TODO
-        $command->save();
-        $command->backgroundExec ();
-
+        $Image->create ();
         $this->getUser()->setFlash('notice', $notice);
         $this->redirect('command_list');
       }
@@ -68,5 +56,42 @@ class imageActions extends autoImageActions
     {
       $this->getUser()->setFlash('error', 'The item has not been saved due to some errors.', false);
     }
+  }
+
+  /**
+   * Méthode appelée pour restorer des machines
+   */
+  public function executeRestore (sfWebRequest $request)
+  {
+    $ids = $request->getParameter ('ids');
+    $this->hosts = HostQuery::create()->filterById ($ids)->find ();
+    $this->form = new RestoreForm (array ('hosts' => $ids));
+
+    if ($request->isMethod ('post'))
+    {
+      $this->form->bind($request->getParameter ($this->form->getName ()));
+      if ($this->form->isValid ())
+      {
+        $this->restore ($this->form);
+        $this->getUser()->setFlash('notice', 'La restauration a été lancée');
+        $this->redirect ('command_list');
+      }
+    }
+  }
+
+  protected function restore ($form)
+  {
+    $script = sfConfig::get('sf_manitou_restore_image_command');
+    $script = str_replace(
+      array('%image%', '%macs%'),
+      array('test.img', '"'.implode (' ', $form->getMacAddresses()).'"'),
+      $script
+    );
+
+    $command = new Command();
+    $command->setCommand($script);
+    $command->setUserId ('foobar'); // TODO
+    $command->save();
+    $command->backgroundExec ();
   }
 }

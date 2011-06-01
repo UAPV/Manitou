@@ -1,7 +1,3 @@
-### DRBL_ADMIN_CONF_START
-### DO NOT EDIT !
-
-<?php foreach ($subnets as $subnet): ?>
 
 #  <?php echo $subnet->getName() ?>
 
@@ -31,7 +27,3 @@ subnet <?php echo $subnet->getIpAddress() ?> netmask <?php echo $subnet->getNetm
   <?php endforeach ?>
 
 }
-<?php endforeach ?>
-
-### DO NOT EDIT !
-### DRBL_ADMIN_CONF_END

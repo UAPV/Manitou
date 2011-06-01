@@ -8,5 +8,14 @@ all:
     create_image_command:  /media/data/dev/Manitou/t.sh -f %filename% -m %mac% -i %ip% -r %restart%
 
     # params :
-    #   - TODO
-    restore_image_command: /media/data/dev/drbladmin2/trunk/t.sh
+    #   - %macs%    Liste des adresses MAC séparées par des virgules
+    #   - %image%   Nom du fichier image à restaurer
+    restore_image_command: /media/data/dev/drbladmin2/trunk/t.sh -m %macs% -i %image%
+
+    # Chemin absolu vers le répertoire où seront générés les fichiers de conf.
+    # Ce repertoire doit exister et doit être versionné sous svn.
+    dhcpd_conf_path: %SF_DATA_DIR%/rezodhcp/subnets
+
+    # Utilisateur svn pour la mise à jour du dépôt contenant la conf dhcp
+    svn_username: manitou
+    svn_password: m4n1t00

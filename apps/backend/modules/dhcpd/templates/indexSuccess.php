@@ -2,9 +2,9 @@
 
 <h1>Configuration générée</h1>
 
-<pre>
+<?php foreach ($dhcpdConf as $file => $conf): ?>
+  <h2><?php echo $file ?></h2>
+  <pre><?php echo $conf ?></pre>
+<?php endforeach ?>
 
-<?php echo $dhcpdConf ?>
-
-</pre>
 </div>
