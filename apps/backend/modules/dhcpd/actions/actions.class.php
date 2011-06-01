@@ -17,6 +17,8 @@ class dhcpdActions extends sfActions
   */
   public function executeIndex(sfWebRequest $request)
   {
-    $this->dhcpdConf = file_get_contents(sfConfig::get ('sf_data_dir').'/dhcpd/dhcpd.conf');
+    $this->dhcpdConf = array();
+    foreach (glob (sfConfig::get('sf_manitou_dhcpd_conf_path').'/*.conf') as $file)
+      $this->dhcpdConf [basename($file)] = file_get_contents($file);
   }
 }

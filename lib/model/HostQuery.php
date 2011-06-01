@@ -19,4 +19,16 @@
  */
 class HostQuery extends BaseHostQuery {
 
+  public function filterBySubnetId ($subnetId)
+  {
+    return $this->useRoomQuery()
+        ->filterBySubnetId ($subnetId)
+      ->endUse();
+  }
+
+  public function filterBySubnet ($subnet)
+  {
+    return $this->filterBySubnetId ($subnet->getId());
+  }
+
 } // HostQuery

@@ -6,10 +6,9 @@ require_once dirname(__FILE__).'/../lib/hostGeneratorHelper.class.php';
 /**
  * host actions.
  *
- * @package    Arnaud Didry <arnaud.didry@univ-avignon.fr>
+ * @package    Manitou
  * @subpackage host
  * @author     Arnaud Didry <arnaud.didry@univ-avignon.fr>
- * @version    SVN: $Id: actions.class.php 12474 2008-10-31 10:41:27Z fabien $
  */
 class hostActions extends autoHostActions
 {
@@ -24,14 +23,42 @@ class hostActions extends autoHostActions
     HostQuery::create ()->find (); // Juste pour remplir le cache de propel
     $subnets = SubnetQuery::create ()->find ();
 
-    $conf = $this->getPartial ('dhcpd.conf', array ('subnets' => $subnets));
-    $filename = sfConfig::get('sf_data_dir').'/dhcpd/dhcpd.conf';
-    file_put_contents ($filename, $conf);
+    $confPath = sfConfig::get('sf_manitou_dhcpd_conf_path');
+    foreach ($subnets as $subnet) {
+        $conf = $this->getPartial ('dhcpdSubnet.conf', array ('subnet' => $subnet));
+        $filename = $confPath.'/'.$subnet->getName().'.conf';
+        file_put_contents ($filename, $conf);
+    }
+
+    $script = 'cd '.$confPath.'; svn add *.conf; svn commit '
+        .' --no-auth-cache'
+        .' --non-interactive'
+        .' --username '.sfConfig::get('sf_manitou_svn_username')
+        .' --password '.sfConfig::get('sf_manitou_svn_password')
+        .' -m "manitou update"';
+
+    $command = new Command();
+    $command->setCommand($script);
+    $command->setUserId ('foobarhost'); // TODO
+    $command->save();
+    $command->backgroundExec ();
   }
 
+  /**
+   * Action exéctutée lors d'un clic sur le liens "créer une image"
+   */
   public function executeListCreateImage(sfWebRequest $request)
   {
     $host = $this->getRoute()->getObject();
     $this->redirect ('@image_new?host_id='.$host->getId());
+  }
+
+  /**
+   * Action appelée par le biais du menu déroulant sur la liste des machines
+   */
+  public function executeBatchRestore(sfWebRequest $request)
+  {
+    $ids = $request->getParameter('ids');
+    $this->redirect ($this->getContext()->getRouting()->generate('image_restore', array ('ids' => $ids)));
   }
 }
