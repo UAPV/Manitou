@@ -24,16 +24,4 @@ class Subnet extends BaseSubnet {
     return $this->getName ();
   }
 
-  /**
-   * Retourne toutes les machines dans ce subnet
-   *
-   * @return array<Host>
-   */
-  public function getHosts ()
-  {
-    return HostQuery::create ()
-      ->filterBySubnet ($this)
-      ->find();
-  }
-  
 } // Subnet

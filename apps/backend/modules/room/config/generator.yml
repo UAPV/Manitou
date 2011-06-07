@@ -16,7 +16,7 @@ generator:
       fields:  ~
       list:
         title: Gestion des salles
-        display: [=name, subnet, ip_address, comment]
+        display: [=name, comment]
       filter:  ~
       form:    ~
       edit:    ~
