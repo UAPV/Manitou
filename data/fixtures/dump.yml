@@ -54,8 +54,6 @@ Subnet:
 Room:
   Room_1:
     name: 2W28
-    subnet_id: Subnet_1
-    ip_address: 10.4.228.0
 Profile:
   Profile_1:
     name: etd
@@ -72,3 +70,4 @@ Host:
     custom_conf: ''
     created_at: '2011-05-25 22:52:29'
     updated_at: '2011-05-25 22:52:29'
+    subnet_id: Subnet_1
