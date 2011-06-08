@@ -19,4 +19,39 @@
  */
 class CommandPeer extends BaseCommandPeer {
 
+  /**
+   * Met à jour les fichiers de conf du DHCP et exécute la commande pour
+   * mettre à jour le dépôt svn.
+   *
+   * @static
+   * @return void
+   */
+  public static function runDhcpdUpdate ()
+  {
+    HostQuery::create()->find(); // Juste pour remplir le cache de propel
+    $subnets  = SubnetQuery::create ()->find ();
+    $confPath = sfConfig::get('sf_manitou_dhcpd_conf_path');
+
+    sfContext::getInstance()->getConfiguration()->loadHelpers('Partial');
+    sfConfig::set('sf_escaping_strategy', false);
+    foreach ($subnets as $subnet)
+    {
+      $filename = $confPath.'/'.$subnet->getName().'.conf';
+      file_put_contents ($filename, get_partial ('dhcpd/subnet.conf', array ('subnet' => $subnet)));
+    }
+
+    $script   = 'cd '.$confPath.'; svn add *.conf; svn commit '
+        .' --no-auth-cache'
+        .' --non-interactive'
+        .' --username '.sfConfig::get('sf_manitou_svn_username')
+        .' --password '.sfConfig::get('sf_manitou_svn_password')
+        .' -m "manitou update"';
+
+    $command = new Command();
+    $command->setCommand($script);
+    $command->setUserId ('foobarhost'); // TODO
+    $command->save();
+    $command->backgroundExec ();
+  }
+
 } // CommandPeer

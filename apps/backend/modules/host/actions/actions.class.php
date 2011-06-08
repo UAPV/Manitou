@@ -20,28 +20,7 @@ class hostActions extends autoHostActions
 
   public function updateDhcp ()
   {
-    HostQuery::create ()->find (); // Juste pour remplir le cache de propel
-    $subnets = SubnetQuery::create ()->find ();
-
-    $confPath = sfConfig::get('sf_manitou_dhcpd_conf_path');
-    foreach ($subnets as $subnet) {
-        $conf = $this->getPartial ('dhcpdSubnet.conf', array ('subnet' => $subnet));
-        $filename = $confPath.'/'.$subnet->getName().'.conf';
-        file_put_contents ($filename, $conf);
-    }
-
-    $script = 'cd '.$confPath.'; svn add *.conf; svn commit '
-        .' --no-auth-cache'
-        .' --non-interactive'
-        .' --username '.sfConfig::get('sf_manitou_svn_username')
-        .' --password '.sfConfig::get('sf_manitou_svn_password')
-        .' -m "manitou update"';
-
-    $command = new Command();
-    $command->setCommand($script);
-    $command->setUserId ('foobarhost'); // TODO
-    $command->save();
-    $command->backgroundExec ();
+    CommandPeer::runDhcpdUpdate();
   }
 
   /**
