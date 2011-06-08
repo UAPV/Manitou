@@ -3,9 +3,13 @@ propel:
   subnet:
     id: ~
     name:             { type: varchar, size: 30 }
+    domain_name:      { type: varchar, size: 30 }
+    dns_server:       { type: varchar, size: 15, required: true }
     ip_address:       { type: varchar, size: 15, required: true }
     netmask:          { type: varchar, size: 15, required: true }
     server_interface: { type: varchar, size: 5,  required: true }
+    range_begin:      { type: varchar, size: 15, required: true }
+    range_end:        { type: varchar, size: 15, required: true }
     custom_conf:      { type: longvarchar }
     image_server_id:  ~
     pxe_file_id:      ~
@@ -38,18 +42,18 @@ propel:
     id: ~
     name:    { type: varchar, size: 20 }
     comment: { type: longvarchar }
+    created_at: ~
 
   pxe_file:
     id: ~
-    name:     { type: varchar, size: 50 }
     filename: { type: varchar, size: 50 }
+    name:     { type: varchar, size: 50 }
 
   image:
     id: ~
     name:     { type: varchar, size: 30, required: true }
     filename: { type: varchar,size: 50, required: true }
-    restart:  { type: boolean, default: true }
-    host_id:  ~
+    host_id:  ~ 
 
   command:
     id: ~

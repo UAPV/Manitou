@@ -12,42 +12,70 @@ Subnet:
   Subnet_1:
     name: etd-cv
     ip_address: 10.4.0.0
+    dns_server: 195.83.163.60
+    range_begin: 195.83.163.1
+    range_end: 195.83.163.1
+    domain_name: 'univ-avignon.fr'
     netmask: 255.255.0.0
     server_interface: eth1
     image_server_id: ImageServer_3
   Subnet_2:
     name: pasnet-cv
     ip_address: 10.3.0.0
+    dns_server: 195.83.163.60
+    range_begin: 195.83.163.1
+    range_end: 195.83.163.1
+    domain_name: 'univ-avignon.fr'
     netmask: 255.255.0.0
     server_interface: eth1
     image_server_id: ImageServer_3
   Subnet_3:
     name: ens
     ip_address: 195.83.164.0
+    dns_server: 195.83.163.60
+    range_begin: 195.83.163.1
+    range_end: 195.83.163.1
+    domain_name: 'univ-avignon.fr'
     netmask: 255.255.255.0
     server_interface: eth1
     image_server_id: ImageServer_3
   Subnet_4:
     name: rec
     ip_address: 195.83.163.0
+    dns_server: 195.83.163.60
+    range_begin: 195.83.163.1
+    range_end: 195.83.163.1
+    domain_name: 'univ-avignon.fr'
     netmask: 255.255.255.0
     server_interface: eth1
     image_server_id: ImageServer_3
   Subnet_5:
     name: etd-agro
     ip_address: 10.104.0.0
+    dns_server: 195.83.163.60
+    range_begin: 195.83.163.1
+    range_end: 195.83.163.1
+    domain_name: 'univ-avignon.fr'
     netmask: 255.255.0.0
     server_interface: eth0
     image_server_id: ImageServer_2
   Subnet_6:
     name: captif-fil-agro
     ip_address: 10.120.0.0
+    dns_server: 195.83.163.60
+    range_begin: 195.83.163.1
+    range_end: 195.83.163.1
+    domain_name: 'univ-avignon.fr'
     netmask: 255.255.0.0
     server_interface: eth0
     image_server_id: ImageServer_2
   Subnet_7:
     name: 'Maquette 1'
     ip_address: 10.4.0.0
+    dns_server: 195.83.163.60
+    range_begin: 195.83.163.1
+    range_end: 195.83.163.1
+    domain_name: 'univ-avignon.fr'
     netmask: 255.255.0.0
     server_interface: eth0
     image_server_id: ImageServer_1

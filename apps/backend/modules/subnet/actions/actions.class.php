@@ -13,4 +13,14 @@ require_once dirname(__FILE__).'/../lib/subnetGeneratorHelper.class.php';
  */
 class subnetActions extends autoSubnetActions
 {
+  public function preExecute()
+  {
+    $this->dispatcher->connect('admin.save_object', array ($this, 'updateDhcp'));
+    return parent::preExecute ();
+  }
+
+  public function updateDhcp ()
+  {
+    CommandPeer::runDhcpdUpdate();
+  }
 }

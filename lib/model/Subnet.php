@@ -24,4 +24,12 @@ class Subnet extends BaseSubnet {
     return $this->getName ();
   }
 
+  public function getRevDomainName ()
+  {
+    $address = $this->getIpAddress();
+    $networkPart = substr ($address, 0, strpos ($address, '.0'));
+    $networkPart = array_reverse (explode ('.', $networkPart));
+    return implode ($networkPart, '.').'.in-addr.arpa';
+  }
+
 } // Subnet
