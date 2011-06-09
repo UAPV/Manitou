@@ -13,7 +13,7 @@ class RestoreForm extends BaseForm
 {
   public function setup()
   {
-    $this->setWidgets(array(
+    $this->setWidget(
       'hosts'       => new sfWidgetFormPropelChoice (array('model' => 'Host', 'multiple' => true)),
     ));
 

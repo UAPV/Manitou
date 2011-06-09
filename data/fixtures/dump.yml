@@ -1,13 +1,16 @@
 ImageServer:
   ImageServer_1:
     name: Maquette
-    host: drbl00c.univ-avignon.fr
+    hostname: drbl00c.univ-avignon.fr
+    iface: eth0
   ImageServer_2:
     name: CERI
-    host: drbl01a.univ-avignon.fr
+    hostname: drbl01a.univ-avignon.fr
+    iface: eth0
   ImageServer_3:
     name: 'Centre ville'
-    host: drbl01c.univ-avignon.fr
+    hostname: drbl01c.univ-avignon.fr
+    iface: eth1
 Subnet:
   Subnet_1:
     name: etd-cv
@@ -17,7 +20,6 @@ Subnet:
     range_end: 195.83.163.1
     domain_name: 'univ-avignon.fr'
     netmask: 255.255.0.0
-    server_interface: eth1
     image_server_id: ImageServer_3
   Subnet_2:
     name: pasnet-cv
@@ -27,7 +29,6 @@ Subnet:
     range_end: 195.83.163.1
     domain_name: 'univ-avignon.fr'
     netmask: 255.255.0.0
-    server_interface: eth1
     image_server_id: ImageServer_3
   Subnet_3:
     name: ens
@@ -37,7 +38,6 @@ Subnet:
     range_end: 195.83.163.1
     domain_name: 'univ-avignon.fr'
     netmask: 255.255.255.0
-    server_interface: eth1
     image_server_id: ImageServer_3
   Subnet_4:
     name: rec
@@ -47,7 +47,6 @@ Subnet:
     range_end: 195.83.163.1
     domain_name: 'univ-avignon.fr'
     netmask: 255.255.255.0
-    server_interface: eth1
     image_server_id: ImageServer_3
   Subnet_5:
     name: etd-agro
@@ -57,7 +56,6 @@ Subnet:
     range_end: 195.83.163.1
     domain_name: 'univ-avignon.fr'
     netmask: 255.255.0.0
-    server_interface: eth0
     image_server_id: ImageServer_2
   Subnet_6:
     name: captif-fil-agro
@@ -67,7 +65,6 @@ Subnet:
     range_end: 195.83.163.1
     domain_name: 'univ-avignon.fr'
     netmask: 255.255.0.0
-    server_interface: eth0
     image_server_id: ImageServer_2
   Subnet_7:
     name: 'Maquette 1'
@@ -77,7 +74,6 @@ Subnet:
     range_end: 195.83.163.1
     domain_name: 'univ-avignon.fr'
     netmask: 255.255.0.0
-    server_interface: eth0
     image_server_id: ImageServer_1
 Room:
   Room_1:

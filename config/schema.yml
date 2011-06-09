@@ -1,68 +1,71 @@
 propel:
 
   subnet:
-    id: ~
-    name:             { type: varchar, size: 30 }
-    domain_name:      { type: varchar, size: 30 }
-    dns_server:       { type: varchar, size: 15, required: true }
-    ip_address:       { type: varchar, size: 15, required: true }
-    netmask:          { type: varchar, size: 15, required: true }
-    server_interface: { type: varchar, size: 5,  required: true }
-    range_begin:      { type: varchar, size: 15, required: true }
-    range_end:        { type: varchar, size: 15, required: true }
-    custom_conf:      { type: longvarchar }
-    image_server_id:  ~
-    pxe_file_id:      ~
+    id:             ~
+    name:           { type: varchar, size: 30 }
+    domain_name:    { type: varchar, size: 30 }
+    dns_server:     { type: varchar, size: 15, required: true }
+    ip_address:     { type: varchar, size: 15, required: true }
+    netmask:        { type: varchar, size: 15, required: true }
+    range_begin:    { type: varchar, size: 15, required: true }
+    range_end:      { type: varchar, size: 15, required: true }
+    custom_conf:    { type: longvarchar }
+    image_server_id: ~
+    pxe_file_id:    ~
 
   image_server:
-    id: ~
-    name: { type: varchar, size: 30 }
-    host: { type: varchar,size: 30 }
+    id:             ~
+    name:           { type: varchar, size: 30 }
+    hostname:       { type: varchar,size: 30 }
+    iface:          { type: varchar, size: 5,  required: true }
 
   room:
-    id: ~
-    name:       { type: varchar, size: 30 }
-    comment:    { type: longvarchar }
+    id:             ~
+    name:           { type: varchar, size: 30 }
+    comment:        { type: longvarchar }
 
   host:
-    id: ~
-    profile_id: ~
-    room_id: ~
+    id:             ~
+    profile_id:     ~
+    room_id:        ~
     number:         { type: varchar, size: 10 }
     ip_address:     { type: char, size: 15, required: true }
     mac_address:    { type: char, size: 17, required: true }
     comment:        { type: longvarchar }
     custom_conf:    { type: longvarchar }
-    subnet_id:  ~
-    pxe_file_id: ~
-    created_at: ~
-    updated_at: ~
+    cloned_from_image_id: { type: integer, foreignReference: id, foreignTable: image, fkRefPhpName: ClonedToHost }
+    subnet_id:      ~
+    pxe_file_id:    ~
+    created_at:     ~
+    updated_at:     ~
 
   profile:
-    id: ~
-    name:    { type: varchar, size: 20 }
-    comment: { type: longvarchar }
-    created_at: ~
+    id:             ~
+    name:           { type: varchar, size: 20 }
+    comment:        { type: longvarchar }
+    created_at:     ~
 
   pxe_file:
-    id: ~
-    filename: { type: varchar, size: 50 }
-    name:     { type: varchar, size: 50 }
+    id:             ~
+    filename:       { type: varchar, size: 50 }
+    name:           { type: varchar, size: 50 }
 
   image:
-    id: ~
-    name:     { type: varchar, size: 30, required: true }
-    filename: { type: varchar,size: 50, required: true }
-    host_id:  ~ 
+    id:             ~
+    comment:        { type: varchar, size: 200, required: true }
+    filename:       { type: varchar, size: 50, required: true }
+    host_id:        { type: integer, foreignReference: id, foreignTable: host, fkPhpName: Host }
+    image_server_id: ~
 
   command:
     id: ~
-    started_at:   { type: timestamp }
-    finished_at:  { type: timestamp }
-    command:      { type: varchar, size: 200 }
-    std_out_file: { type: varchar,size: 50 }
-    std_err_file: { type: varchar,size: 50 }
-    std_out:      { type: longvarchar }
-    std_err:      { type: longvarchar }
-    return_code:  { type: smallint, default: null }
-    user_id:      { type: varchar,size: 50 } # user login
+    started_at:     { type: timestamp }
+    finished_at:    { type: timestamp }
+    command:        { type: varchar, size: 200 }
+    label:          { type: varchar, size: 50 }
+    std_out_file:   { type: varchar,size: 50 }
+    std_err_file:   { type: varchar,size: 50 }
+    std_out:        { type: longvarchar }
+    std_err:        { type: longvarchar }
+    return_code:    { type: smallint, default: null }
+    user_id:        { type: varchar,size: 50 } # user login

@@ -1,17 +1,38 @@
 all:
   manitou:
+
+    # NB ! Le chemin des scripts doivent être absolu ! 
+    # Pour cela utiliser la variable %SF_ROOT_DIR% qui sera remplacée par la racine de Manitou
+
+    # Création d'une image :
+    #
     # params :
     #   - %filename%
-    #   - %ip%
-    #   - %mac%
-    #   - %restart% (1 ou 0)
-    create_image_command:  /media/data/dev/Manitou/t.sh -f %filename% -m %mac% -i %ip% -r %restart%
+    #   - %host_ip%
+    #   - %host_mac%
+    #   - %restart% (true ou false)
+    #   - %image_server%
+    #   - %interface%
+    create_image_command: %SF_ROOT_DIR%/scripts/examples/create-image.sh %host_ip% %host_mac% %interface% %image_server% %restart% %image_filename%
 
+    # Restauration d'une image :
+    #
     # params :
     #   - %macs%    Liste des adresses MAC séparées par des virgules
     #   - %image%   Nom du fichier image à restaurer
-    restore_image_command: /media/data/dev/drbladmin2/trunk/t.sh -m %macs% -i %image%
+    restore_image_command: %SF_ROOT_DIR%/scripts/examples/restore-image.sh -m %macs% -i %image%
 
+    # Mise à jour du DNS à la modification d'un host.
+    # (Appelé à l'ajout/mdification/suppression d'une machine
+    #
+    # params :
+    #   - %domain%          Zone forward
+    #   - %reverse_domain%  Zone reverse
+    #   - %hostname%        Hostname de la machine ajoutée/modifiée/supprimée
+    ns_update_command: %SF_ROOT_DIR%/scripts/examples/ns-update.sh %domain% %reverse_domain% %hostname%
+
+    # Création d'une image :
+    #
     # Chemin absolu vers le répertoire où seront générés les fichiers de conf.
     # Ce repertoire doit exister et doit être versionné sous svn.
     dhcpd_conf_path: %SF_DATA_DIR%/rezodhcp/subnets

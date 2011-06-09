@@ -26,45 +26,45 @@ class Command extends BaseCommand {
    * Une fois la commande terminée, son résultat est sauvegardé en BDD et les fichiers
    * temporaires sont supprimés.
    *
-   * Cette fonction est potentiellement bloquante !
+   * Par défaut cette fonction est bloquante ! Par contre, si $background = true, elle
+   * sera exécutée en arrière plan.
+   *
+   *
    *
    * @return void
    */
-  public function exec ()
+  public function exec ($background = false)
   {
-    $this->setStdErrFile (tempnam ('/tmp','manitou_cmd_'));
-    $this->setStdOutFile (tempnam ('/tmp','manitou_cmd_'));
-    $this->setStartedAt  (time());
-    $this->save();
+    if (! $background)
+    {
+      $this->setStdErrFile (tempnam ('/tmp','manitou_cmd_'));
+      $this->setStdOutFile (tempnam ('/tmp','manitou_cmd_'));
+      $this->setStartedAt  (time());
+      $this->save();
 
-    $command = $this->getCommand()
-      .' 2> '.$this->getStdErrFile()
-      .'  > '.$this->getStdOutFile();
+      $command = $this->getCommand()
+        .' 2> '.$this->getStdErrFile()
+        .'  > '.$this->getStdOutFile();
 
-    exec($command, $result, $returnVal);
+      exec($command, $result, $returnVal);
 
-    $this->syncTmpOutput ();
-    $this->setFinishedAt (time());
-    $this->setReturnCode ($returnVal);
-    $this->save();
+      $this->syncTmpOutput ();
+      $this->setFinishedAt (time());
+      $this->setReturnCode ($returnVal);
+      $this->save();
 
-    unlink($this->getStdErrFile());
-    unlink($this->getStdOutFile());
-  }
-
-  /**
-   * Execute une commande en arrière plan et insère le résultat (code erreur, stdout stderr) en BDD.
-   *
-   * Pour ne pas avoir à utiliser pcntl_fork (module PHP à installer, mémoire partagée, connexion DB
-   * à réinitialiser, etc) on appelle en arrière plan une URL qui va exécuter un appel bloquant
-   * de la commande. C'est une bidouille mais ça marche...
-   *
-   * @return void
-   */
-  public function backgroundExec ()
-  {
-    $startUrl = sfContext::getInstance()->getController()->genUrl('@command_start?id='.$this->getId(), true);
-    exec ('wget "'.$startUrl."\"  > /dev/null &");
+      unlink($this->getStdErrFile());
+      unlink($this->getStdOutFile());
+    }
+    else
+    {
+      // Pour ne pas avoir à utiliser pcntl_fork (module PHP à installer, mémoire partagée, connexion DB
+      // à réinitialiser, etc) on appelle en arrière plan une URL qui va exécuter un appel bloquant
+      // de la commande. C'est une bidouille mais ça marche...
+      $this->save();
+      $startUrl = sfContext::getInstance()->getController()->genUrl('@command_start?id='.$this->getId(), true);
+      exec ('wget "'.$startUrl."\"  > /dev/null &");
+    }
   }
 
   public function isStarted ()
@@ -118,5 +118,26 @@ class Command extends BaseCommand {
 
     return ($finishedAt - $startedAt);
   }
+
+  public function setArgument ($name, $value)
+  {
+    $this->setCommand(str_replace('%'.$name.'%', escapeshellarg ($value), $this->getCommand()));
+  }
+
+
+	/**
+	 * Code to be run before inserting to database
+	 * @param PropelPDO $con
+	 * @return boolean
+	 */
+	public function preInsert(PropelPDO $con = null)
+	{
+    if (! $this->getUserId())
+    {
+      $this->setUserId('foobar'); // TODO  sfContext::getInstance()->getUser()...
+    }
+    
+		return parent::preInsert($con);
+	}
 
 } // Command

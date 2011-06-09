@@ -40,6 +40,12 @@ class CommandPeer extends BaseCommandPeer {
       file_put_contents ($filename, get_partial ('dhcpd/subnet.conf', array ('subnet' => $subnet)));
     }
 
+    CommandPeer::getDhcpdUpdateCommand()->exec (true);
+  }
+
+  public static function getDhcpdUpdateCommand ()
+  {
+    $confPath = sfConfig::get('sf_manitou_dhcpd_conf_path');
     $script   = 'cd '.$confPath.'; svn add *.conf; svn commit '
         .' --no-auth-cache'
         .' --non-interactive'
@@ -49,9 +55,32 @@ class CommandPeer extends BaseCommandPeer {
 
     $command = new Command();
     $command->setCommand($script);
-    $command->setUserId ('foobarhost'); // TODO
-    $command->save();
-    $command->backgroundExec ();
+    return $command;
+  }
+
+  public static function getCreateImageCommand (Image $image)
+  {
+    $command = new Command();
+    $command->setCommand(sfConfig::get('sf_manitou_create_image_command'));
+
+    $host = $image->getHost();
+    $imageServer = $host->getSubnet()->getImageServer();
+
+    $command->setArgument('host_ip',        $host->getIpAddress());
+    $command->setArgument('host_mac',       $host->getMacAddress());
+    $command->setArgument('interface',      $imageServer->getIface());
+    $command->setArgument('image_server',   $imageServer->getHostname());
+    $command->setArgument('image_filename', $image->getFilename());
+    $command->setLabel ('Creation de l\'image "'.$image->getFilename().'" à partir de la machine '.$image->getHost());
+
+    return $command;
+  }
+
+  public static function getRestoreImageCommand ()
+  {
+    $command = new Command();
+    $command->setCommand(sfConfig::get('sf_manitou_restore_image_command'));
+    return $command;
   }
 
 } // CommandPeer

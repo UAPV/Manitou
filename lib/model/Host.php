@@ -27,4 +27,32 @@ class Host extends BaseHost {
     return $this->getProfile().'-'.$this->getRoom ().'-'.$this->getNumber ();
   }
 
+	/**
+	 * Code to be run before persisting the object
+   *
+   * On exécute alors la commande ns-update
+   *
+	 * @param PropelPDO $con
+	 */
+	public function preSave(PropelPDO $con = null)
+  {
+    // TODO récupérer les anciennes valeurs et ne déclancher la commande
+    // que si l'hostname a changé
+
+    return parent::preSave($con);
+  }
+
+	/**
+	 * Code to be run after persisting the object
+   *
+   * On exécute alors la commande de mise à jour du DHCP
+   *
+	 * @param PropelPDO $con
+	 */
+	public function postSave(PropelPDO $con = null)
+  {
+    CommandPeer::runDhcpdUpdate();
+    return parent::postSave($con);
+  }
+
 } // Host

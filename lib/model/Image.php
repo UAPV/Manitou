@@ -19,20 +19,4 @@
  */
 class Image extends BaseImage {
 
-  public function create ()
-  {
-    $script = sfConfig::get('sf_manitou_create_image_command');
-    $script = str_replace(
-      array('%filename%', '%ip%', '%mac%', '%restart%'),
-      array($this->getFilename(), $this->getHost()->getIpAddress(), $this->getHost()->getMacAddress(), $this->getRestart()),
-      $script
-    );
-
-    $command = new Command();
-    $command->setCommand($script);
-    $command->setUserId ('foobar'); // TODO
-    $command->save();
-    $command->backgroundExec ();
-  }
-
 } //ge

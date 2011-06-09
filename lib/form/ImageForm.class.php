@@ -11,5 +11,15 @@ class ImageForm extends BaseImageForm
 {
   public function configure()
   {
+    $stateChoices = array ('poweroff' => 'Éteint', 'reboot' => 'Allumé', 'true' => 'En attente');
+
+    $this->setWidget('state', new sfWidgetFormChoice( array('choices' => $stateChoices)));
+    $this->setValidator ('state', new sfValidatorChoice(array('choices' =>  array_keys($stateChoices))));
+
+    $this->widgetSchema->setLabel ('state', 'État après la création');
+
+    unset ($this['image_server_id']);
+
+    //$this->getWidgetSchema()->offsetGet('host_id')->setAttribute ('disabled', 'disabled');
   }
 }
