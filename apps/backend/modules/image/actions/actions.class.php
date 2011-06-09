@@ -16,8 +16,12 @@ class imageActions extends autoImageActions
 
   public function executeNew(sfWebRequest $request)
   {
+    $host = HostQuery::create()->findPk ($request->getGetParameter('host_id'));
+    $this->forward404If($host === null);
+
     $this->Image = new Image ();
-    $this->Image->setHostId ($request->getGetParameter('host_id'));
+    $this->Image->setHost ($host);
+    $this->Image->setImageServerId ($host->getSubnet()->getImageServerId());
     $this->form = $this->configuration->getForm($this->Image);
   }
 
@@ -42,7 +46,10 @@ class imageActions extends autoImageActions
 
       if ($isNew)
       {
-        $Image->create ();
+        $command = CommandPeer::getCreateImageCommand($Image);
+        $command->setArgument('restart', $form->getValue('state'));
+        $command->exec(true);
+
         $this->getUser()->setFlash('notice', $notice);
         $this->redirect('command_list');
       }
@@ -81,17 +88,9 @@ class imageActions extends autoImageActions
 
   protected function restore ($form)
   {
-    $script = sfConfig::get('sf_manitou_restore_image_command');
-    $script = str_replace(
-      array('%image%', '%macs%'),
-      array('test.img', '"'.implode (' ', $form->getMacAddresses()).'"'),
-      $script
-    );
-
-    $command = new Command();
-    $command->setCommand($script);
-    $command->setUserId ('foobar'); // TODO
-    $command->save();
-    $command->backgroundExec ();
+    $command = CommandPeer::getRestoreImageCommand();
+    $command->setArgument('image', 'test.img');
+    $command->setArgument('hosts_mac', implode (' ', $form->getMacAddresses()));
+    $command->exec (true);
   }
 }

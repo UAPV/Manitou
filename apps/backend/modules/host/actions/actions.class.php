@@ -12,17 +12,6 @@ require_once dirname(__FILE__).'/../lib/hostGeneratorHelper.class.php';
  */
 class hostActions extends autoHostActions
 {
-  public function preExecute()
-  {
-    $this->dispatcher->connect('admin.save_object', array ($this, 'updateDhcp'));
-    return parent::preExecute ();
-  }
-
-  public function updateDhcp ()
-  {
-    CommandPeer::runDhcpdUpdate();
-  }
-
   /**
    * Action exéctutée lors d'un clic sur le liens "créer une image"
    */
