@@ -19,4 +19,9 @@
  */
 class Image extends BaseImage {
 
+  public function __toString()
+  {
+    return $this->getComment().' ('.$this->getFilename().')';
+  }
+
 } //ge

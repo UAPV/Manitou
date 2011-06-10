@@ -47,7 +47,7 @@ class imageActions extends autoImageActions
       if ($isNew)
       {
         $command = CommandPeer::getCreateImageCommand($Image);
-        $command->setArgument('restart', $form->getValue('state'));
+        $command->setArgument('state', $form->getValue('state'));
         $command->exec(true);
 
         $this->getUser()->setFlash('notice', $notice);
@@ -88,9 +88,20 @@ class imageActions extends autoImageActions
 
   protected function restore ($form)
   {
+    $hosts = $form->getHosts();
+    $imageServer = $hosts[0]->getSubnet()->getImageServer();
+
     $command = CommandPeer::getRestoreImageCommand();
-    $command->setArgument('image', 'test.img');
-    $command->setArgument('hosts_mac', implode (' ', $form->getMacAddresses()));
+    $command->setArgument ('hosts_ip', implode (' ', $form->getIpAddresses()));
+    $command->setArgument ('hosts_mac', implode (' ', $form->getMacAddresses()));
+    $command->setArgument ('interface', $imageServer->getIface());
+    $command->setArgument ('image_server', $imageServer->getHostname());
+    $command->setArgument ('resize', $form->getValue('resize') ? 1 : 0);
+    $command->setArgument ('partition', $form->getValue('partition'));
+    $command->setArgument ('image_filename', $form->getImage()->getFilename());
+    $command->setArgument ('pre_run', $form->getValue ('pre_script') ? 1 : 0);
+    $command->setArgument ('post_run', $form->getValue ('post_script') ? 1 : 0);
+    $command->setArgument ('state', $form->getValue ('state'));
     $command->exec (true);
   }
 }
