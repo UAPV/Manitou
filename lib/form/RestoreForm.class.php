@@ -13,16 +13,38 @@ class RestoreForm extends BaseForm
 {
   public function setup()
   {
-    $this->setWidget(
+    $stateChoices = array ('poweroff' => 'Éteint', 'reboot' => 'Allumé', 'true' => 'En attente');
+    $diskChoices = array ('sda' => 'Disque entier', 'sda1' => 'Windows', 'sda2' => 'Ubuntu');
+
+    $this->setWidgets (array(
       'hosts'       => new sfWidgetFormPropelChoice (array('model' => 'Host', 'multiple' => true)),
+      'state'       => new sfWidgetFormChoice (array('choices' => $stateChoices)),
+      'disk'        => new sfWidgetFormChoice (array('choices' => $diskChoices)),
+      'resize'      => new sfWidgetFormInputCheckbox (array('default'=>'checked')),
+      'post_script' => new sfWidgetFormInputCheckbox (array('default'=>'checked')),
+      'pre_script'  => new sfWidgetFormInputCheckbox (),
     ));
 
     $this->setValidators(array(
-      'hosts'       => new sfValidatorPropelChoice(array('model' => 'Host', 'column' => 'id', 'required' => true, 'multiple' => true)),
+      'hosts'       => new sfValidatorPropelChoice (array('model' => 'Host', 'column' => 'id', 'required' => true, 'multiple' => true)),
+      'state'       => new sfValidatorChoice (array('choices' =>  array_keys($stateChoices))),
     ));
 
     $this->widgetSchema->setLabels (array (
-      'hosts' => 'Machines à restaurer',
+      'hosts'       => 'Machines à restaurer',
+      'state'       => 'État',
+      'disk'        => 'Partitions',
+      'resize'      => 'Redimentionnement',
+      'post_script' => 'Post installation',
+      'pre_script'  => 'Pre installation',
+    ));
+
+    $this->widgetSchema->setHelps (array (
+      'state'       => 'État des machines après restauration',
+      'disk'        => 'Partition à restaurer',
+      'resize'      => 'Redimentionner les partitions à la taille du disque ?',
+      'post_script' => 'Exécuter le script POST_RUN',
+      'pre_script'  => 'Exécuter le script PRE_RUN',
     ));
 
     $this->widgetSchema->setNameFormat('restore[%s]');
