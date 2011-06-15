@@ -48,7 +48,7 @@ propel:
   pxe_file:
     id:             ~
     filename:       { type: varchar, size: 50 }
-    name:           { type: varchar, size: 50 }
+    description:    { type: varchar, size: 50 }
 
   image:
     id:             ~
