@@ -28,6 +28,9 @@ class CommandPeer extends BaseCommandPeer {
    */
   public static function runDhcpdUpdate ()
   {
+    if (!sfContext::hasInstance())
+      return;
+
     HostQuery::create()->find(); // Juste pour remplir le cache de propel
     $subnets  = SubnetQuery::create ()->find ();
     $confPath = sfConfig::get('sf_manitou_dhcpd_conf_path');
