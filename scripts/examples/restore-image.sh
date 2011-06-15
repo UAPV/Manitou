@@ -65,12 +65,9 @@ echo "COMMANDE DRBL > $command"
 
 command="$command < /dev/null"
 
-# sudo -u drbl ssh manitou@$3 <<eof
-#
-#    $command < /dev/null
-#
-#    for mac in $2; do
-#       sudo etherwake -i $3 $mac
-#    done
-#    
-#eof
+sudo -u drbl /usr/bin/ssh manitou@$image_server "\
+    $command ;\
+    for mac in $hosts_mac;\
+	do sudo etherwake -i $interface $mac;\
+    done
+"

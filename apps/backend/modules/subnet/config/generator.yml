@@ -16,7 +16,7 @@ generator:
       fields:  ~
       list:
         title: Gestion des subnets
-        display: [=name, ip_address, netmask, domain_name, dns_server,  server_interface, image_server, pxe_file]
+        display: [=name, ip_address, netmask, domain_name, dns_server, image_server, pxe_file]
       filter:  ~
       form:    ~
       edit:    ~

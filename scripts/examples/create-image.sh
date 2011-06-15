@@ -37,7 +37,7 @@ echo "COMMANDE DRBL > $command"
 
 command="$command  < /dev/null"
 
-# sudo -u drbl ssh manitou@$image_server '
-#   sudo /usr/local/bin/drbl-ocs stop ; \
-#   sudo etherwake -i $interface host_mac  ; \
-#   $command'
+sudo -u drbl ssh manitou@$image_server "\
+	sudo /opt/drbl/sbin/drbl-ocs stop ; \
+	sudo /usr/sbin/etherwake -i $interface $host_mac  ; \
+	$command"
