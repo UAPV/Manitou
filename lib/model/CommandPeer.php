@@ -86,4 +86,79 @@ class CommandPeer extends BaseCommandPeer {
     return $command;
   }
 
+  /**
+   * Lance la mise à jour le DNS.
+   * Commande à lancer lorsqu'une(des) machine(s) à été ajoutée ou modifiée.
+   *
+   *
+   * @static
+   * @param  $hosts     Tableau ou Object de la classe Host
+   * @return Command
+   */
+  public static function runDnsUpdate ($hosts)
+  {
+    $addScript    = sfConfig::get('sf_manitou_ns_add_command');
+    $deleteScript = sfConfig::get('sf_manitou_ns_delete_command');
+    $script = '';
+
+    $keys = array ('%domain%', '%reverse_domain%', '%hostname%', '%host_ip%');
+    foreach ((array) $hosts as $host)
+    {
+      $replacedData = array (
+          escapeshellarg ($host->getDomainName ()),
+          escapeshellarg ($host->getRevDomainName ()),
+          escapeshellarg ($host->getHostname ()),
+          escapeshellarg ($host->getIpAddress ()),
+      );
+
+      // On supprime l'hôte par précaution au cas où il existe déjà
+      $script .= str_replace ($keys, $replacedData, $deleteScript).'; ';
+      $script .= str_replace ($keys, $replacedData, $addScript).'; ';
+    }
+
+    // faire exécuter toutes ces commandes par bash permet de récupérer la sortie en une seule fois
+    $script = 'bash '.escapeshellarg ($script);
+
+    $command = new Command ();
+    $command->setCommand ($script);
+    $command->setLabel ('Mise à jour des entrées du DNS');
+    
+    return $command->exec (true);
+  }
+
+  /**
+   * Lance la mise à jour le DNS.
+   * Commande à lancer lorsqu'une(des) machine(s) à été ajoutée ou modifiée.
+   *
+   *
+   * @static
+   * @param  $hosts     Tableau ou Object de la classe Host
+   * @return Command
+   */
+  public static function runDnsDelete ($hosts)
+  {
+    $deleteScript = sfConfig::get('sf_manitou_ns_delete_command');
+    $script = '';
+
+    $keys = array ('%domain%', '%reverse_domain%', '%host_ip%');
+    foreach ((array) $hosts as $host)
+    {
+      $script .= str_replace ($keys, array (
+          escapeshellarg ($host->getDomainName ()),
+          escapeshellarg ($host->getRevDomainName ()),
+          escapeshellarg ($host->getIpAddress ()),
+      ), $deleteScript).'; ';
+    }
+
+    // faire exécuter toutes ces commandes par bash permet de récupérer la sortie en une seule fois
+    $script = 'bash '.escapeshellarg ($script);
+
+    $command = new Command ();
+    $command->setCommand ($script);
+    $command->setLabel ('Suppression d\'entrées du DNS');
+
+    return $command->exec (true);
+  }
+
+
 } // CommandPeer

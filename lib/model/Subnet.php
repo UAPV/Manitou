@@ -19,6 +19,8 @@
  */
 class Subnet extends BaseSubnet {
 
+  protected $needDnsUpdate = null;
+
   public function __toString ()
   {
     return $this->getName ();
@@ -30,6 +32,61 @@ class Subnet extends BaseSubnet {
     $networkPart = substr ($address, 0, strpos ($address, '.0'));
     $networkPart = array_reverse (explode ('.', $networkPart));
     return implode ($networkPart, '.').'.in-addr.arpa';
+  }
+
+	/**
+	 * Code to be run before persisting the object
+   *
+   * On détermine si le DNS devra être mis à jour après l'enregistrement en base
+   *
+	 * @param PropelPDO $con
+	 */
+	public function preSave(PropelPDO $con = null)
+  {
+    $this->needDnsUpdate = (
+        $this->isColumnModified ('ip_address') ||
+        $this->isColumnModified ('domain') 
+    );
+    return parent::preSave ($con);
+  }
+
+	/**
+	 * Code to be run after persisting the object
+   *
+   * On exécute alors la commande de mise à jour du DHCP
+   *
+	 * @param PropelPDO $con
+	 */
+	public function postSave(PropelPDO $con = null)
+  {
+    parent::postSave ($con);
+
+    CommandPeer::runDhcpdUpdate ();
+
+    if ($this->needDnsUpdate === true)
+      CommandPeer::runDnsUpdate ($this->getHosts());
+  }
+
+  /**
+   * Code to be after deleting the object in database
+   * @param PropelPDO $con
+   * @return boolean
+   */
+  public function preDelete(PropelPDO $con = null)
+  {
+    CommandPeer::runDnsDelete ($this->getHosts());
+    return parent::preDelete ($con);
+  }
+
+  /**
+   * Code to be after before deleting the object in database
+   * @param PropelPDO $con
+   * @return boolean
+   */
+  public function postDelete(PropelPDO $con = null)
+  {
+    CommandPeer::runDhcpdUpdate ();
+    parent::postDelete ($con);
   }
 
 } // Subnet

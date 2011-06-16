@@ -19,8 +19,42 @@
  */
 class Room extends BaseRoom {
 
+  protected $needDhcpUpdate = null;
+  protected $needDnsUpdate = null;
+
   public function __toString () {
     return $this->getName ();
   }
-  
+
+  /**
+   * Code to be run before persisting the object
+   *
+   * On détermine si le DNS devra être mis à jour après l'enregistrement en base
+   *
+   * @param PropelPDO $con
+   */
+  public function preSave(PropelPDO $con = null)
+  {
+    $this->needDnsUpdate = $this->needDhcpUpdate = $this->isColumnModified ('name');
+    return parent::preSave ($con);
+  }
+
+  /**
+   * Code to be run after persisting the object
+   *
+   * On exécute alors la commande de mise à jour du DHCP
+   *
+   * @param PropelPDO $con
+   */
+  public function postSave(PropelPDO $con = null)
+  {
+    parent::postSave ($con);
+
+    if ($this->needDhcpUpdate)
+      CommandPeer::runDhcpdUpdate ();
+
+    if ($this->needDnsUpdate)
+      CommandPeer::runDnsUpdate ($this->getHosts());
+  }
+
 } // Room
