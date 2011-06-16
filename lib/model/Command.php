@@ -31,7 +31,7 @@ class Command extends BaseCommand {
    *
    *
    *
-   * @return void
+   * @return Command    self
    */
   public function exec ($background = false)
   {
@@ -65,6 +65,8 @@ class Command extends BaseCommand {
       $startUrl = sfContext::getInstance()->getController()->genUrl('@command_start?id='.$this->getId(), true);
       exec ('wget "'.$startUrl."\"  > /dev/null &");
     }
+
+    return $this;
   }
 
   public function isStarted ()
