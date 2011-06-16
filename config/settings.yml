@@ -9,8 +9,8 @@ all:
     # params :
     #   - %image_filename%  Nom du fichier image à restaurer
     #   - %restart%         État des machine post-installation
-    #   - %hosts_ip%        Adresse IP séparés par des espaces
-    #   - %hosts_mac%       Adresse MAC séparés par des espaces (pour le wakeonlan)
+    #   - %hosts_ip%        Adresses IP séparés par des espaces
+    #   - %hosts_mac%       Adresses MAC séparés par des espaces (pour le wakeonlan)
     #   - %interface%       Interface du serveur DRBL pour le wakeonlan
     #   - %image_server%    Serveur DRBL à utiliser
     #   - %state%           État des machine post-installation (wait, reboot, poweroff)
@@ -19,8 +19,8 @@ all:
     # Restauration d'une image :s
     #
     # params :
-    #   - %hosts_ip%        Adresse IP séparés par des espaces
-    #   - %hosts_mac%       Adresse MAC séparés par des espaces (pour le wakeonlan)
+    #   - %hosts_ip%        Adresses IP séparés par des espaces
+    #   - %hosts_mac%       Adresses MAC séparés par des espaces (pour le wakeonlan)
     #   - %interface%       Interface du serveur DRBL pour le wakeonlan
     #   - %image_server%    Serveur DRBL à utiliser
     #   - %resize%          Redimentionner les partitions
@@ -38,7 +38,17 @@ all:
     #   - %domain%          Zone forward
     #   - %reverse_domain%  Zone reverse
     #   - %hostname%        Hostname de la machine ajoutée/modifiée/supprimée
-    ns_update_command: %SF_ROOT_DIR%/scripts/examples/ns-update.sh %domain% %reverse_domain% %hostname%
+    #   - %host_ip%         Adresse IP
+    ns_add_command: %SF_ROOT_DIR%/scripts/examples/ns-update.sh add %domain% %reverse_domain% %hostname% %host_ip%
+
+    # Mise à jour du DNS à la modification d'un host.
+    # (Appelé à l'ajout/mdification/suppression d'une machine
+    #
+    # params :
+    #   - %domain%          Zone forward
+    #   - %reverse_domain%  Zone reverse
+    #   - %host_ip%         Adresse IP
+    ns_delete_command: %SF_ROOT_DIR%/scripts/examples/ns-update.sh delete %domain% %reverse_domain% %host_ip%
 
     # Création d'une image :
     #
