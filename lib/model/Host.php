@@ -19,28 +19,78 @@
  */
 class Host extends BaseHost {
 
-  public function __toString () {
+  protected $needDnsUpdate = null;
+  protected $originalIpAddress = null;
+
+  /**
+   * Surcharge de la création de l'objet afin de sauvegarder la valeur originale
+   * de l'adresse IP (utilisée dans la méthode preSave)
+   *
+   * @param  $row
+   * @param int $startcol
+   * @param bool $rehydrate
+   * @return void
+   */
+  public function hydrate($row, $startcol = 0, $rehydrate = false)
+  {
+    $returnValue = parent::hydrate ($row, $startcol, $rehydrate);
+    $this->originalIpAddress = $this->getIpAddress();
+    return $returnValue;
+  }
+
+  public function __toString ()
+  {
     return $this->getHostname ();
   }
 
-  public function getHostname () {
+  public function getHostname ()
+  {
     return $this->getProfile().'-'.$this->getRoom ().'-'.$this->getNumber ();
+  }
+
+  public function getDomainName ()
+  {
+    return $this->getSubnet()->getDomainName();
+  }
+
+  public function getRevDomainName ()
+  {
+    return $this->getSubnet()->getRevDomainName();
   }
 
 	/**
 	 * Code to be run before persisting the object
    *
-   * On exécute alors la commande ns-update
+   * On détermine si le DNS devra être mis à jour après l'enregistrement en base
    *
 	 * @param PropelPDO $con
 	 */
 	public function preSave(PropelPDO $con = null)
   {
-    // TODO récupérer les anciennes valeurs et ne déclancher la commande
-    // que si l'hostname a changé
+    $this->needDnsUpdate = null;
 
-    return parent::preSave($con);
+    // Si l'IP est modifiée on supprime l'entrée du DNS.
+    if (! $this->isNew () && $this->isColumnModified ('ip_address'))
+      CommandPeer::runDnsDelete ($this->copy()->setIpAddress($this->originalIpAddress));
+    // Le reste des modifications est pris en charge dans le postSave
+    elseif ($this->needDnsUpdate())
+      $this->needDnsUpdate = true; // Une fois dans postSave il est impossible de savoir ce
+                                   // qui a été modifié, on enregistre donc l'info dans l'objet
+
+    return parent::preSave ($con);
   }
+
+	/**
+	 * Code to be after before deleting the object in database
+	 * @param PropelPDO $con
+	 * @return boolean
+	 */
+	public function postDelete(PropelPDO $con = null)
+	{
+    CommandPeer::runDnsDelete ($this);
+    CommandPeer::runDhcpdUpdate ();
+		parent::postDelete ($con);
+	}
 
 	/**
 	 * Code to be run after persisting the object
@@ -51,8 +101,27 @@ class Host extends BaseHost {
 	 */
 	public function postSave(PropelPDO $con = null)
   {
-    CommandPeer::runDhcpdUpdate();
-    return parent::postSave($con);
+    parent::postSave ($con);
+    
+    CommandPeer::runDhcpdUpdate ();
+
+    // Mise à jour du DNS si nécessaire
+    if ($this->needDnsUpdate === true)
+      CommandPeer::runDnsUpdate ($this);
+  }
+
+  /**
+   * Détermine si les modifications apportées à l'object nécessitent une mise à jour
+   * de l'entrée dans le DNS
+   *
+   * @return boolean
+   */
+  public function needDnsUpdate ()
+  {
+    return ($this->isColumnModified ('profile_id') ||
+            $this->isColumnModified ('room_id') ||
+            $this->isColumnModified ('subnet_id') ||
+            $this->isColumnModified ('ip_address'));
   }
 
 } // Host
