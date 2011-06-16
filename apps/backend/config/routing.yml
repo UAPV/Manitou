@@ -69,15 +69,6 @@ command_list:
   url:   /command
   param: { module: command, action: index }
 
-command_start:
-  url:     /command/:id/start
-  class:   sfPropel15Route
-  options: { model: Command, type: object }
-  param:   { module: command, action: start }
-  requirements:
-    id: \d+
-    sf_method: [get]
-
 command_show:
   url:     /command/:id
   class:   sfPropel15Route

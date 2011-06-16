@@ -17,17 +17,7 @@ class commandActions extends sfActions
         ->find();
 
     foreach ($this->commands as $command)
-    {
-      $command->syncTmpOutput();
-      $command->save();
-    }
-  }
-
-  public function executeStart (sfWebRequest $request)
-  {
-    $this->command = $this->getRoute()->getCommand();
-    $this->command->exec ();
-    return sfView::NONE;
+      $command->syncStatus();
   }
 
   public function executeStop (sfWebRequest $request)
@@ -40,7 +30,7 @@ class commandActions extends sfActions
   public function executeShow (sfWebRequest $request)
   {
     $this->command = $this->getRoute()->getCommand();
-    $this->command->syncTmpOutput();
+    $this->command->syncStatus();
     
     if ($request->isXmlHttpRequest())
       return $this->renderPartial ('commandInfo', array ('command' => $this->command));

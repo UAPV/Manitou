@@ -48,7 +48,7 @@ class imageActions extends autoImageActions
       {
         $command = CommandPeer::getCreateImageCommand($Image);
         $command->setArgument('state', $form->getValue('state'));
-        $command->exec(true);
+        $command->exec();
 
         $this->getUser()->setFlash('notice', $notice);
         $this->redirect('command_list');
@@ -102,6 +102,6 @@ class imageActions extends autoImageActions
     $command->setArgument ('pre_run', $form->getValue ('pre_script') ? 1 : 0);
     $command->setArgument ('post_run', $form->getValue ('post_script') ? 1 : 0);
     $command->setArgument ('state', $form->getValue ('state'));
-    $command->exec (true);
+    $command->exec ();
   }
 }
