@@ -31,7 +31,7 @@ all:
     #   - %state%           État des machine post-installation (wait, reboot, poweroff)
     restore_image_command: %SF_ROOT_DIR%/scripts/examples/restore-image.sh %hosts_ip% %hosts_mac% %interface% %image_server% %resize% %partition% %state% %image_filename% %pre_run% %post_run%
 
-    # Mise à jour du DNS à la modification d'un host.
+    # Mise à jour du DNS après une modification liée à un host.
     # (Appelé à l'ajout/mdification/suppression d'une machine
     #
     # params :
@@ -41,7 +41,7 @@ all:
     #   - %host_ip%         Adresse IP
     ns_add_command: %SF_ROOT_DIR%/scripts/examples/ns-update.sh add %domain% %reverse_domain% %hostname% %host_ip%
 
-    # Mise à jour du DNS à la modification d'un host.
+    # Mise à jour du DNS après une modification liée à un host.
     # (Appelé à l'ajout/mdification/suppression d'une machine
     #
     # params :
@@ -49,6 +49,13 @@ all:
     #   - %reverse_domain%  Zone reverse
     #   - %host_ip%         Adresse IP
     ns_delete_command: %SF_ROOT_DIR%/scripts/examples/ns-update.sh delete %domain% %reverse_domain% %host_ip%
+
+    # Mise à jour du DNS après une modification liée à un host.
+    # (Appelé à l'ajout/mdification/suppression d'une machine
+    #
+    # params :
+    #   - %conf_path%       Chemin où se situent les fichiers de conf du DHCP
+    dhcp_update_command: %SF_ROOT_DIR%/scripts/examples/dhcp-update.sh %conf_path%
 
     # Création d'une image :
     #

@@ -19,52 +19,33 @@
  */
 class Command extends BaseCommand {
 
+  protected $pid = null;
+
   /**
    * Exécute la commande en redirigeant la sortie standart et d'errreur vers
-   * des fichiers temporaires afin de pouvoir surveiller leur contenu en "temps réel".
+   * des fichiers temporaires afin de pouvoir surveiller leur contenu en temps réel.
    *
-   * Une fois la commande terminée, son résultat est sauvegardé en BDD et les fichiers
-   * temporaires sont supprimés.
-   *
-   * Par défaut cette fonction est bloquante ! Par contre, si $background = true, elle
-   * sera exécutée en arrière plan.
-   *
-   *
+   * Cette commande n'est pas bloquante, l'exécution se passe en arrière plan
    *
    * @return Command    self
    */
-  public function exec ($background = false)
+  public function exec ()
   {
-    if (! $background)
-    {
-      $this->setStdErrFile (tempnam ('/tmp','manitou_cmd_'));
-      $this->setStdOutFile (tempnam ('/tmp','manitou_cmd_'));
-      $this->setStartedAt  (time());
-      $this->save();
+    $this->setStdErrFile  (tempnam ('/tmp','manitou_cmd_'));
+    $this->setStdOutFile  (tempnam ('/tmp','manitou_cmd_'));
+    $this->setExitFile    (tempnam ('/tmp','manitou_cmd_'));
+    $this->setStartedAt   (time());
+    $this->save();
 
-      $command = $this->getCommand()
-        .' 2> '.$this->getStdErrFile()
-        .'  > '.$this->getStdOutFile();
+    $command = 'nohup bash -c '.escapeshellarg($this->getCommand()
+      .' 2> '.$this->getStdErrFile()
+      .'  > '.$this->getStdOutFile()
+      .' ; echo $? "`date --rfc-3339=seconds`" > '.$this->getExitFile() // On place le code d'erreur et la date de fin dans ce fichier
+    ).' > /dev/null & ';
 
-      exec($command, $result, $returnVal);
+    file_put_contents('/tmp/manitou_cmd_debug', $command."\n", FILE_APPEND);
 
-      $this->syncTmpOutput ();
-      $this->setFinishedAt (time());
-      $this->setReturnCode ($returnVal);
-      $this->save();
-
-      unlink($this->getStdErrFile());
-      unlink($this->getStdOutFile());
-    }
-    else
-    {
-      // Pour ne pas avoir à utiliser pcntl_fork (module PHP à installer, mémoire partagée, connexion DB
-      // à réinitialiser, etc) on appelle en arrière plan une URL qui va exécuter un appel bloquant
-      // de la commande. C'est une bidouille mais ça marche...
-      $this->save();
-      $startUrl = sfContext::getInstance()->getController()->genUrl('@command_start?id='.$this->getId(), true);
-      exec ('wget "'.$startUrl."\"  > /dev/null &");
-    }
+    exec($command);
 
     return $this;
   }
@@ -76,12 +57,12 @@ class Command extends BaseCommand {
 
   public function isRunning ()
   {
-    return ($this->isStarted() && ! $this->isFinished() && ! $this->isStopped());
+    return ! $this->isFinished();
   }
 
   public function isStopped ()
   {
-    return ($this->getFinishedAt() === null && $this->getReturnCode() !== null);
+    return ($this->getFinishedAt() !== null && $this->getReturnCode() === null);
   }
 
   public function isFinished ()
@@ -96,18 +77,63 @@ class Command extends BaseCommand {
     return (($code !== null && $code !== 0) || $this->getStdErr() != '');
   }
 
-  public function syncTmpOutput ()
+  public function syncStatus ()
   {
     if (! $this->isRunning())
       return;
 
     $this->setStdErr (file_get_contents ($this->getStdErrFile()));
     $this->setStdOut (file_get_contents ($this->getStdOutFile()));
+
+    // Si le programme n'a pas d'heure de fin et qu'on ne trouve pas son PID
+    // on en conclu qu'il s'est terminé.
+    if ($this->getFinishedAt() === null && $this->getPid() === false)
+    {
+      $exitStatus = explode (' ', file_get_contents ($this->getExitFile()), 2);
+
+      $this->setReturnCode ($exitStatus[0]);
+      $this->setFinishedAt ($exitStatus[1]);
+      $this->deleteOutputFiles();
+    }
+    $this->save();
+  }
+
+  public function deleteOutputFiles ()
+  {
+    unlink($this->getStdErrFile());
+    unlink($this->getStdOutFile());
+    unlink($this->getExitFile());
+  }
+
+  /**
+   * Return the pid number of the command
+   *
+   * @return integer    The pid number or null if the process is not found
+   */
+  public function getPid ()
+  {
+    if ($this->pid === null)
+    {
+      if ($this->isFinished() || $this->isStopped())
+        return false;
+
+      $cmd =  'ps axo pid,cmd | grep '.escapeshellarg($this->getStdErrFile()).' | grep -v "grep"';
+      exec ($cmd, $output);
+
+      $this->pid = (count ($output) ? (int) $output[0] : false);
+    }
+
+    return $this->pid;
   }
 
   public function stop ()
   {
-    // TODO
+    exec ('kill -9 '.$this->getPid());
+    $this->setStdErr (file_get_contents ($this->getStdErrFile()));
+    $this->setStdOut (file_get_contents ($this->getStdOutFile()));
+    $this->setFinishedAt (time());
+    $this->deleteOutputFiles();
+    $this->save();
   }
 
   /**

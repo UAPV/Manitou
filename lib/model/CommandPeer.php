@@ -43,21 +43,14 @@ class CommandPeer extends BaseCommandPeer {
       file_put_contents ($filename, get_partial ('dhcpd/subnet.conf', array ('subnet' => $subnet)));
     }
 
-    CommandPeer::getDhcpdUpdateCommand()->exec (true);
+    CommandPeer::getDhcpdUpdateCommand()->exec ();
   }
 
   public static function getDhcpdUpdateCommand ()
   {
-    $confPath = sfConfig::get('sf_manitou_dhcpd_conf_path');
-    $script   = 'cd '.$confPath.'; svn add *.conf; svn commit '
-        .' --no-auth-cache'
-        .' --non-interactive'
-        .' --username '.sfConfig::get('sf_manitou_svn_username')
-        .' --password '.sfConfig::get('sf_manitou_svn_password')
-        .' -m "manitou update"';
-
-    $command = new Command();
-    $command->setCommand($script);
+    $command = new Command ();
+    $command->setCommand (sfConfig::get('sf_manitou_dhcp_update_command'));
+    $command->setArgument ('conf_path', sfConfig::get('sf_manitou_dhcpd_conf_path'));
     return $command;
   }
 
@@ -123,7 +116,7 @@ class CommandPeer extends BaseCommandPeer {
     $command->setCommand ($script);
     $command->setLabel ('Mise à jour des entrées du DNS');
     
-    return $command->exec (true);
+    return $command->exec ();
   }
 
   /**
@@ -157,7 +150,16 @@ class CommandPeer extends BaseCommandPeer {
     $command->setCommand ($script);
     $command->setLabel ('Suppression d\'entrées du DNS');
 
-    return $command->exec (true);
+    return $command->exec ();
+  }
+
+  public static function stopImageServer ()
+  {
+    $command = new Command ();
+    $command->setCommand ($script);
+    $command->setLabel ('Suppression d\'entrées du DNS');
+
+    return $command->exec ();
   }
 
 

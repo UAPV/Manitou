@@ -23,6 +23,13 @@
 
     setInterval (updateRunningCommands, 1000);
 
+    $('.stop_command').live ('click', function (e) {
+      if (confirm ('Êtes vous sûr de vouloir stopper cette commande ?'))
+        $.get($(this).attr('href'));
+
+      return e.preventDefault();
+    });
+
   });
 
 </script>
