@@ -43,10 +43,8 @@ class Subnet extends BaseSubnet {
 	 */
 	public function preSave(PropelPDO $con = null)
   {
-    $this->needDnsUpdate = (
-        $this->isColumnModified ('ip_address') ||
-        $this->isColumnModified ('domain') 
-    );
+    $this->needDnsUpdate = ($this->isColumnModified (SubnetPeer::IP_ADDRESS) ||
+                            $this->isColumnModified (SubnetPeer::DOMAIN_NAME));
     return parent::preSave ($con);
   }
 
@@ -60,22 +58,10 @@ class Subnet extends BaseSubnet {
 	public function postSave(PropelPDO $con = null)
   {
     parent::postSave ($con);
-
     CommandPeer::runDhcpdUpdate ();
 
     if ($this->needDnsUpdate === true)
-      CommandPeer::runDnsUpdate ($this->getHosts());
-  }
-
-  /**
-   * Code to be after deleting the object in database
-   * @param PropelPDO $con
-   * @return boolean
-   */
-  public function preDelete(PropelPDO $con = null)
-  {
-    CommandPeer::runDnsDelete ($this->getHosts());
-    return parent::preDelete ($con);
+      CommandPeer::runDnsUpdate ();
   }
 
   /**
@@ -85,8 +71,9 @@ class Subnet extends BaseSubnet {
    */
   public function postDelete(PropelPDO $con = null)
   {
-    CommandPeer::runDhcpdUpdate ();
     parent::postDelete ($con);
+    CommandPeer::runDhcpdUpdate ();
+    CommandPeer::runDnsUpdate ();
   }
 
 } // Subnet
