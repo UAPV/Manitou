@@ -19,8 +19,7 @@
  */
 class Room extends BaseRoom {
 
-  protected $needDhcpUpdate = null;
-  protected $needDnsUpdate = null;
+  protected $needConfUpdate = null;
 
   public function __toString () {
     return $this->getName ();
@@ -35,7 +34,7 @@ class Room extends BaseRoom {
    */
   public function preSave(PropelPDO $con = null)
   {
-    $this->needDnsUpdate = $this->needDhcpUpdate = $this->isColumnModified ('name');
+    $this->needConfUpdate = $this->isColumnModified (RoomPeer::NAME);
     return parent::preSave ($con);
   }
 
@@ -50,11 +49,11 @@ class Room extends BaseRoom {
   {
     parent::postSave ($con);
 
-    if ($this->needDhcpUpdate)
+    if ($this->needConfUpdate)
+    {
       CommandPeer::runDhcpdUpdate ();
-
-    if ($this->needDnsUpdate)
-      CommandPeer::runDnsUpdate ($this->getHosts());
+      CommandPeer::runDnsUpdate ();
+    }
   }
 
 } // Room

@@ -79,43 +79,12 @@ class CommandPeer extends BaseCommandPeer {
     return $command;
   }
 
-  /**
-   * Lance la mise à jour le DNS.
-   * Commande à lancer lorsqu'une(des) machine(s) à été ajoutée ou modifiée.
-   *
-   *
-   * @static
-   * @param  $hosts     Tableau ou Object de la classe Host
-   * @return Command
-   */
-  public static function runDnsUpdate ($hosts)
+  public static function runDnsPreUpdate ()
   {
-    $addScript    = sfConfig::get('sf_manitou_ns_add_command');
-    $deleteScript = sfConfig::get('sf_manitou_ns_delete_command');
-    $script = '';
-
-    $keys = array ('%domain%', '%reverse_domain%', '%hostname%', '%host_ip%');
-    foreach ((array) $hosts as $host)
-    {
-      $replacedData = array (
-          escapeshellarg ($host->getDomainName ()),
-          escapeshellarg ($host->getRevDomainName ()),
-          escapeshellarg ($host->getHostname ()),
-          escapeshellarg ($host->getIpAddress ()),
-      );
-
-      // On supprime l'hôte par précaution au cas où il existe déjà
-      $script .= str_replace ($keys, $replacedData, $deleteScript).'; ';
-      $script .= str_replace ($keys, $replacedData, $addScript).'; ';
-    }
-
-    // faire exécuter toutes ces commandes par bash permet de récupérer la sortie en une seule fois
-    $script = 'bash '.escapeshellarg ($script);
-
     $command = new Command ();
-    $command->setCommand ($script);
-    $command->setLabel ('Mise à jour des entrées du DNS');
-    
+    $command->setCommand (sfConfig::get('sf_manitou_dns_pre_update_command'));
+    $command->setArgument ('conf_path', sfConfig::get('sf_manitou_dns_conf_path'));
+    $command->setLabel ('Mise à jour des fichiers de conf du DNS');
     return $command->exec ();
   }
 
@@ -128,28 +97,22 @@ class CommandPeer extends BaseCommandPeer {
    * @param  $hosts     Tableau ou Object de la classe Host
    * @return Command
    */
-  public static function runDnsDelete ($hosts)
+  public static function runDnsUpdate ()
   {
-    $deleteScript = sfConfig::get('sf_manitou_ns_delete_command');
-    $script = '';
+    self::runDnsPreUpdate();
 
-    $keys = array ('%domain%', '%reverse_domain%', '%host_ip%');
-    foreach ((array) $hosts as $host)
-    {
-      $script .= str_replace ($keys, array (
-          escapeshellarg ($host->getDomainName ()),
-          escapeshellarg ($host->getRevDomainName ()),
-          escapeshellarg ($host->getIpAddress ()),
-      ), $deleteScript).'; ';
-    }
+    $path = sfConfig::get('sf_manitou_dns_conf_path');
 
-    // faire exécuter toutes ces commandes par bash permet de récupérer la sortie en une seule fois
-    $script = 'bash '.escapeshellarg ($script);
+    $hosts = HostQuery::create()->orderByRoomId()->orderByProfileId()->find ();
+    $dnsConf = new Dns ();
+    $dnsConf->setHosts ($hosts);
+    $dnsConf->apply ($path);
 
     $command = new Command ();
-    $command->setCommand ($script);
-    $command->setLabel ('Suppression d\'entrées du DNS');
-
+    $command->setCommand (sfConfig::get('sf_manitou_dns_update_command'));
+    $command->setArgument ('conf_path', $path);
+    $command->setLabel ('Mise à jour des entrées du DNS');
+    
     return $command->exec ();
   }
 
@@ -157,7 +120,7 @@ class CommandPeer extends BaseCommandPeer {
   {
     $command = new Command ();
     $command->setCommand ($script);
-    $command->setLabel ('Suppression d\'entrées du DNS');
+    $command->setLabel ('Arrêt du serveur d\'images');
 
     return $command->exec ();
   }

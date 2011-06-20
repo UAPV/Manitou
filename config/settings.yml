@@ -32,23 +32,18 @@ all:
     restore_image_command: %SF_ROOT_DIR%/scripts/examples/restore-image.sh %hosts_ip% %hosts_mac% %interface% %image_server% %resize% %partition% %state% %image_filename% %pre_run% %post_run%
 
     # Mise à jour du DNS après une modification liée à un host.
-    # (Appelé à l'ajout/mdification/suppression d'une machine
+    # (Appelé à AVANT l'ajout/mdification/suppression d'une machine)
     #
     # params :
-    #   - %domain%          Zone forward
-    #   - %reverse_domain%  Zone reverse
-    #   - %hostname%        Hostname de la machine ajoutée/modifiée/supprimée
-    #   - %host_ip%         Adresse IP
-    ns_add_command: %SF_ROOT_DIR%/scripts/examples/ns-update.sh add %domain% %reverse_domain% %hostname% %host_ip%
+    #   - %conf_path%       Chemin où se situent les fichiers de conf du DHCP
+    dns_pre_update_command: %SF_ROOT_DIR%/scripts/examples/dns-pre-update.sh %conf_path%
 
     # Mise à jour du DNS après une modification liée à un host.
     # (Appelé à l'ajout/mdification/suppression d'une machine
     #
     # params :
-    #   - %domain%          Zone forward
-    #   - %reverse_domain%  Zone reverse
-    #   - %host_ip%         Adresse IP
-    ns_delete_command: %SF_ROOT_DIR%/scripts/examples/ns-update.sh delete %domain% %reverse_domain% %host_ip%
+    #   - %conf_path%       Chemin où se situent les fichiers de conf du DHCP
+    dns_update_command: %SF_ROOT_DIR%/scripts/examples/dns-update.sh %conf_path%
 
     # Mise à jour du DNS après une modification liée à un host.
     # (Appelé à l'ajout/mdification/suppression d'une machine
@@ -57,11 +52,13 @@ all:
     #   - %conf_path%       Chemin où se situent les fichiers de conf du DHCP
     dhcp_update_command: %SF_ROOT_DIR%/scripts/examples/dhcp-update.sh %conf_path%
 
-    # Création d'une image :
-    #
-    # Chemin absolu vers le répertoire où seront générés les fichiers de conf.
+    # Chemin absolu vers le répertoire où seront générés les fichiers de conf du DHCP
     # Ce repertoire doit exister et doit être versionné sous svn.
     dhcpd_conf_path: %SF_DATA_DIR%/rezodhcp/subnets
+
+    # Chemin absolu vers le répertoire où seront générés les fichiers de conf du DNS
+    # Ce repertoire doit exister et doit être versionné sous svn.
+    dns_conf_path: %SF_DATA_DIR%/rezodns/dns/etc/bind/datadns
 
     # Utilisateur svn pour la mise à jour du dépôt contenant la conf dhcp
     svn_username: manitou
