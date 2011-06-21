@@ -70,14 +70,14 @@ ul#command_list li .process_status {
 }
 ul#command_list li .process_info ,
 ul#command_list li .process_status {
-    color: #777;
+  color: #AAA;
     padding: 0;
     margin: 0 0 3px 0;
     font-size: 1.05em;
     text-shadow: 2px 2px 1px #FFF;
     font-weight: bold;
 }
-ul#command_list li pre{
+ul#command_list li pre {
     color: #DDD;
     background: #333;
     margin: 0; padding: 8px;
@@ -97,6 +97,19 @@ ul#command_list li div.stdout {
 }
 ul#command_list li .stderr pre { color: #A00; background: rgba(255, 20, 2, .1); }
 ul#command_list li .stdout pre { color: #333; background: #FFF; }
+
+ul#command_list li .process_info .owner {
+  color: black;
+}
+ul#command_list li .process_info .started_at {
+}
+ul#command_list li .process_status .pid ,
+ul#command_list li .process_status .return_code ,
+ul#command_list li .process_info   .label {
+    color: #555;
+}
+ul#command_list li.is_stopped  .process_status .status {color: #ff2222;}
+ul#command_list li.is_finished .process_status .status {color: #73B65A;}
 
 #sf_admin_container .sf_admin_form_field_hosts li {
     display: block;
