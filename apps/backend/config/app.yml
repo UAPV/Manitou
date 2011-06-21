@@ -1,5 +1,19 @@
-# You can find more information about this file on the symfony website:
-# http://www.symfony-project.org/reference/1_4/en/11-App
+all:
+  cas_server:
+    host: cas.univ-avignon.fr
+    port: 443
+    path:
+   
+  ldap_server:
+    host: ldap.univ-avignon.fr
+    port: 389
+    basedn: dc=univ-avignon,dc=fr
+    options: {<?php echo LDAP_OPT_PROTOCOL_VERSION ?>: 3}
+  
+  profile:
+    var_translation:
+      fullname: displayname
 
-# default values
-#all:
+dev:
+  security:
+    gods: [didrya]
