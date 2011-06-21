@@ -11,7 +11,7 @@ host_mac=$2
 interface=$3
 image_server=$4
 state=$5
-image_filename=$8
+image_filename=$6
 
 command='sudo /opt/drbl/sbin/drbl-ocs -b -q2 -rm-win-swap-hib -fsck-src-part -z0 -i 0'
 
