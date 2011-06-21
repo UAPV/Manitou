@@ -49,7 +49,7 @@ clientToWait=$(echo $hosts_ip | sed "s/ /\n/g" | wc -l)
 command="$command --clients-to-wait $clientToWait --max-time-to-wait 140 "
 
 # Hôtes à restaurer
-command="$command -h $hosts_ip"
+command="$command -h '$hosts_ip'"
 
 # LANG
 command="$command -l en_US"
