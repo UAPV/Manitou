@@ -60,6 +60,3 @@ all:
     # Ce repertoire doit exister et doit être versionné sous svn.
     dns_conf_path: %SF_DATA_DIR%/rezodns/dns/etc/bind/datadns
 
-    # Utilisateur svn pour la mise à jour du dépôt contenant la conf dhcp
-    svn_username: manitou
-    svn_password: m4n1t00
