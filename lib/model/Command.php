@@ -162,7 +162,10 @@ class Command extends BaseCommand {
 	{
     if (! $this->getUserId())
     {
-      $this->setUserId('foobar'); // TODO  sfContext::getInstance()->getUser()...
+      if (sfContext::hasInstance())
+        $this->setUserId(sfContext::getInstance()->getUser()->getProfileVar('uid'));
+      else
+        $this->setUserId('UNKNOWN');
     }
     
 		return parent::preInsert($con);
