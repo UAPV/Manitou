@@ -16,7 +16,7 @@ generator:
       fields:  ~
       list:
         title: Gestion des fichiers PXE
-        display: [=filename]
+        display: [=filename, description]
       filter:  ~
       form:    ~
       edit:    ~
