@@ -14,7 +14,9 @@ generator:
     config:
       actions: ~
       fields:  ~
-      list:    ~
+      list:
+        title: Images disponibles
+        display: [filename, comment, host, image_server]
       filter:  ~
       form:    ~
       edit:    ~
