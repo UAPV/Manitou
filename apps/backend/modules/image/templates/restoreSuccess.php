@@ -29,3 +29,21 @@
       </ul>
     </form>
   </div>
+
+  <script type="text/javascript">
+
+    $(document).ready (function () {
+      // On supprime les hôtes décochés
+      $('.sf_admin_form_field_hosts input:not(:checked)').closest('li').remove();
+
+      // Pour les autre on vérifie s'ils sont démarrés
+      $('.sf_admin_form_field_hosts input').each (function (i, input) {
+        $.get ('<?php echo url_for('@host') ?>/'+input.value+'/status', function (data) {
+          $(input).closest ('li').append (data.status == 1 ? 'UP !' : 'DOWN');
+          if (data.status == 1)
+            $(input).removeAttr ('checked')
+        });
+      });
+    });
+
+  </script>
