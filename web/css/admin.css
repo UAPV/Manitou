@@ -97,3 +97,7 @@ ul#command_list li div.stdout {
 }
 ul#command_list li .stderr pre { color: #A00; background: rgba(255, 20, 2, .1); }
 ul#command_list li .stdout pre { color: #333; background: #FFF; }
+
+#sf_admin_container .sf_admin_form_field_hosts li {
+    display: block;
+}

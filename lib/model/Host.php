@@ -46,6 +46,13 @@ class Host extends BaseHost {
     return $this->getHostname().'.'.$this->getDomainName();
   }
 
+  public function isRunning ()
+  {
+    $ignored = $code = -1;
+    exec ('fping -q -r 1 -t 50 '.$this->getIpAddress(), $ignored, $code);
+    return ($code == 0);
+  }
+
   /**
    * Code to be run before persisting the object
    *

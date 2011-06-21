@@ -18,7 +18,7 @@ class RestoreForm extends BaseForm
 
     $this->setWidgets (array(
       'image'       => new sfWidgetFormPropelChoice (array('model' => 'Image')),
-      'hosts'       => new sfWidgetFormPropelChoice (array('model' => 'Host', 'multiple' => true)),
+      'hosts'       => new sfWidgetFormPropelChoice (array('model' => 'Host', 'multiple' => true, 'expanded' => true)),
       'state'       => new sfWidgetFormChoice (array('choices' => $stateChoices)),
       'partition'   => new sfWidgetFormInputText(array('default'=>'sda1')),
       'resize'      => new sfWidgetFormInputCheckbox (array('default'=>'checked')),
