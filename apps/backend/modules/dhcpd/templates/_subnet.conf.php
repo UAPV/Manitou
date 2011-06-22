@@ -12,19 +12,7 @@ subnet <?php echo $subnet->getIpAddress() ?> netmask <?php echo $subnet->getNetm
 
     option subnet-mask  <?php echo $subnet->getNetmask() ?>;
     option routers      <?php echo preg_replace('/\.0$/', '.1', $subnet->getIpAddress()) // on remplace le dernier ".0" par ".1" ?>;
-
     option domain-name  "<?php echo $subnet->getDomainName() ?>";
-    ddns-domain-name    "<?php echo $subnet->getDomainName() ?>";
-
-    zone <?php echo $subnet->getDomainName() ?> {
-      primary <?php echo $subnet->getDnsServer () ?>;
-      key rndc-key;
-    }
-
-    zone <?php echo $subnet->getRevDomainName() ?> {
-      primary <?php echo $subnet->getDnsServer () ?>;
-      key rndc-key;
-    }
 
     <?php echo $subnet->getCustomConf() ?>
 
@@ -41,11 +29,6 @@ subnet <?php echo $subnet->getIpAddress() ?> netmask <?php echo $subnet->getNetm
         fixed-address               <?php echo $host->getIpAddress() ?>;
         option host-name            "<?php echo $host->getHostname() ?>";
         option domain-name-servers  <?php echo $subnet->getDnsServer() ?>;
-
-        ddns-updates        on;
-        ddns-hostname       "<?php echo $host->getHostname() ?>";
-        ddns-domainname     "<?php echo $subnet->getDomainName() ?>";
-        ddns-rev-domainname "<?php echo $subnet->getRevDomainName() ?>";
 
         <?php echo $host->getCustomConf() ?> 
     }
