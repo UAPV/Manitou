@@ -44,9 +44,9 @@ class Dns
    */
   public function apply ($path)
   {
-    $startTag = ';;; MANITOU_CONF_BEGIN ;;;';
-    $endTag   = ';;; MANITOU_CONF_END ;;;';
-    $tagRegex = '/\n'.$startTag.'.*'.$endTag.'/s';
+    $startTag = '; MANITOU_CONF_BEGIN';
+    $endTag   = '; MANITOU_CONF_END';
+    $tagRegex = '/\n'.$startTag.'.*'.$endTag.'\n/s';
     $serialId = sfConfig::get('sf_manitou_dns_serial_identifier');
     $serialRegex = '/.*'.$serialId.'.*/';
     $serial = "\t\t".time().' ; '.$serialId.' '.date('c');
@@ -68,7 +68,7 @@ class Dns
 
         $newContent .= str_pad ($entry['hostname'], 24).'IN      A       '.$entry['ip']."\n";
       }
-      $newContent .= $endTag;
+      $newContent .= $endTag."\n";
 
 
       file_put_contents ($path.'/'.$filename, $content.$newContent);
@@ -91,7 +91,7 @@ class Dns
 
         $newContent .= str_pad ($entry['ip'], 16).'IN PTR '.$entry['fqdn'].".\n";
       }
-      $newContent .= $endTag;
+      $newContent .= $endTag."\n";
       file_put_contents ($path.'/'.$filename, $content.$newContent);
     }
   }
