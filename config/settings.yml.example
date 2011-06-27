@@ -60,3 +60,6 @@ all:
     # Ce repertoire doit exister et doit être versionné sous svn.
     dns_conf_path: %SF_DATA_DIR%/rezodns/dns/etc/bind/datadns
 
+    # Chaine permettant d'identifier la ligne comportant le serial dans le fichiers de conf du DNS
+    dns_serial_identifier: __SERIAL_IDENTIFIER__
+
