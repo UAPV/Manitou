@@ -23,7 +23,7 @@ Récupérer les sources
 
 Configurer la base de données en éditant `config/databases.yml` puis l'initialiser :
 
-    ./symfony propel:build-all-load
+    ./symfony propel:build-all
 
 Initialiser le dépôt contenant la configuration des DHCP :
 
@@ -35,11 +35,60 @@ Initialiser le dépôt contenant la configuration DNS :
     svn checkout svn://svn.univ-avignon.fr/XXXX_DNS data/dnsconf
     sudo chown www-data:www-data data/dnsconf -R
 
-Personnaliser la commandes exécutées, la conf svn, etc : `config/settings.yml`.
+Copier les scripts d'exemple et les éditer (vérifier les droits d'exécution) :
 
-Configurer l'authentification :
+    cp scripts/examples/*.sh scripts/
+    vi scripts/*
 
-    TODO
+Personnaliser la commandes exécutées, etc : `config/settings.yml`.
+
+Configurer l'authentification en modifiant `apps/backend/config/app.yml`
+
+
+Mise à jour
+===========
+
+Un script existe déjà sur le serveur de test (`update-project.sh`) et contient :
+
+    #!/bin/bash
+    git stash           # Enregistrement temporaire des modifs locales
+    git pull            # récupération et intégration des modifs du dépôt
+    git stash apply     # Application des modifs temporaires
+    ./symfony propel:build --all-classes    # reconstruction des classes générées
+    ./symfony propel:migrate                # Mise à jour de la base de données
+    sudo /usr/local/bin/wwwize.sh log cache # chown www-data: log cache
+    sudo -u www-data symfony-cc.sh manitou-test # symfony cc (RAZ du cache de symfony)
+
+
+FAQ
+===
+
+Quelles commandes sont exécutées ? quand et comment ?
+-----------------------------------------------------
+
+Voir le fichier [/config/settings.yml](https://github.com/UAPV/Manitou/blob/master/config/settings.yml.example)
+
+Comment modifier les arguments des commandes exécutées ?
+--------------------------------------------------------
+
+Dans la plupart des cas la classe [CommandePeer](https://github.com/UAPV/Manitou/blob/master/lib/model/CommandPeer.php)
+centralise la manipulation et la configuration des commandes.
+
+Comment la conf du DHCP est elle intégrée ?
+-------------------------------------------
+
+
+
+Comment modifier le template utilisé pour la génération de la conf DHCP ?
+-------------------------------------------------------------------------
+
+
+Comment fonctionne l'intégration du DNS ?
+-----------------------------------------
+
+Comment modifier la génération de la conf DNS ?
+-----------------------------------------------
+
 
 À propos
 ========
