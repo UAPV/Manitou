@@ -87,6 +87,12 @@ command_stop:
     id: \d+
     sf_method: [get]
 
+dns_show:
+  url:   /dns/:filename
+  param: { module: dns, action: show }
+  requirements:
+    filename: db.*
+
 # default rules
 homepage:
   url:   /

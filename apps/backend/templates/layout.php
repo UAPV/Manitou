@@ -25,7 +25,8 @@
         <li><?php echo link_to ('Images', 'image') ?></li>
         <li><?php echo link_to ('Subnets', 'subnet') ?></li>
         <li><?php echo link_to ('Fichiers PXE', 'pxe_file') ?></li>
-        <li><?php echo link_to ('Conf Dhcp', 'dhcpd/index') ?></li>
+        <li><?php echo link_to ('Conf DHCP', 'dhcpd/index') ?></li>
+        <li><?php echo link_to ('Erreurs DNS', 'dns/index') ?></li>
       </ul>
     </div>
     <div id="content">
