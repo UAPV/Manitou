@@ -85,7 +85,8 @@ class CommandPeer extends BaseCommandPeer {
     $command->setCommand (sfConfig::get('sf_manitou_dns_pre_update_command'));
     $command->setArgument ('conf_path', sfConfig::get('sf_manitou_dns_conf_path'));
     $command->setLabel ('Mise à jour des fichiers de conf du DNS');
-    return $command->exec ();
+    return $command->exec (false); // obligé d'attendre le retour de la commande pour que le svn commit
+                                   // qui va suivre fonctionne correctement
   }
 
   /**

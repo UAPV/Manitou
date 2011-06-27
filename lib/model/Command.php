@@ -27,9 +27,10 @@ class Command extends BaseCommand {
    *
    * Cette commande n'est pas bloquante, l'exécution se passe en arrière plan
    *
+   * @param boolean     $background   Si false exec ne rentrant la main qu'un fois la commande terminée
    * @return Command    self
    */
-  public function exec ()
+  public function exec ($background = true)
   {
     $this->setStdErrFile  (tempnam ('/tmp','manitou_cmd_'));
     $this->setStdOutFile  (tempnam ('/tmp','manitou_cmd_'));
@@ -41,11 +42,17 @@ class Command extends BaseCommand {
       .' 2> '.$this->getStdErrFile()
       .'  > '.$this->getStdOutFile()
       .' ; echo $? "`date --rfc-3339=seconds`" > '.$this->getExitFile() // On place le code d'erreur et la date de fin dans ce fichier
-    ).' > /dev/null & ';
+    ).' > /dev/null ';
+    
+    if ($background)
+      $command .= ' &' ;
 
     file_put_contents('/tmp/manitou_cmd_debug', $command."\n", FILE_APPEND);
 
     exec($command);
+
+    if (! $background)
+      $this->syncStatus();
 
     return $this;
   }
@@ -79,7 +86,7 @@ class Command extends BaseCommand {
 
   public function syncStatus ()
   {
-    if (! $this->isRunning())
+    if ($this->isFinished())
       return;
 
     $this->setStdErr (file_get_contents ($this->getStdErrFile()));
