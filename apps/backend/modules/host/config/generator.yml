@@ -16,7 +16,7 @@ generator:
       fields:  ~
       list:
         title: Gestion des machines
-        display: [=hostname, ip_address, mac_address]
+        display: [=hostname, ip_address, mac_address, subnet]
         max_per_page: 50
         batch_actions:
           _delete:    ~
@@ -27,7 +27,7 @@ generator:
           _edit:      ~
           _delete:    ~
       filter:
-        display: [profile_id, room_id, ip_address, mac_address, pxe_file_id]
+        display: [profile_id, room_id, subnet_id, ip_address, mac_address, pxe_file_id]
       form:    ~
       edit:    ~
       new:     ~
