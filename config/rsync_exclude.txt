@@ -3,6 +3,7 @@
 /log/*
 /web/*_dev.php
 /web/uploads/*
+/data/*
 
 # SCM files
 .arch-params
