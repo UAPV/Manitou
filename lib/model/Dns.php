@@ -46,7 +46,7 @@ class Dns
   {
     $startTag = '; MANITOU_CONF_BEGIN';
     $endTag   = '; MANITOU_CONF_END';
-    $tagRegex = '/\n'.$startTag.'.*'.$endTag.'\n/s';
+    $tagRegex = '/\n*'.$startTag.'.*'.$endTag.'\n*/s';
     $serialId = sfConfig::get('sf_manitou_dns_serial_identifier');
     $serialRegex = '/.*'.$serialId.'.*/';
     $serial = "\t\t".time().' ; '.$serialId.' '.date('c');
@@ -57,7 +57,7 @@ class Dns
       $content = preg_replace ($tagRegex, '', $content);
       $content = preg_replace ($serialRegex, $serial, $content);
 
-      $newContent = "\n$startTag\n;===================\n";
+      $newContent = "\n\n$startTag\n;===================\n";
       foreach ($entries as $entry)
       {
         // Si l'entrée existe déjà on la commente
@@ -68,7 +68,7 @@ class Dns
 
         $newContent .= str_pad ($entry['hostname'], 24).'IN      A       '.$entry['ip']."\n";
       }
-      $newContent .= $endTag."\n";
+      $newContent .= $endTag."\n\n";
 
 
       file_put_contents ($path.'/'.$filename, $content.$newContent);
@@ -80,7 +80,7 @@ class Dns
       $content = preg_replace ($tagRegex, '', $content);
       $content = preg_replace ($serialRegex, $serial, $content);
 
-      $newContent = "\n$startTag\n;===================\n";
+      $newContent = "\n\n$startTag\n;===================\n";
       foreach ($entries as $entry)
       {
         // Si l'entrée existe déjà on la commente
@@ -91,7 +91,7 @@ class Dns
 
         $newContent .= str_pad ($entry['ip'], 16).'IN PTR '.$entry['fqdn'].".\n";
       }
-      $newContent .= $endTag."\n";
+      $newContent .= $endTag."\n\n";
       file_put_contents ($path.'/'.$filename, $content.$newContent);
     }
   }
