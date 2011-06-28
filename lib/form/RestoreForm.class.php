@@ -14,13 +14,13 @@ class RestoreForm extends BaseForm
   public function setup()
   {
     $stateChoices = array ('poweroff' => 'Éteint', 'reboot' => 'Allumé', 'true' => 'En attente');
-    $diskChoices = array ('sda' => 'Disque entier', 'sda1' => 'Windows', 'sda2' => 'Ubuntu');
+    // $diskChoices = array ('sda' => 'Disque entier', 'sda1' => 'Windows', 'sda2' => 'Ubuntu');
 
     $this->setWidgets (array(
       'image'       => new sfWidgetFormPropelChoice (array('model' => 'Image')),
       'hosts'       => new sfWidgetFormPropelChoice (array('model' => 'Host', 'multiple' => true, 'expanded' => true)),
       'state'       => new sfWidgetFormChoice (array('choices' => $stateChoices)),
-      'partition'   => new sfWidgetFormInputText(array('default'=>'sda1')),
+      'partition'   => new sfWidgetFormInputText(array('default'=>'sda')),
       'resize'      => new sfWidgetFormInputCheckbox (array('default'=>'checked')),
       'post_script' => new sfWidgetFormInputCheckbox (array('default'=>'checked')),
       'pre_script'  => new sfWidgetFormInputCheckbox (),
