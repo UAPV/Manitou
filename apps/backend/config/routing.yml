@@ -93,6 +93,18 @@ dns_show:
   requirements:
     filename: db.*
 
+image_server_stop:
+  url:   /image_server/:id/stop
+  class:   sfPropel15Route
+  options: { model: ImageServer, type: object }
+  param: { module: dns, action: show }
+
+image_server_status:
+  url:   /image_server/:id/status
+  class:   sfPropel15Route
+  options: { model: ImageServer, type: object }
+  param: { module: dns, action: status }
+
 # default rules
 homepage:
   url:   /

@@ -16,6 +16,8 @@ class commandActions extends sfActions
         ->limit(40)
         ->find();
 
+    $this->imageServers = ImageServerQuery::create ()->find();
+
     foreach ($this->commands as $command)
       $command->syncStatus();
   }

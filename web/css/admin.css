@@ -1,3 +1,11 @@
+a, a:visited {
+    color: #5b6cd6;
+    text-decoration: none;
+}
+a:hover {
+    color: #0099ff;
+}
+
 
 h1 {
     font-family: 'Carter One', serif;
@@ -7,6 +15,10 @@ h1 {
     font-size: 1.6em;
 }
 h2 {
+    font-family: 'Carter One', serif;
+    font-weight: normal;
+    color: #666;
+	text-shadow: 2px 2px 0px #FFF;
 }
 
 body {
@@ -110,6 +122,14 @@ ul#command_list li .process_info   .label {
 }
 ul#command_list li.is_stopped  .process_status .status {color: #ff2222;}
 ul#command_list li.is_finished .process_status .status {color: #73B65A;}
+
+ul#image_server_status li .status {
+    font-family: monospace;
+    margin: 0 1em;
+}
+ul#image_server_status li .hostname {
+    font-weight: bold;
+}
 
 #sf_admin_container .sf_admin_form_field_hosts li {
     display: block;

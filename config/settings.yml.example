@@ -16,7 +16,7 @@ all:
     #   - %state%           État des machine post-installation (wait, reboot, poweroff)
     create_image_command: %SF_ROOT_DIR%/scripts/examples/create-image.sh %host_ip% %host_mac% %interface% %image_server% %state% %image_filename%
 
-    # Restauration d'une image :s
+    # Restauration d'une image
     #
     # params :
     #   - %hosts_ip%        Adresses IP séparés par des espaces
@@ -30,6 +30,18 @@ all:
     #   - %post_run%        Exécuter le script POST_RUN (0,1)
     #   - %state%           État des machine post-installation (wait, reboot, poweroff)
     restore_image_command: %SF_ROOT_DIR%/scripts/examples/restore-image.sh %hosts_ip% %hosts_mac% %interface% %image_server% %resize% %partition% %state% %image_filename% %pre_run% %post_run%
+
+    # Stop les serveurs de restauration d'image
+    #
+    # params :
+    #   - %image_server%    Serveur DRBL à utiliser
+    image_server_stop: %SF_ROOT_DIR%/scripts/examples/image_server_stop.sh %image_server%
+
+    # Stop les serveurs de restauration d'image
+    #
+    # params :
+    #   - %image_server%    Serveur DRBL à utiliser
+    image_server_status: %SF_ROOT_DIR%/scripts/examples/image_server_status.sh %image_server%
 
     # Mise à jour du DNS après une modification liée à un host.
     # (Appelé à AVANT l'ajout/mdification/suppression d'une machine)
