@@ -14,7 +14,7 @@ subnet <?php echo $subnet->getIpAddress() ?> netmask <?php echo $subnet->getNetm
     option routers      <?php echo preg_replace('/\.0$/', '.1', $subnet->getIpAddress()) // on remplace le dernier ".0" par ".1" ?>;
     option domain-name  "<?php echo $subnet->getDomainName() ?>";
 
-    <?php if ($subnet->getPxeFileId() !== null) echo 'filename = "'.$subnet->getPxeFile ()->getFilename()."\"\n"; ?>
+    <?php if ($subnet->getPxeFileId() !== null) echo 'filename = "'.$subnet->getPxeFile ()->getFilename()."\";\n"; ?>
 
     <?php echo str_replace("\n", "\n    ", $subnet->getCustomConf())."\n" ?>
 
@@ -29,7 +29,7 @@ subnet <?php echo $subnet->getIpAddress() ?> netmask <?php echo $subnet->getNetm
         option host-name            "<?php echo $host->getHostname() ?>";
         option domain-name-servers  <?php echo $subnet->getDnsServer() ?>;
 
-        <?php if ($host->getPxeFileId() !== null) echo 'filename = "'.$host->getPxeFile ()->getFilename()."\"\n"; ?>
+        <?php if ($host->getPxeFileId() !== null) echo 'filename = "'.$host->getPxeFile ()->getFilename()."\";\n"; ?>
         <?php echo str_replace("\n", "\n        ", $host->getCustomConf())."\n" ?>
     }
   <?php endforeach ?>
