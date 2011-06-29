@@ -41,6 +41,16 @@ class hostActions extends autoHostActions
   }
 
   /**
+   * Action appelée par le biais du menu déroulant sur la liste des machines
+   */
+  public function executeMassCreate(sfWebRequest $request)
+  {
+    $this->form = new MultipleHostForm();
+  }
+
+
+
+  /**
    * Return in JSON when requested via AJAX or as plain text when requested directly in debug mode
    *
    */
