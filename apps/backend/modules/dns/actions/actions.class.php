@@ -39,4 +39,17 @@ class dnsActions extends sfActions
     $this->filename = basename ($request->getParameter ('filename'));
     $this->fileContent = file_get_contents(sfConfig::get('sf_manitou_dns_conf_path').'/'.$this->filename);
   }
+
+ /**
+  * Force la regénération de la conf DNS
+  *
+  * @param sfRequest $request A request object
+  */
+  public function executeReload(sfWebRequest $request)
+  {
+    CommandPeer::runDnsPreUpdate();
+    CommandPeer::runDnsUpdate();
+
+    $this->redirect ('dns/index');
+  }
 }
