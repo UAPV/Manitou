@@ -1,8 +1,8 @@
-a, a:visited {
+a, a:visited, #sf_admin_container a {
     color: #5b6cd6;
     text-decoration: none;
 }
-a:hover {
+a:hover, #sf_admin_container a:hover {
     color: #0099ff;
 }
 

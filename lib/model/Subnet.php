@@ -35,6 +35,17 @@ class Subnet extends BaseSubnet {
   }
 
 	/**
+	 * Set the value of [custom_conf] column.
+	 *
+	 * @param      string $v new value
+	 * @return     Host The current object (for fluent API support)
+	 */
+	public function setCustomConf($v)
+	{
+    parent::setCustomConf(str_replace("\r", '', $v));
+  }
+  
+	/**
 	 * Code to be run before persisting the object
    *
    * On détermine si le DNS devra être mis à jour après l'enregistrement en base

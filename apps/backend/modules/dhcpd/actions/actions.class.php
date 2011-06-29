@@ -21,4 +21,10 @@ class dhcpdActions extends sfActions
     foreach (glob (sfConfig::get('sf_manitou_dhcpd_conf_path').'/*.conf') as $file)
       $this->dhcpdConf [basename($file)] = file_get_contents($file);
   }
+
+  public function executeReload (sfWebRequest $request)
+  {
+    CommandPeer::runDhcpdUpdate();
+    $this->redirect ('dhcpd/index');
+  }
 }
