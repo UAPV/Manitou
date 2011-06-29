@@ -29,6 +29,7 @@ subnet <?php echo $subnet->getIpAddress() ?> netmask <?php echo $subnet->getNetm
         option host-name            "<?php echo $host->getHostname() ?>";
         option domain-name-servers  <?php echo $subnet->getDnsServer() ?>;
 
+        <?php if ($host->getPxeFileId() !== null) echo 'filename = "'.$host->getPxeFile ()->getFilename()."\"\n"; ?>
         <?php echo str_replace("\n", "\n        ", $host->getCustomConf())."\n" ?>
     }
   <?php endforeach ?>
