@@ -53,6 +53,39 @@ class Host extends BaseHost {
     return ($code == 0);
   }
 
+	/**
+	 * Set the value of [custom_conf] column.
+	 *
+	 * @param      string $v new value
+	 * @return     Host The current object (for fluent API support)
+	 */
+	public function setMacAddress($v)
+	{
+    return parent::setMacAddress(strtoupper($v));
+  }
+
+	/**
+	 * Set the value of [custom_conf] column.
+	 *
+	 * @param      string $v new value
+	 * @return     Host The current object (for fluent API support)
+	 */
+	public function setCustomConf($v)
+	{
+    return parent::setCustomConf(str_replace("\r", '', $v));
+  }
+
+	/**
+	 * Set the value of [custom_conf] column.
+	 *
+	 * @param      string $v new value
+	 * @return     Host The current object (for fluent API support)
+	 */
+	public function setComment($v)
+	{
+    parent::setComment(str_replace("\r", '', $v));
+  }
+
   /**
    * Code to be run before persisting the object
    *
