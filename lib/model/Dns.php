@@ -47,15 +47,12 @@ class Dns
     $startTag = '; MANITOU_CONF_BEGIN';
     $endTag   = '; MANITOU_CONF_END';
     $tagRegex = '/\n*'.$startTag.'.*'.$endTag.'\n*/s';
-    $serialId = sfConfig::get('sf_manitou_dns_serial_identifier');
-    $serialRegex = '/.*'.$serialId.'.*/';
-    $serial = "\t\t".time().' ; '.$serialId.' '.date('c');
 
     foreach ($this->conf as $filename => $entries)
     {
       $content = file_get_contents($path.'/'.$filename);
       $content = preg_replace ($tagRegex, '', $content);
-      $content = preg_replace ($serialRegex, $serial, $content);
+      $content = $this->updateSerial($content);
 
       $newContent = "\n\n$startTag\n;===================\n";
       foreach ($entries as $entry)
@@ -78,7 +75,7 @@ class Dns
     {
       $content = file_get_contents($path.'/'.$filename);
       $content = preg_replace ($tagRegex, '', $content);
-      $content = preg_replace ($serialRegex, $serial, $content);
+      $content = $this->updateSerial($content);
 
       $newContent = "\n\n$startTag\n;===================\n";
       foreach ($entries as $entry)
@@ -94,5 +91,35 @@ class Dns
       $newContent .= $endTag."\n\n";
       file_put_contents ($path.'/'.$filename, $content.$newContent);
     }
+  }
+
+  /**
+   * Met à jour le serial dans une conf de bind
+   *
+   * @param string $conf
+   * @return string       La conf avec le serial màj
+   */
+  function updateSerial ($conf)
+  {
+    $currentDate = date('Ymd');
+    $counter = '00';
+
+    $serialId = sfConfig::get('sf_manitou_dns_serial_identifier');
+    $serialRegex = '/\s*([0-9]{8})([0-9]{2})\s*;.*'.$serialId.'.*/';
+
+    if (preg_match($serialRegex, $conf, $matches) < 1)
+    {
+      if (sfContext::hasInstance ())
+        sfContext::getInstance()->getLogger()->log ('DNS Serial not found', sfLogger::CRIT);
+
+      return $conf;
+    }
+
+    if ($matches[1] == $currentDate)
+      $counter = str_pad(((int) $matches[2]) + 1, 2, '0', STR_PAD_LEFT);
+
+    $serial = "\n\t\t".$currentDate.$counter.' ; '.$serialId.' '.date('c');
+
+    return preg_replace ($serialRegex, $serial, $conf);
   }
 }
