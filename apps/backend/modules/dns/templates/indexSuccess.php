@@ -1,6 +1,11 @@
 
 <h1>Conf DNS</h1>
 
+<p>
+  Dernière configuration générée par Manitou (peut être différent de la dernière version du dépôt)
+  <?php echo link_to ('Forcer la regénération', 'dns/reload') ?>
+</p>
+
 <!-- Fichiers avec des erreurs -->
 <?php foreach ($files as $filename): ?>
   <?php if ($dnsErrors->offsetExists ($filename)): ?>
