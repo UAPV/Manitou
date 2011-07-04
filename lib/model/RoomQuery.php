@@ -19,4 +19,14 @@
  */
 class RoomQuery extends BaseRoomQuery {
 
+  /**
+   * Code to execute before every SELECT statement
+   *
+   * @param     PropelPDO $con The connection object used by the query
+   */
+  function preSelect(PropelPDO $con)
+  {
+    return $this->orderByName ();
+  }
+
 } // RoomQuery
