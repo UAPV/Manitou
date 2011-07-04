@@ -60,7 +60,7 @@ class Dns
         // Si l'entrée existe déjà on la commente
         if (preg_match('/^'.$entry['hostname'].'\s+IN\s+A/', $content) !== 0)
           $newContent .= '; MANITOU_ERROR hostname already exists : ';
-        if (preg_match('/IN\s+A\s+'.$entry['ip'].'/', $content) !== 0)
+        if (preg_match('/IN\s+A\s+'.str_replace('.', '\.', $entry['ip']).'/', $content) !== 0)
           $newContent .= '; MANITOU_ERROR ip already exists : ';
 
         $newContent .= str_pad ($entry['hostname'], 24).'IN      A       '.$entry['ip']."\n";
@@ -81,7 +81,7 @@ class Dns
       foreach ($entries as $entry)
       {
         // Si l'entrée existe déjà on la commente
-        if (preg_match('/^'.$entry['ip'].'\s+IN\s+PTR/', $content) !== 0)
+        if (preg_match('/^'.str_replace('.', '\.', $entry['ip']).'\s+IN\s+PTR/', $content) !== 0)
           $newContent .= '; MANITOU_ERROR ip already exists : ';
         if (preg_match('/IN\s+PTR\s+'.$entry['fqdn'].'/', $content) !== 0)
           $newContent .= '; MANITOU_ERROR fqdn already exists : ';
