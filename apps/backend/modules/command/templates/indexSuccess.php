@@ -44,9 +44,10 @@
       });
     }
 
-    setInterval (updateRunningCommands, 1000);
-    setInterval (updateImageServerStatus, 3000);
+    setInterval (updateRunningCommands, 7000);
+    setInterval (updateImageServerStatus, 30000);
 
+    updateRunningCommands();
     updateImageServerStatus();
 
     $('.stop_command').live ('click', function (e) {
