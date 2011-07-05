@@ -19,4 +19,21 @@
  */
 class HostQuery extends BaseHostQuery {
 
+  /**
+   * @param $hostname     example "etd-2w18-121"
+   * @return Host
+   */
+  public function findByHostname ($hostname)
+  {
+    list ($profile, $room, $number) = explode ('-', $hostname);
+    return $this->filterByNumber($number)
+                ->useProfileQuery()
+                  ->filterByName($profile)
+                ->endUse()
+                ->useRoomQuery()
+                  ->filterByName($room)
+                ->endUse()
+                ->findOne();
+  }
+
 } // HostQuery

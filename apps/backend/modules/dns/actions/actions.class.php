@@ -52,4 +52,37 @@ class dnsActions extends sfActions
 
     $this->redirect ('dns/index');
   }
+
+
+ /**
+  * Force la regénération de la conf DNS
+  *
+  * @param sfRequest $request A request object
+  */
+  public function executeClean(sfWebRequest $request)
+  {
+    CommandPeer::runDnsPreUpdate();
+
+    $this->files = array();
+    $this->dnsErrors = array();
+
+    foreach (glob (sfConfig::get('sf_manitou_dns_conf_path').'/db.*') as $file)
+    {
+      $filename = basename ($file);
+      if ($filename == 'db.univ-avignon.fr') continue;
+      if (preg_match_all ('/;(.*)\R.*MARKED FOR DELETION.*PTR\s+(.*).$/m', file_get_contents($file), $result) > 0)
+      {
+        foreach ($result[1] as $i => $comment)
+        {
+          $hostParts = explode ('.', $result[2][$i]);
+          $host = HostQuery::create()->findByHostname($hostParts[0]);
+          echo $host.' : '.$comment."\n";
+          $host->setComment($comment);
+          $host->save();
+        }
+      }
+    }
+
+    return sfView::NONE;
+  }
 }
