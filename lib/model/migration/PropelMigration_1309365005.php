@@ -76,7 +76,7 @@ ALTER TABLE `image` ADD CONSTRAINT `image_FK_2`
 
 CREATE UNIQUE INDEX `image_server_U_1` ON `image_server` (`hostname`);
 
-CREATE UNIQUE INDEX `name` ON `pxe_file` (`name`);
+CREATE UNIQUE INDEX `filename` ON `pxe_file` (`filename`);
 
 CREATE UNIQUE INDEX `room_U_1` ON `room` (`name`);
 

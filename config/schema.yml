@@ -56,7 +56,7 @@ propel:
     filename:       { type: varchar, size: 50 }
     description:    { type: varchar, size: 50 }
     _uniques:
-      name:         [name]
+      filename:     [filename]
 
   image:
     id:             ~
