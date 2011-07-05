@@ -11,5 +11,6 @@ class ProfileForm extends BaseProfileForm
 {
   public function configure()
   {
+    unset($this['created_at']);
   }
 }
