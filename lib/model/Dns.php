@@ -57,10 +57,14 @@ class Dns
       $newContent = "\n\n$startTag\n;===================\n";
       foreach ($entries as $entry)
       {
-        // Si l'entrée existe déjà on la commente
-        if (preg_match('/^'.$entry['hostname'].'\s+IN\s+A/', $content) !== 0)
+        // Si une entrée STRICTEMENT identique existe on commente l'originale
+        $regex = '/^'.preg_quote($entry['hostname']).'\s+IN\s+A\s+'.preg_quote($entry['ip']).'\s*$/m';
+        if (preg_match($regex, $content, $matches) === 1)
+          $content = preg_replace ($regex, '; [MANITOU] MARKED FOR DELETION : '.$matches[0], $content);
+        // Sinon manitou perd la main et on commente l'ajout prévu
+        else if (preg_match('/^'.$entry['hostname'].'\s+IN\s+A/m', $content) > 0)
           $newContent .= '; MANITOU_ERROR hostname already exists : ';
-        if (preg_match('/IN\s+A\s+'.str_replace('.', '\.', $entry['ip']).'/', $content) !== 0)
+        else if (preg_match('/^[^;].*IN\s+A\s+'.preg_quote($entry['ip']).'\s*$/m', $content) > 0)
           $newContent .= '; MANITOU_ERROR ip already exists : ';
 
         $newContent .= str_pad ($entry['hostname'], 24).'IN      A       '.$entry['ip']."\n";
@@ -80,10 +84,14 @@ class Dns
       $newContent = "\n\n$startTag\n;===================\n";
       foreach ($entries as $entry)
       {
-        // Si l'entrée existe déjà on la commente
-        if (preg_match('/^'.str_replace('.', '\.', $entry['ip']).'\s+IN\s+PTR/', $content) !== 0)
+        // Si une entrée STRICTEMENT identique existe on commente l'originale
+        $regex = '/^'.preg_quote($entry['ip']).'\s+IN\s+PTR\s+'.preg_quote($entry['fqdn']).'\.\s*$/m';
+        if (preg_match($regex, $content, $matches) === 1)
+          $content = preg_replace ($regex, '; [MANITOU] MARKED FOR DELETION : '.$matches[0], $content);
+        // Sinon manitou perd la main et on commente l'ajout prévu
+        else if (preg_match('/^'.preg_quote($entry['ip']).'\s+IN\s+PTR/m', $content) > 0)
           $newContent .= '; MANITOU_ERROR ip already exists : ';
-        if (preg_match('/IN\s+PTR\s+'.$entry['fqdn'].'/', $content) !== 0)
+        else if (preg_match('/^[^;].*IN\s+PTR\s+'.preg_quote($entry['fqdn']).'\s*$/m', $content) > 0)
           $newContent .= '; MANITOU_ERROR fqdn already exists : ';
 
         $newContent .= str_pad ($entry['ip'], 16).'IN PTR '.$entry['fqdn'].".\n";
