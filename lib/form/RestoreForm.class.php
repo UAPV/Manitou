@@ -13,7 +13,7 @@ class RestoreForm extends BaseForm
 {
   public function setup()
   {
-    $stateChoices = array ('poweroff' => 'Éteint', 'reboot' => 'Allumé', 'true' => 'En attente');
+    $stateChoices = array ('poweroff' => 'Éteint', 'reboot' => 'Allumé', 'wait' => 'En attente');
     // $diskChoices = array ('sda' => 'Disque entier', 'sda1' => 'Windows', 'sda2' => 'Ubuntu');
 
     $this->setWidgets (array(
