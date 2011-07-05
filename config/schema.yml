@@ -12,16 +12,18 @@ propel:
     custom_conf:    { type: longvarchar }
     image_server_id: ~
     pxe_file_id:    ~
+    _uniques:
+      ip:           [ip_address, image_server_id]
 
   image_server:
     id:             ~
     name:           { type: varchar, size: 30 }
-    hostname:       { type: varchar,size: 30 }
+    hostname:       { type: varchar,size: 30, index: unique }
     iface:          { type: varchar, size: 5,  required: true }
 
   room:
     id:             ~
-    name:           { type: varchar, size: 30 }
+    name:           { type: varchar, size: 30, index: unique }
     comment:        { type: longvarchar }
 
   host:
@@ -38,6 +40,10 @@ propel:
     pxe_file_id:    ~
     created_at:     ~
     updated_at:     ~
+    _uniques:
+      mac:          [mac_address]
+      ip:           [ip_address]
+      hostname:     [profile_id, room_id, number]
 
   profile:
     id:             ~
@@ -49,6 +55,8 @@ propel:
     id:             ~
     filename:       { type: varchar, size: 50 }
     description:    { type: varchar, size: 50 }
+    _uniques:
+      filename:     [filename]
 
   image:
     id:             ~
@@ -56,6 +64,8 @@ propel:
     filename:       { type: varchar, size: 50, required: true }
     host_id:        { type: integer, foreignReference: id, foreignTable: host, fkPhpName: Host }
     image_server_id: ~
+    _uniques:
+      filename:     [filename, host_id]
 
   command:
     id: ~
