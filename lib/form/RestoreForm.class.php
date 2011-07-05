@@ -41,7 +41,7 @@ class RestoreForm extends BaseForm
       'hosts'       => 'Machines à restaurer',
       'state'       => 'État',
       'partition'   => 'Partition',
-      'resize'      => 'Redimentionnement',
+      'resize'      => 'Redimensionnement',
       'post_script' => 'Post installation',
       'pre_script'  => 'Pre installation',
     ));
