@@ -9,10 +9,10 @@ subnet <?php echo $subnet->getIpAddress() ?> netmask <?php echo $subnet->getNetm
     deny dynamic bootp clients;
 
     range <?php echo $subnet->getRangeBegin().' '.$subnet->getRangeEnd() ?>;
-
     option subnet-mask  <?php echo $subnet->getNetmask() ?>;
     option routers      <?php echo $subnet->getGateway() ?>;
     option domain-name  "<?php echo $subnet->getDomainName() ?>";
+    option domain-name-servers  <?php echo $subnet->getDnsServer() ?>;
 
     <?php if ($subnet->getPxeFileId() !== null) echo 'filename = "'.$subnet->getPxeFile ()->getFilename()."\";\n"; ?>
 
@@ -27,7 +27,6 @@ subnet <?php echo $subnet->getIpAddress() ?> netmask <?php echo $subnet->getNetm
         hardware ethernet           <?php echo $host->getMacAddress() ?>;
         fixed-address               <?php echo $host->getIpAddress() ?>;
         option host-name            "<?php echo $host->getHostname() ?>";
-        option domain-name-servers  <?php echo $subnet->getDnsServer() ?>;
 
         <?php if ($host->getPxeFileId() !== null) echo 'filename = "'.$host->getPxeFile ()->getFilename()."\";\n"; ?>
         <?php echo str_replace("\n", "\n        ", $host->getCustomConf())."\n" ?>
