@@ -22,7 +22,9 @@ class imageActions extends autoImageActions
     $this->Image = new Image ();
     $this->Image->setHost ($host);
     $this->Image->setImageServerId ($host->getSubnet()->getImageServerId());
+    
     $this->form = $this->configuration->getForm($this->Image);
+    $this->form->setWidget('image_server_id', new sfWidgetFormInputHidden());
   }
 
   /**

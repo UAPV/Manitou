@@ -66,7 +66,7 @@ propel:
     host_id:        { type: integer, foreignReference: id, foreignTable: host, fkPhpName: Host }
     image_server_id: ~
     _uniques:
-      filename:     [filename, host_id]
+      filename:     [filename, image_server_id]
 
   command:
     id: ~
