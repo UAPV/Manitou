@@ -11,7 +11,7 @@ subnet <?php echo $subnet->getIpAddress() ?> netmask <?php echo $subnet->getNetm
     range <?php echo $subnet->getRangeBegin().' '.$subnet->getRangeEnd() ?>;
 
     option subnet-mask  <?php echo $subnet->getNetmask() ?>;
-    option routers      <?php echo preg_replace('/\.0$/', '.1', $subnet->getIpAddress()) // on remplace le dernier ".0" par ".1" ?>;
+    option routers      <?php echo $subnet->getGateway() ?>;
     option domain-name  "<?php echo $subnet->getDomainName() ?>";
 
     <?php if ($subnet->getPxeFileId() !== null) echo 'filename = "'.$subnet->getPxeFile ()->getFilename()."\";\n"; ?>
