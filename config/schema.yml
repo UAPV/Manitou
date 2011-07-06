@@ -5,6 +5,7 @@ propel:
     name:           { type: varchar, size: 30 }
     domain_name:    { type: varchar, size: 30 }
     dns_server:     { type: varchar, size: 15, required: true }
+    gateway:        { type: varchar, size: 15, required: true }
     ip_address:     { type: varchar, size: 15, required: true }
     netmask:        { type: varchar, size: 15, required: true }
     range_begin:    { type: varchar, size: 15, required: true }
