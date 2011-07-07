@@ -44,7 +44,57 @@ class Subnet extends BaseSubnet {
 	{
     parent::setCustomConf(str_replace("\r", '', $v));
   }
-  
+
+  /**
+   * Détermine si une IP donnée appartient au range d'adresses IP délivrées par le serveur DHCP
+   *
+   * @param string $ipAddress
+   * @return boolean
+   */
+  public function isInsideDhcpRange ($ipAddress)
+  {
+    return (ip2long($this->getRangeBegin()) <= ip2long($ipAddress)
+         && ip2long($this->getRangeEnd())   >= ip2long($ipAddress));
+  }
+
+  /**
+   * Détermine si une IP donnée peut être affectée, celle ci ne doit pas appartenir :
+   *   - aux serveurs DNS du subnet
+   *   - à la passerelle
+   *   - au range d'adresse IP délivrée par le serveur DHCP
+   *
+   * @param string $ipAddress
+   * @return boolean
+   */
+  public function isIpAddressAuthorized ($ipAddress)
+  {
+    return ($this->containsIpAddress ($ipAddress) &&
+          ! $this->isInsideDhcpRange ($ipAddress) &&
+            $this->getDnsServer()  != $ipAddress  &&
+            $this->getGateway()    != $ipAddress);
+  }
+
+  /**
+   * Détermine si une adresse IP est bien contenu dans la plage d'IP du subnet
+   *
+   * TODO: Pour le moment on utilise une méthode naïve avec des masques de
+   * TODO: sous-réseau simples (255 ou 0), à améliorer
+   *
+   * @param string $ipAddress
+   * @return void
+   */
+  public function containsIpAddress ($ipAddress)
+  {
+    $ipParts = explode ('.', $ipAddress);
+    $lastPart = (int) end ($ipParts);
+
+    if ($lastPart < 1 || $lastPart > 254)
+      return false;
+
+    $networkPartLength = strpos ($this->getNetmask(), '.0');
+    return (substr ($this->getIpAddress(), 0, $networkPartLength) == substr ($ipAddress, 0, $networkPartLength));
+  }
+
 	/**
 	 * Code to be run before persisting the object
    *
