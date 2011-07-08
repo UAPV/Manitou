@@ -126,5 +126,4 @@ class CommandPeer extends BaseCommandPeer {
     return $command->exec ();
   }
 
-
 } // CommandPeer

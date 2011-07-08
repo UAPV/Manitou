@@ -87,6 +87,38 @@ class Host extends BaseHost {
   }
 
   /**
+   * Détermine si la machine a déjà une entrée dans le DNS (couple IP & Hostname)
+   *
+   * @return boolean
+   */
+  public function hasDnsRecord ()
+  {
+    return ($this->hasDnsRecordForHostname() && $this->hasDnsRecordForIp());
+  }
+
+  /**
+   * Détermine si la machine a déjà une entrée dans le DNS
+   *
+   * @return boolean
+   */
+  public function hasDnsRecordForIp ()
+  {
+    $ip = implode('.', array_reverse( explode('.', $this->getIpAddress())));
+    return dns_check_record ($ip.'.in-addr.arpa', 'PTR');
+  }
+
+  /**
+   * Détermine si la machine a déjà une entrée dans le DNS
+   *
+   * @return boolean
+   */
+  public function hasDnsRecordForHostname ()
+  {
+    return dns_check_record ($this->getHostname(), 'ANY');
+  }
+
+
+  /**
    * Code to be run before persisting the object
    *
    * On détermine si le DNS devra être mis à jour après l'enregistrement en base
