@@ -61,9 +61,22 @@ class MultipleHostForm extends BaseForm
    */
   public function bind(array $taintedValues = null, array $taintedFiles = null)
   {
-    $validator = new sfValidatorIpAddress();
+    // Dans un premier temps on ne pré-valide que les données communes
     $isClean = true;
-    try {$validator->clean ($taintedValues['first_ip_address']);} catch (Exception $e) {$isClean = false;}
+    try
+    {
+      $this->validatorSchema['profile_id'      ]->clean ($taintedValues['profile_id'      ]);
+      $this->validatorSchema['room_id'         ]->clean ($taintedValues['room_id'         ]);
+      $this->validatorSchema['first_ip_address']->clean ($taintedValues['first_ip_address']);
+      $this->validatorSchema['subnet_id'       ]->clean ($taintedValues['subnet_id'       ]);
+      $this->validatorSchema['pxe_file_id'     ]->clean ($taintedValues['pxe_file_id'     ]);
+      $this->validatorSchema['count'           ]->clean ($taintedValues['count'           ]);
+    }
+    catch (Exception $e)
+    {
+      $isClean = false;
+    }
+    
     $hostNumber = (int) $taintedValues['count'];
 
     if ($isClean && $hostNumber > 1)

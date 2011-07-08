@@ -38,11 +38,15 @@
     <h2>Adresses des machines</h2>
 
     <fieldset class="sf_fieldset_none">
-      <?php echo $form ?>
+      <?php for ($i=0; $i<$form['count']->getValue(); $i++): ?>
+        <?php if ($form->offsetExists ('host_'.$i, $form)): ?>
+          <?php echo $form['host_'.$i] ?>
+        <?php endif ?>
+      <?php endfor ?>
     </fieldset>
 
     <ul class="sf_admin_actions">
-      <li><input type="submit" value="Mettre à jour les infos" /></li>
+      <li><input type="submit" value="Enregistrer" /></li>
     </ul>
 
   </form>
