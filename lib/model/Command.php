@@ -32,9 +32,9 @@ class Command extends BaseCommand {
    */
   public function exec ($background = true)
   {
-    $this->setStdErrFile  (tempnam ('/tmp','manitou_cmd_'));
-    $this->setStdOutFile  (tempnam ('/tmp','manitou_cmd_'));
-    $this->setExitFile    (tempnam ('/tmp','manitou_cmd_'));
+    $this->setStdErrFile  (tempnam (sfConfig::get('sf_log_dir'),'manitou_cmd_'));
+    $this->setStdOutFile  (tempnam (sfConfig::get('sf_log_dir'),'manitou_cmd_'));
+    $this->setExitFile    (tempnam (sfConfig::get('sf_log_dir'),'manitou_cmd_'));
     $this->setStartedAt   (time());
     $this->save();
 
@@ -46,8 +46,6 @@ class Command extends BaseCommand {
     
     if ($background)
       $command .= ' &' ;
-
-    file_put_contents('/tmp/manitou_cmd_debug', $command."\n", FILE_APPEND);
 
     exec($command);
 
