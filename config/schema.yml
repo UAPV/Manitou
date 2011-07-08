@@ -74,9 +74,9 @@ propel:
     finished_at:    { type: timestamp }
     command:        { type: varchar, size: 200 }
     label:          { type: varchar, size: 50 }
-    std_out_file:   { type: varchar,size: 50 }
-    std_err_file:   { type: varchar,size: 50 }
-    exit_file:      { type: varchar,size: 50 }
+    std_out_file:   { type: varchar,size: 200 }
+    std_err_file:   { type: varchar,size: 200 }
+    exit_file:      { type: varchar,size: 200 }
     std_out:        { type: longvarchar }
     std_err:        { type: longvarchar }
     return_code:    { type: smallint, default: null }
