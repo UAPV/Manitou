@@ -11,7 +11,7 @@ propel:
     range_begin:    { type: varchar, size: 15, required: true }
     range_end:      { type: varchar, size: 15, required: true }
     custom_conf:    { type: longvarchar }
-    image_server_id: ~
+    image_server_id: { type: integer, foreignReference: id, foreignTable: image_server, required: true }
     pxe_file_id:    ~
     _uniques:
       ip:           [ip_address, image_server_id]
@@ -29,15 +29,15 @@ propel:
 
   host:
     id:             ~
-    profile_id:     ~
-    room_id:        ~
+    profile_id:     { type: integer, foreignReference: id, foreignTable: profile, required: true }
+    room_id:        { type: integer, foreignReference: id, foreignTable: room, required: true }
     number:         { type: varchar, size: 10 }
     ip_address:     { type: char, size: 15, required: true }
     mac_address:    { type: char, size: 17, required: true }
     comment:        { type: longvarchar }
     custom_conf:    { type: longvarchar }
     cloned_from_image_id: { type: integer, foreignReference: id, foreignTable: image, fkRefPhpName: ClonedToHost }
-    subnet_id:      ~
+    subnet_id:      { type: integer, foreignReference: id, foreignTable: subnet, required: true }
     pxe_file_id:    ~
     created_at:     ~
     updated_at:     ~
