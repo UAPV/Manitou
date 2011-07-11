@@ -39,6 +39,8 @@ class HostForm extends BaseHostForm
       'pxe_file_id'          => 'Fichier PXE (par défaut celui configuré pour le subnet sera utilisé)',
     ));
 
+    $this->setValidator ('ip_address', new sfValidatorIpAddress(array('required' => true)));
+    
     $this->validatorSchema->setPostValidator(
       new sfValidatorAnd(array(
         $this->validatorSchema->getPostValidator(),

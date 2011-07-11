@@ -11,5 +11,6 @@ class SubnetForm extends BaseSubnetForm
 {
   public function configure()
   {
+    $this->setValidator ('ip_address', new sfValidatorIpAddress(array('required' => true)));
   }
 }
