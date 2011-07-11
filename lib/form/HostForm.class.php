@@ -65,16 +65,20 @@ class HostForm extends BaseHostForm
       throw new sfValidatorError($validator, 'L\'adresse ip n\'est pas autorisée (déjà prise par la passerelle, le dns, n\'appartient pas au subnet, etc)');
 
     // Si la machine est nouvelle ou si on modifie son adresse IP
-    if ($this->getObject()->isNew() || $this->getObject()->getIpAddress() != $values['ip_address'])
+    if ($this->getObject()->isNew())
     {
       $hostnameRecord = $tmpHost->hasDnsRecordForHostname();
       $ipRecord       = $tmpHost->hasDnsRecordForIp();
 
       if (! $hostnameRecord && $ipRecord)
-        throw new sfValidatorError($validator, 'L\'adresse ip existe déjà dans le DNS');
+        throw new sfValidatorError($validator, 'L\'adresse ip existe déjà dans le DNS, veuillez la supprimer puis recommencer.');
 
       if ($hostnameRecord && ! $ipRecord)
-        throw new sfValidatorError($validator, 'Le nom d\'hôte existe déjà dans le DNS');
+        throw new sfValidatorError($validator, 'Le nom d\'hôte existe déjà dans le DNS, veuillez le supprimer puis recommencer.');
+    }
+    else if ($this->getObject()->getIpAddress() != $values['ip_address'] && $tmpHost->hasDnsRecordForIp())
+    {
+      throw new sfValidatorError($validator, 'L\'adresse ip existe déjà dans le DNS, veuillez la supprimer puis recommencer.');
     }
     
     return $values;
