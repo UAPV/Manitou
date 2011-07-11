@@ -85,14 +85,19 @@ class Subnet extends BaseSubnet {
    */
   public function containsIpAddress ($ipAddress)
   {
-    $ipParts = explode ('.', $ipAddress);
-    $lastPart = (int) end ($ipParts);
+    $octetsRef = explode ('.', $this->getIpAddress());
+    $octetsNew = explode ('.', $ipAddress);
 
-    if ($lastPart < 1 || $lastPart > 254)
-      return false;
+    foreach (explode ('.', $this->getNetmask()) as $i => $octetMask)
+    {
+      if ((int) $octetMask[$i] == 0)
+        return true;
 
-    $networkPartLength = strpos ($this->getNetmask(), '.0');
-    return (substr ($this->getIpAddress(), 0, $networkPartLength) == substr ($ipAddress, 0, $networkPartLength));
+      if ($octetsNew[$i] != $octetsRef[$i])
+        return false;
+    }
+
+    return true;
   }
 
 	/**
