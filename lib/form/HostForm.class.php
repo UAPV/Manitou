@@ -63,8 +63,17 @@ class HostForm extends BaseHostForm
 
     $subnet = $tmpHost->getSubnet();
 
-    if (! $subnet->isIpAddressAuthorized($values['ip_address']))
-      throw new sfValidatorError($validator, 'L\'adresse ip n\'est pas autorisée (déjà prise par la passerelle, le dns, n\'appartient pas au subnet, etc)');
+    if (! $subnet->containsIpAddress ($values['ip_address']))
+      throw new sfValidatorError($validator, 'L\'adresse ip n\'est pas autorisée car elle n\'appartient pas au subnet');
+
+    if ($subnet->getDnsServer()  == $values['ip_address'])
+      throw new sfValidatorError($validator, 'L\'adresse ip n\'est pas autorisée car elle correspond au DNS');
+
+    if ($subnet->getGateway()    == $values['ip_address'])
+      throw new sfValidatorError($validator, 'L\'adresse ip n\'est pas autorisée car elle correspond à la passerelle');
+
+    if ($subnet->isInsideDhcpRange ($values['ip_address']))
+      throw new sfValidatorError($validator, 'L\'adresse ip n\'est pas autorisée car elle est dans la plage d\'adresses IP délivrées par le DHCP');
 
     // Si la machine est nouvelle ou si on modifie son adresse IP
     if ($this->getObject()->isNew())
