@@ -41,6 +41,29 @@ class hostActions extends autoHostActions
   }
 
   /**
+   * Action appelée par le biais du menu déroulant sur la liste des machines
+   */
+  public function executeMassCreate(sfWebRequest $request)
+  {
+    $this->form = new MultipleHostForm();
+
+    if ($request->isMethod('post'))
+    {
+      $this->form->bind($request->getParameter($this->form->getName()));
+      if ($this->form->isValid())
+      {
+        $this->form->save();
+        $this->getUser()->setFlash('notice', 'Machines créées avec succès.');
+        $this->redirect('@host_list');
+      }
+      else
+      {
+        $this->getUser()->setFlash('error', 'Création échouée.', false);
+      }
+    }
+  }
+
+  /**
    * Return in JSON when requested via AJAX or as plain text when requested directly in debug mode
    *
    */
