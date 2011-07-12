@@ -44,55 +44,9 @@ class HostForm extends BaseHostForm
     $this->validatorSchema->setPostValidator(
       new sfValidatorAnd(array(
         $this->validatorSchema->getPostValidator(),
-        new sfValidatorCallback(array('callback' => array($this, 'checkIpAddress')))
+        new sfValidatorHost(array('host_object' => $this->getObject()))
       ))
     );
-  }
-
-  public function checkIpAddress ($validator, $values)
-  {
-    if ($values['subnet_id'] === null)
-      return $values;
-
-    $tmpHost = new Host();
-    $tmpHost->setProfileId($values['profile_id']);
-    $tmpHost->setSubnetId($values['subnet_id']);
-    $tmpHost->setRoomId($values['room_id']);
-    $tmpHost->setNumber($values['number']);
-    $tmpHost->setIpAddress($values['ip_address']);
-
-    $subnet = $tmpHost->getSubnet();
-
-    if (! $subnet->containsIpAddress ($values['ip_address']))
-      throw new sfValidatorError($validator, 'L\'adresse ip n\'est pas autorisée car elle n\'appartient pas au subnet');
-
-    if ($subnet->getDnsServer()  == $values['ip_address'])
-      throw new sfValidatorError($validator, 'L\'adresse ip n\'est pas autorisée car elle correspond au DNS');
-
-    if ($subnet->getGateway()    == $values['ip_address'])
-      throw new sfValidatorError($validator, 'L\'adresse ip n\'est pas autorisée car elle correspond à la passerelle');
-
-    if ($subnet->isInsideDhcpRange ($values['ip_address']))
-      throw new sfValidatorError($validator, 'L\'adresse ip n\'est pas autorisée car elle est dans la plage d\'adresses IP délivrées par le DHCP');
-
-    // Si la machine est nouvelle ou si on modifie son adresse IP
-    if ($this->getObject()->isNew())
-    {
-      $hostnameRecord = $tmpHost->hasDnsRecordForHostname();
-      $ipRecord       = $tmpHost->hasDnsRecordForIp();
-
-      if (! $hostnameRecord && $ipRecord)
-        throw new sfValidatorError($validator, 'L\'adresse ip existe déjà dans le DNS, veuillez la supprimer puis recommencer.');
-
-      if ($hostnameRecord && ! $ipRecord)
-        throw new sfValidatorError($validator, 'Le nom d\'hôte existe déjà dans le DNS, veuillez le supprimer puis recommencer.');
-    }
-    else if ($this->getObject()->getIpAddress() != $values['ip_address'] && $tmpHost->hasDnsRecordForIp())
-    {
-      throw new sfValidatorError($validator, 'L\'adresse ip existe déjà dans le DNS, veuillez la supprimer puis recommencer.');
-    }
-    
-    return $values;
   }
 }
   
