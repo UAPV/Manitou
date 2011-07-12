@@ -54,7 +54,7 @@ class hostActions extends autoHostActions
       {
         $this->form->save();
         $this->getUser()->setFlash('notice', 'Machines créées avec succès.');
-        $this->redirect('@host_list');
+        //$this->redirect('@host_list');
       }
       else
       {

@@ -11,13 +11,14 @@ class MultipleHostForm extends BaseForm
 {
   public function configure()
   {
+
     $this->setWidgets(array(
       'profile_id'           => new sfWidgetFormPropelChoice(array('model' => 'Profile', 'add_empty' => true)),
       'room_id'              => new sfWidgetFormPropelChoice(array('model' => 'Room', 'add_empty' => true)),
       'first_ip_address'     => new sfWidgetFormInputText(),
       'subnet_id'            => new sfWidgetFormPropelChoice(array('model' => 'Subnet', 'add_empty' => true)),
       'pxe_file_id'          => new sfWidgetFormPropelChoice(array('model' => 'PxeFile', 'add_empty' => true)),
-      'count'                => new sfWidgetFormInputText(array ('default' => 0)),
+      'mac_addresses'        => new sfWidgetFormTextarea(array(), array('rows' => 20, 'cols' => 20)),
     ));
 
     $this->setValidators(array(
@@ -26,7 +27,7 @@ class MultipleHostForm extends BaseForm
       'first_ip_address'     => new sfValidatorIpAddress(array('required' => true)),
       'subnet_id'            => new sfValidatorPropelChoice(array('model' => 'Subnet', 'column' => 'id', 'required' => false, 'required' => true)),
       'pxe_file_id'          => new sfValidatorPropelChoice(array('model' => 'PxeFile', 'column' => 'id', 'required' => false)),
-      'count'                => new sfValidatorInteger(array('required' => true, 'min' => 1)),
+      'mac_addresses'        => new sfValidatorMacAddress(array('multiple' => true)),
     ));
 
     $this->widgetSchema->setLabels(array(
@@ -35,7 +36,7 @@ class MultipleHostForm extends BaseForm
       'first_ip_address'     => 'Adresse IP',
       'subnet_id'            => 'Subnet',
       'pxe_file_id'          => 'Fichier PXE',
-      'count'                => 'Total',
+      'mac_addresses'        => 'Adresses MAC',
     ));
 
     $this->widgetSchema->setHelps(array(
@@ -44,63 +45,91 @@ class MultipleHostForm extends BaseForm
       'first_ip_address'     => 'Adresse IP de début',
       'subnet_id'            => 'Subnet',
       'pxe_file_id'          => 'Fichier PXE par défaut',
-      'count'                => 'Nombre de machines',
+      'mac_addresses'        => 'Adresses MAC (une par ligne au format 11:22:33:44:55:66)',
     ));
+
 
     $this->widgetSchema->setNameFormat('hosts[%s]');
     $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
+
+    $this->validatorSchema->setPostValidator(
+        new sfValidatorCallback(array('callback' => array($this, 'checkHosts')))
+    );
   }
 
   /**
-   * Binds the form with input values.
-   *
-   * It triggers the validator schema validation.
+   * On pré-valide le formulaire pour précalculer les adresses IP qui vont être affectées. Si une des
+   * machines est en conflit (IP ou Hostname) on ajoute une case à cocher pour demander à la personne
+   * valider le formulaire même si la plage d'adresses affectées n'est pas continue.
    *
    * @param array $taintedValues  An array of input values
-   * @param array $taintedFiles   An array of uploaded files (in the $_FILES or $_GET format)
    */
   public function bind(array $taintedValues = null, array $taintedFiles = null)
   {
-    // Dans un premier temps on ne pré-valide que les données communes
-    $isClean = true;
     try
     {
-      $this->validatorSchema['profile_id'      ]->clean ($taintedValues['profile_id'      ]);
-      $this->validatorSchema['room_id'         ]->clean ($taintedValues['room_id'         ]);
-      $this->validatorSchema['first_ip_address']->clean ($taintedValues['first_ip_address']);
-      $this->validatorSchema['subnet_id'       ]->clean ($taintedValues['subnet_id'       ]);
-      $this->validatorSchema['pxe_file_id'     ]->clean ($taintedValues['pxe_file_id'     ]);
-      $this->validatorSchema['count'           ]->clean ($taintedValues['count'           ]);
-    }
-    catch (Exception $e)
-    {
-      $isClean = false;
-    }
-    
-    $hostNumber = (int) $taintedValues['count'];
+      $macAddresses = $this->validatorSchema['mac_addresses']->clean ($taintedValues['mac_addresses']);
 
-    if ($isClean && $hostNumber > 1)
-    {
+      $hostNumber = count ($macAddresses);
       $ipBase = explode ('.', $taintedValues['first_ip_address']);
       $ipCounter = (int) array_pop ($ipBase);
 
-      for ($i=0; $i < $hostNumber; $i++)
-      {
-        $host = new Host();
-        $host->setProfileId     ($taintedValues['profile_id']);
-        $host->setRoomId        ($taintedValues['room_id']);
-        $host->setIpAddress     (implode($ipBase, '.').'.'.$ipCounter);
-        $host->setNumber        ($ipCounter);
-        $host->setSubnetId      ($taintedValues['subnet_id']);
-        $host->setPxeFileId     ($taintedValues['pxe_file_id']);
+      $conflicts = array();
 
-        $form = new HostForm($host);
-        $this->embedForm ('host_'.$i, $form);
+      for ($i=0; $i < $hostNumber && $ipCounter < 255; $i++)
+      {
+        try
+        {
+          $data = $taintedValues + array (
+            'number' => $ipCounter,
+            'ip_address' => implode($ipBase, '.').'.'.$ipCounter,
+          );
+
+          $validator = new sfValidatorHost(array('host_object' => new Host()));
+          $validator->clean ($data);
+
+          $host = new Host();
+          $host->fromArray($data, BasePeer::TYPE_FIELDNAME);
+
+          $form = new HostForm($host);
+          $this->embedForm ($i, $form); // FIXME !!!
+        }
+        catch (sfValidatorError $e)
+        {
+          $conflicts [] = $e->getMessage();
+          $i--;
+        }
+
+        if (count ($conflicts))
+        {
+          throw new sfValidatorError (new sfValidatorString(), implode("\n", $conflicts));
+        }
+
         $ipCounter++;
       }
+
+      //$taintedValues['mac_addresses'] = '';
+    }
+    catch (Exception $e)
+    {
+      throw $e;
     }
 
     return parent::bind ($taintedValues, $taintedFiles);
+  }
+
+  public function checkHosts ($values)
+  {
+    //$this->getValues();
+    //print_r($values);
+    //die;
+  }
+
+  public function save ()
+  {
+    var_dump($this->getValues());
+
+    //die('hell');
   }
 
 }
