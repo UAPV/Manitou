@@ -1,0 +1,3 @@
+[35m[Klib/model/Command.php[m[K[36m[K:[m[K    // [01;31m[KFIXME[m[K ! Ne pas utiliser le PID pour vérifier si une commande est terminée !
+[35m[Klib/model/Command.php[m[K[36m[K:[m[K   * [01;31m[KFIXME[m[K : Cette commande ne peut pas fonctionner sur des serveur loadbalancés
+[35m[Klib/form/MultipleHostForm.class.php[m[K[36m[K:[m[K          $this->embedForm ($i, $form); // [01;31m[KFIXME[m[K !!!
