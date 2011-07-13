@@ -1,0 +1,4 @@
+[35m[Klib/model/Command.php[m[K[36m[K:[m[K   * [01;31m[KTODO[m[K Ajouter une option pour indiquer qu'il ne faut pas logguer la commande en base
+[35m[Klib/model/Subnet.php[m[K[36m[K:[m[K   * [01;31m[KTODO[m[K: Pour le moment on utilise une méthode naïve avec des masques de
+[35m[Klib/model/Subnet.php[m[K[36m[K:[m[K   * [01;31m[KTODO[m[K: sous-réseau simples (255 ou 0), à améliorer
+[35m[Klib/form/RestoreForm.class.php[m[K[36m[K:[m[K    // [01;31m[KTODO[m[K ne pas exécuter la requête 2 fois !

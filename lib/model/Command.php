@@ -26,6 +26,8 @@ class Command extends BaseCommand {
    * des fichiers temporaires afin de pouvoir surveiller leur contenu en temps réel.
    *
    * Cette commande n'est pas bloquante, l'exécution se passe en arrière plan
+   * 
+   * TODO Ajouter une option pour indiquer qu'il ne faut pas logguer la commande en base
    *
    * @param boolean     $background   Si false exec ne rentrant la main qu'un fois la commande terminée
    * @return Command    self
@@ -38,14 +40,14 @@ class Command extends BaseCommand {
     $this->setStartedAt   (time());
     $this->save();
 
-    $command = 'nohup bash -c '.escapeshellarg($this->getCommand()
+    $command = 'bash -c '.escapeshellarg($this->getCommand()
       .' 2> '.$this->getStdErrFile()
       .'  > '.$this->getStdOutFile()
       .' ; echo $? "`date --rfc-3339=seconds`" > '.$this->getExitFile() // On place le code d'erreur et la date de fin dans ce fichier
     ).' > /dev/null 2> /dev/null < /dev/null ';
     
     if ($background)
-      $command .= ' &' ;
+      $command = 'nohup '.$command.' &' ;
 
     exec($command);
 
@@ -90,6 +92,9 @@ class Command extends BaseCommand {
     $this->setStdErr (file_get_contents ($this->getStdErrFile()));
     $this->setStdOut (file_get_contents ($this->getStdOutFile()));
 
+    // FIXME ! Ne pas utiliser le PID pour vérifier si une commande est terminée !
+    // Peut être source d'erreurs sur des serveurs loadbalancés 
+
     // Si le programme n'a pas d'heure de fin et qu'on ne trouve pas son PID
     // on en conclu qu'il s'est terminé.
     if ($this->getFinishedAt() === null && $this->getPid() === false)
@@ -131,6 +136,9 @@ class Command extends BaseCommand {
     return $this->pid;
   }
 
+  /**
+   * FIXME : Cette commande ne peut pas fonctionner sur des serveur loadbalancés
+   */
   public function stop ()
   {
     exec ('kill -9 '.$this->getPid());
