@@ -1,4 +1,3 @@
-
 Fonctionnalités
 ===============
 
@@ -69,7 +68,7 @@ Comment sont gérés les machines, quelles conventions sont utilisées ?
 Les machines sont organisées par Salle, Profil (étudiant, administratif, etc) et Subnet.
 
 Leur hostname est au format `[profil]-[salle]-[suffixe]`. Par convention le suffixe correspond
-au derniers octet de l'IP de la machine, mais ce paramètre reste modifiable lors de l'éditiond d'une machine.
+au derniers octet de l'IP de la machine, mais ce paramètre reste modifiable lors de l'édition d'une machine.
 
 Quelles commandes sont exécutées ? quand et comment ?
 -----------------------------------------------------
@@ -94,8 +93,7 @@ celles-ci sont exécutées en arrière plan.
 Les chemins vers ces fichiers tampons sont mis en base de données par la classe [Command](https://github.com/UAPV/Manitou/blob/master/lib/model/Command.php)
 et sont régulièrement interrogés par le module [command](https://github.com/UAPV/Manitou/blob/master/apps/backend/modules/command/actions/actions.class.php).
 
-Lorsque ce module détecte la complétion d'une commande (en vérifiant le fichier tampon contenant le code de retour) la classe met
-automatiquement le contenu des fichiers tampon en base de données et puis les supprime du système.
+Lorsque ce module détecte la complétion d'une commande (en vérifiant le fichier tampon contenant le code de retour) la classe met automatiquement le contenu des fichiers tampon en base de données puis les supprime du système.
 
 Pour plus de détails sur l'exécution d'une commande, voir la méthode [Command::exec](https://github.com/UAPV/Manitou/blob/master/lib/model/Command.php).
 
@@ -118,7 +116,7 @@ Comment la conf du DHCP est elle intégrée ?
 
 Un fichier de configuration de bind est généré par subnet. Ils sont écrasés à chaque regénération.
 
-Pour des modifications exceptionnels, il suffit d'utiliser les attributs `custom_conf` du subnet ou d'un host.
+Pour des modifications exceptionnelles, il suffit d'utiliser les attributs `custom_conf` du subnet ou d'un host.
 
 Mais s'il s'agit d'une modification plus profonde, il est possible de modifier le template
 utilisé [`_subnet.conf.php`](apps/backend/modules/dhcpd/templates/_subnet.conf.php) (Ce template est un simple 'partial' _ou vue_ symfony.
