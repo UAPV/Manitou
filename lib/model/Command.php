@@ -27,18 +27,19 @@ class Command extends BaseCommand {
    *
    * Cette commande n'est pas bloquante, l'exécution se passe en arrière plan
    * 
-   * TODO Ajouter une option pour indiquer qu'il ne faut pas logguer la commande en base
-   *
    * @param boolean     $background   Si false exec ne rentrant la main qu'un fois la commande terminée
+   * @param boolean     $logCommand   Si true (par défaut) la commande et son résultat seront enregistrés en base
    * @return Command    self
    */
-  public function exec ($background = true)
+  public function exec ($background = true, $logCommand = true)
   {
     $this->setStdErrFile  (tempnam (sfConfig::get('sf_log_dir'),'manitou_cmd_'));
     $this->setStdOutFile  (tempnam (sfConfig::get('sf_log_dir'),'manitou_cmd_'));
     $this->setExitFile    (tempnam (sfConfig::get('sf_log_dir'),'manitou_cmd_'));
     $this->setStartedAt   (time());
-    $this->save();
+
+    if ($logCommand)
+     $this->save();
 
     $command = 'bash -c '.escapeshellarg($this->getCommand()
       .' 2> '.$this->getStdErrFile()
@@ -84,7 +85,14 @@ class Command extends BaseCommand {
     return (($code !== null && $code !== 0) || $this->getStdErr() != '');
   }
 
-  public function syncStatus ()
+  /**
+   * Permet de synchroniser la attributs de l'objet avec les fichiers tampons 
+   * contenant les sorties standart et d'erreur stockées sur le disque.
+   *
+   * @param boolean     $logCommand     Si true (par défaut) l'objet sera sauvegardé
+   *                                    en base automatiquement.
+   */
+  public function syncStatus ($logCommand = true)
   {
     if ($this->isFinished())
       return;
@@ -105,7 +113,9 @@ class Command extends BaseCommand {
       $this->setFinishedAt ($exitStatus[1]);
       $this->deleteOutputFiles();
     }
-    $this->save();
+
+    if ($logCommand)
+      $this->save();
   }
 
   public function deleteOutputFiles ()
