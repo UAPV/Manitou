@@ -26,26 +26,29 @@ class Command extends BaseCommand {
    * des fichiers temporaires afin de pouvoir surveiller leur contenu en temps réel.
    *
    * Cette commande n'est pas bloquante, l'exécution se passe en arrière plan
-   *
+   * 
    * @param boolean     $background   Si false exec ne rentrant la main qu'un fois la commande terminée
+   * @param boolean     $logCommand   Si true (par défaut) la commande et son résultat seront enregistrés en base
    * @return Command    self
    */
-  public function exec ($background = true)
+  public function exec ($background = true, $logCommand = true)
   {
     $this->setStdErrFile  (tempnam (sfConfig::get('sf_log_dir'),'manitou_cmd_'));
     $this->setStdOutFile  (tempnam (sfConfig::get('sf_log_dir'),'manitou_cmd_'));
     $this->setExitFile    (tempnam (sfConfig::get('sf_log_dir'),'manitou_cmd_'));
     $this->setStartedAt   (time());
-    $this->save();
 
-    $command = 'nohup bash -c '.escapeshellarg($this->getCommand()
+    if ($logCommand)
+     $this->save();
+
+    $command = 'bash -c '.escapeshellarg($this->getCommand()
       .' 2> '.$this->getStdErrFile()
       .'  > '.$this->getStdOutFile()
       .' ; echo $? "`date --rfc-3339=seconds`" > '.$this->getExitFile() // On place le code d'erreur et la date de fin dans ce fichier
     ).' > /dev/null 2> /dev/null < /dev/null ';
     
     if ($background)
-      $command .= ' &' ;
+      $command = 'nohup '.$command.' &' ;
 
     exec($command);
 
@@ -82,13 +85,23 @@ class Command extends BaseCommand {
     return (($code !== null && $code !== 0) || $this->getStdErr() != '');
   }
 
-  public function syncStatus ()
+  /**
+   * Permet de synchroniser la attributs de l'objet avec les fichiers tampons 
+   * contenant les sorties standart et d'erreur stockées sur le disque.
+   *
+   * @param boolean     $logCommand     Si true (par défaut) l'objet sera sauvegardé
+   *                                    en base automatiquement.
+   */
+  public function syncStatus ($logCommand = true)
   {
     if ($this->isFinished())
       return;
 
     $this->setStdErr (file_get_contents ($this->getStdErrFile()));
     $this->setStdOut (file_get_contents ($this->getStdOutFile()));
+
+    // FIXME ! Ne pas utiliser le PID pour vérifier si une commande est terminée !
+    // Peut être source d'erreurs sur des serveurs loadbalancés 
 
     // Si le programme n'a pas d'heure de fin et qu'on ne trouve pas son PID
     // on en conclu qu'il s'est terminé.
@@ -100,7 +113,9 @@ class Command extends BaseCommand {
       $this->setFinishedAt ($exitStatus[1]);
       $this->deleteOutputFiles();
     }
-    $this->save();
+
+    if ($logCommand)
+      $this->save();
   }
 
   public function deleteOutputFiles ()
@@ -131,6 +146,9 @@ class Command extends BaseCommand {
     return $this->pid;
   }
 
+  /**
+   * FIXME : Cette commande ne peut pas fonctionner sur des serveur loadbalancés
+   */
   public function stop ()
   {
     exec ('kill -9 '.$this->getPid());

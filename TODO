@@ -1,0 +1,3 @@
+lib/model/Subnet.php                Pour le moment on utilise une méthode naïve avec des masques de
+lib/model/Subnet.php                sous-réseau simples (255 ou 0), à améliorer
+lib/form/RestoreForm.class.php      TODO ne pas exécuter la requête 2 fois !

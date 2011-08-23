@@ -90,7 +90,7 @@ class Subnet extends BaseSubnet {
 
     foreach (explode ('.', $this->getNetmask()) as $i => $octetMask)
     {
-      if ((int) $octetMask[$i] == 0)
+      if ((int) $octetMask == 0)
         return true;
 
       if ($octetsNew[$i] != $octetsRef[$i])
