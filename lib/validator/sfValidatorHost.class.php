@@ -14,6 +14,8 @@ class sfValidatorHost extends sfValidatorBase
   /**
    * Configures the current validator.
    *
+   * Si ce validateur est utilisé lors de la modification d'une machine, l'hôte à passer
+   * correspond à l'ancien objet en base (afin de connaître les précédentes valeurs)
    * @param array $options   An array of options
    * @param array $messages  An array of error messages
    *
@@ -22,7 +24,8 @@ class sfValidatorHost extends sfValidatorBase
   protected function configure($options = array(), $messages = array())
   {
     parent::configure($options, $messages);
-    $this->addRequiredOption('host_object');
+    $this->addRequiredOption('host_object'); // Si ce validateur est utilisé lors de la modification d'une machine, l'hôte à passer
+                                             // correspond à l'ancien objet en base (afin de connaître les précédentes valeurs)
 
     $this->addMessage('ip_not_in_subnet',       'L\'adresse ip "%value%" n\'est pas autorisée car elle n\'appartient pas au subnet');
     $this->addMessage('ip_same_as_dns',         'L\'adresse ip "%value%" n\'est pas autorisée car elle correspond au DNS');
@@ -61,16 +64,13 @@ class sfValidatorHost extends sfValidatorBase
     if ($subnet->isInsideDhcpRange ($values['ip_address']))
       throw new sfValidatorError($this, 'ip_in_dhcp_range', array('value' => $values['ip_address']));
 
-    // Si la machine est nouvelle ou si on modifie son adresse IP
+    // Si la machine est nouvelle
     if ($this->getOption('host_object')->isNew())
     {
-      $hostnameRecord = $tmpHost->hasDnsRecordForHostname();
-      $ipRecord       = $tmpHost->hasDnsRecordForIp();
-
-      if (! $hostnameRecord && $ipRecord)
+      if ($tmpHost->hasDnsRecordForIp())
         throw new sfValidatorError($this, 'ip_already_in_dns', array('value' => $values['ip_address']));
 
-      if ($hostnameRecord && ! $ipRecord)
+      if ($tmpHost->hasDnsRecordForHostname())
         throw new sfValidatorError($this, 'hostname_already_in_dns', array('value' => $tmpHost->getHostname()));
     }
     else if ($this->getOption('host_object')->getIpAddress() != $values['ip_address'] && $tmpHost->hasDnsRecordForIp())

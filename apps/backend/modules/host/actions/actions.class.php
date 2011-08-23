@@ -53,8 +53,14 @@ class hostActions extends autoHostActions
       if ($this->form->isValid())
       {
         $this->form->save();
-        $this->getUser()->setFlash('notice', 'Machines créées avec succès.');
-        //$this->redirect('@host_list');
+
+        $msg = 'Machines créées avec succès : ';
+        foreach ($this->form->getHosts() as $host) 
+          $msg .= $host.' '.$host->getIpAddress().' '.$host->getMacAddress().', ';
+
+
+        $this->getUser()->setFlash('notice', $msg);
+        $this->redirect('@host');
       }
       else
       {
