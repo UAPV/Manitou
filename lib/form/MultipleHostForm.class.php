@@ -9,6 +9,9 @@
  */
 class MultipleHostForm extends BaseForm
 {
+  /* @var array $host   Tableau contenant les instances d'Host générées par les données entrées dans le formulaire */
+  protected $hosts = array();
+
   public function configure()
   {
 
@@ -57,79 +60,68 @@ class MultipleHostForm extends BaseForm
     );
   }
 
-  /**
-   * On pré-valide le formulaire pour précalculer les adresses IP qui vont être affectées. Si une des
-   * machines est en conflit (IP ou Hostname) on ajoute une case à cocher pour demander à la personne
-   * valider le formulaire même si la plage d'adresses affectées n'est pas continue.
-   *
-   * @param array $taintedValues  An array of input values
-   */
-  public function bind(array $taintedValues = null, array $taintedFiles = null)
+  public function checkHosts ($validator, $values)
   {
-    try
+    $macAddresses = $values['mac_addresses']; // Tableau (transformé depuis un string par le sfValidatorMacAddress)
+
+    $hostNumber = count ($macAddresses);
+    $ipBase = explode ('.', $values['first_ip_address']);
+    $ipCounter = (int) array_pop ($ipBase);
+
+    $conflicts = array();
+
+    for ($i=0; $i < $hostNumber && $ipCounter < 255; $i++)
     {
-      $macAddresses = $this->validatorSchema['mac_addresses']->clean ($taintedValues['mac_addresses']);
-
-      $hostNumber = count ($macAddresses);
-      $ipBase = explode ('.', $taintedValues['first_ip_address']);
-      $ipCounter = (int) array_pop ($ipBase);
-
-      $conflicts = array();
-
-      for ($i=0; $i < $hostNumber && $ipCounter < 255; $i++)
+      try
       {
-        try
-        {
-          $data = $taintedValues + array (
-            'number' => $ipCounter,
-            'ip_address' => implode($ipBase, '.').'.'.$ipCounter,
-          );
+        $data = $values + array (
+          'number'      => $ipCounter,
+          'ip_address'  => implode($ipBase, '.').'.'.$ipCounter,
+          'mac_address' => $macAddresses[$i],
+        );
 
-          $validator = new sfValidatorHost(array('host_object' => new Host()));
-          $validator->clean ($data);
+        $host = new Host();
+        $host->fromArray($data, BasePeer::TYPE_FIELDNAME);
 
-          $host = new Host();
-          $host->fromArray($data, BasePeer::TYPE_FIELDNAME);
+        // On vérifie si les infos sont cohérentes d'un point de vue archi réseau
+        // et si les critères d'unicité avec **les entrées du DNS** sont respectés
+        $validator = new sfValidatorHost(array('host_object' => $host));
+        $validator->clean ($data);
 
-          $form = new HostForm($host);
-          $this->embedForm ($i, $form); // FIXME !!!
-        }
-        catch (sfValidatorError $e)
-        {
-          $conflicts [] = $e->getMessage();
-          $i--;
-        }
+        // On vérifie si les critères d'unicité sont bien respectés en **base de données**
+        $uniqCheck = new sfValidatorAnd(array(
+          new sfValidatorPropelUnique(array('model' => 'Host', 'column' => array('mac_address'))),
+          new sfValidatorPropelUnique(array('model' => 'Host', 'column' => array('ip_address'))),
+          new sfValidatorPropelUnique(array('model' => 'Host', 'column' => array('profile_id', 'room_id', 'number'))),
+        ));
+        $uniqCheck->clean($data);
 
-        if (count ($conflicts))
-        {
-          throw new sfValidatorError (new sfValidatorString(), implode("\n", $conflicts));
-        }
-
-        $ipCounter++;
+        $this->hosts [] = $host;
+      }
+      catch (sfValidatorError $e)
+      {
+        $conflicts [] = $e->getMessage();
+        $i--;
       }
 
-      //$taintedValues['mac_addresses'] = '';
+      $ipCounter++;
     }
-    catch (Exception $e)
+
+    if (count ($conflicts))
     {
-      throw $e;
+      throw new sfValidatorError (new sfValidatorString(), implode("<br />", $conflicts));
     }
-
-    return parent::bind ($taintedValues, $taintedFiles);
-  }
-
-  public function checkHosts ($values)
-  {
-    //$this->getValues();
-    //print_r($values);
-    //die;
   }
 
   public function save ()
   {
-    var_dump($this->getValues());
+    foreach ($this->hosts as $host)
+      $host->save();
+  }
 
-    //die('hell');
+  public function getHosts ()
+  {
+    return $this->hosts;
   }
 
 }

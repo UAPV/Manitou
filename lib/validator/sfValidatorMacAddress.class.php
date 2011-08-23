@@ -40,7 +40,7 @@ class sfValidatorMacAddress extends sfValidatorString
     if ($this->getOption('multiple'))
     {
       if (preg_match_all ($pattern.'m', $value, $matches) < 1)
-        throw new sfValidatorError($this, 'Format "%value%" de l\'adresse MAC incorrect', array('value' => $value));
+        throw new sfValidatorError($this, 'Format "%value%" des adresses MAC incorrect', array('value' => $value));
 
       $matches = $matches[0];
     }
