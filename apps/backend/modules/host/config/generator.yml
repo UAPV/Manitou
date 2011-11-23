@@ -26,6 +26,7 @@ generator:
         batch_actions:
           _delete:    ~
           restore:    { label: Restaurer une image }
+          addPxe:     { label: Ajouter un fichier PXE }
           ping:       { label: Tester le DNS et l\'état des machines }
         object_actions:
           createImage:     { label: Créer une image }
