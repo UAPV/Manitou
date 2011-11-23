@@ -46,6 +46,18 @@ class Host extends BaseHost {
     return $this->getHostname().'.'.$this->getDomainName();
   }
 
+  public function getPxe ()
+  {
+    $id = $this->getPxeFileId();
+    if($id != null)
+    {
+      $objet = PxeFileQuery::create()->findPk($id);
+      return $objet->getDescription();  
+    }
+    else
+     return "";
+  }
+
   public function isRunning ()
   {
     $ignored = $code = -1;

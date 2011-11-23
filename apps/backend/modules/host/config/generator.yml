@@ -13,10 +13,15 @@ generator:
 
     config:
       actions: ~
-      fields:  ~
+      fields:
+        hostname:     { label: Nom }
+        ip_address:   { label: Adresse Ip }
+        mac_address:  { label: Adresse Mac }
+        subnet:       { label: Subnet }
+        pxe:          { label: Fichier Pxe }
       list:
         title: Gestion des machines
-        display: [=hostname, ip_address, mac_address, subnet]
+        display: [=hostname, ip_address, mac_address, subnet, pxe]
         max_per_page: 50
         batch_actions:
           _delete:    ~
