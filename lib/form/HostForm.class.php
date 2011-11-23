@@ -40,7 +40,8 @@ class HostForm extends BaseHostForm
     ));
 
     $this->setValidator ('ip_address', new sfValidatorIpAddress(array('required' => true)));
-    
+    $this->setValidator ('mac_address', new sfValidatorMacAddress(array('required' => true)));
+
     $this->validatorSchema->setPostValidator(
       new sfValidatorAnd(array(
         $this->validatorSchema->getPostValidator(),
