@@ -30,6 +30,15 @@ class hostActions extends autoHostActions
     $this->redirect ($this->getContext()->getRouting()->generate('image_restore', array ('ids' => $ids)));
   }
 
+ /**
+  * Action appelée par le biais du menu déroulant pour ajouter un fichier PXE sur plusieurs machines en un c  * oup
+  */
+  public function executeBatchAddPxe(sfWebRequest $request)
+  {
+    $ids = $request->getParameter('ids');;
+    $this->redirect ($this->getContext()->getRouting()->generate('add_pxe', array ('ids' => $ids)));
+  }
+
   public function executeStatus ()
   {
     $host = $this->getRoute()->getObject();

@@ -11,6 +11,10 @@ image_restore:
   url:   /restore
   param: { module: image, action: restore }
 
+add_pxe:
+  url:    /addPxe
+  param:  { module: pxe_file, action: add }
+
 image_server:
   class: sfPropel15RouteCollection
   options:
