@@ -28,7 +28,7 @@ class pxe_fileActions extends autoPxe_fileActions
          //on vérifie qu'en base ça ait enregistré
 	 //on met a jour la conf dhcp
 	   $this->getUser()->setFlash('notice', 'Le fichier PXE a été ajouté aux machines');
-          // $this->redirect ('command_list');
+           $this->redirect ('command_list');
        }
      }  
   }
