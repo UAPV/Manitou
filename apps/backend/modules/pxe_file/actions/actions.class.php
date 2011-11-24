@@ -43,5 +43,7 @@ class pxe_fileActions extends autoPxe_fileActions
       $host->setPxeFileId($file->getId());
       $host->save();
     }
+
+    CommandPeer::runDhcpUpdate();
   }
 }
