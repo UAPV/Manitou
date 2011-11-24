@@ -171,12 +171,14 @@ class Host extends BaseHost {
   public function postSave(PropelPDO $con = null)
   {
     parent::postSave ($con);
-    if($_SERVER['PATH_INFO'] !== "/addPxe")
+    if($_SERVER['PATH_INFO'] != "/addPxe")
+    {
       CommandPeer::runDhcpdUpdate ();
 
-    // Mise à jour du DNS si nécessaire
-    if ($this->needDnsUpdate === true)
-      CommandPeer::runDnsUpdate ();
+      // Mise à jour du DNS si nécessaire
+      if ($this->needDnsUpdate === true)
+        CommandPeer::runDnsUpdate ();
+    }
   }
 
 } // Host

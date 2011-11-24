@@ -44,6 +44,6 @@ class pxe_fileActions extends autoPxe_fileActions
       $host->save();
     }
 
-    CommandPeer::runDhcpUpdate();
+  CommandPeer::runDhcpdUpdate ();
   }
 }
