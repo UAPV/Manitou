@@ -49,7 +49,7 @@ class sfValidatorHost extends sfValidatorBase
     $tmpHost->setRoomId($values['room_id']);
     $tmpHost->setNumber($values['number']);
     $tmpHost->setIpAddress($values['ip_address']);
-
+    $tmpHost->setMacAddress($values['mac_address']);
     $subnet = $tmpHost->getSubnet();
 
     if (! $subnet->containsIpAddress ($values['ip_address']))
