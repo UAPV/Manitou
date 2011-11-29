@@ -142,4 +142,12 @@ class Subnet extends BaseSubnet {
     CommandPeer::runDnsUpdate ();
   }
 
-} // Subnet
+
+  public function getAllHosts()
+  {
+      return HostQuery::create()
+  		 ->filterBySubnet($this)
+		 ->orderBy('Host.IpAddress','asc')
+	         ->find();
+  }
+}// Subnet
