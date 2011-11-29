@@ -18,7 +18,7 @@ subnet <?php echo $subnet->getIpAddress() ?> netmask <?php echo $subnet->getNetm
 
     <?php echo str_replace("\n", "\n    ", $subnet->getCustomConf())."\n" ?>
 
-  <?php foreach ($subnet->getHosts () as $host): ?>
+  <?php foreach ($subnet->getAllHosts ("order by ip_address") as $host): ?>
 
     <?php if ($host->getComment ()): ?># <?php echo str_replace("\n", "\n    # ", $host->getComment())."\n" ?><?php endif; ?>
     # Created at : <?php echo $host->getCreatedAt() ?>.

@@ -173,7 +173,7 @@ class Host extends BaseHost {
     parent::postSave ($con);
     if($_SERVER['PATH_INFO'] != "/addPxe")
     {
-      CommandPeer::runDhcpdUpdate ();
+       CommandPeer::runDhcpdUpdate ();
 
       // Mise à jour du DNS si nécessaire
       if ($this->needDnsUpdate === true)
