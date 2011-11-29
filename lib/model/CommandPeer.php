@@ -43,7 +43,7 @@ class CommandPeer extends BaseCommandPeer {
       file_put_contents ($filename, get_partial ('dhcpd/subnet.conf', array ('subnet' => $subnet)));
     }
 
-    CommandPeer::getDhcpdUpdateCommand()->exec ();
+  //  CommandPeer::getDhcpdUpdateCommand()->exec ();
   }
 
   public static function getDhcpdUpdateCommand ()
