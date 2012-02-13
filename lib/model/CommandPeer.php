@@ -25,7 +25,7 @@ class CommandPeer extends BaseCommandPeer {
    *
    * @static
    * @return void
-   */
+ */
   public static function runDhcpdUpdate ()
   {
     if (!sfContext::hasInstance())
@@ -51,7 +51,9 @@ class CommandPeer extends BaseCommandPeer {
     $command = new Command ();
     $command->setCommand (sfConfig::get('sf_manitou_dhcp_update_command'));
     $command->setArgument ('conf_path', sfConfig::get('sf_manitou_dhcpd_conf_path'));
-    return $command;
+   
+   echo $command;exit;
+   return $command;
   }
 
   public static function getCreateImageCommand (Image $image)
