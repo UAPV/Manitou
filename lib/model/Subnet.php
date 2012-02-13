@@ -147,7 +147,7 @@ class Subnet extends BaseSubnet {
   {
       return HostQuery::create()
   		 ->filterBySubnet($this)
-		 ->orderBy(INET_ATON('Host.IpAddress'),'asc')
+		 ->orderBy('INET_ATON(Host.IpAddress)','asc')
 	         ->find();
   }
 }// Subnet
