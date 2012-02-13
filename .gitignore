@@ -5,4 +5,5 @@ lib/model/om/*
 lib/model/map/*
 lib/form/base/*
 lib/filter/base/*
+config/databases-test.yml
 data/sql/*
