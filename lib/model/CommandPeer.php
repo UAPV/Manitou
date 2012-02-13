@@ -50,9 +50,10 @@ class CommandPeer extends BaseCommandPeer {
   {
     $command = new Command ();
     $command->setCommand (sfConfig::get('sf_manitou_dhcp_update_command'));
-  // echo sfConfig::get('sf_manitou_dhcp_update_command');exit;
-   $command->setArgument ('conf_path', sfConfig::get('sf_manitou_dhcpd_conf_path'));
-   
+    $command->setArgument ('conf_path', sfConfig::get('sf_manitou_dhcpd_conf_path'));
+    echo "<pre>";
+    var_dump(sfConfig::getAll());
+    echo "</pre>";
    echo $command;exit;
    return $command;
   }
