@@ -104,7 +104,7 @@ class CommandPeer extends BaseCommandPeer {
 
     $path = sfConfig::get('sf_manitou_dns_conf_path');
 
-    $hosts = HostQuery::create()->orderByRoomId()->orderByProfileId()->find ();
+    $hosts = HostQuery::create()->withColumn('INET_ATON(Host.IpAddress)','a')->orderBy('a','asc')->find ();
     $dnsConf = new Dns ();
     $dnsConf->setHosts ($hosts);
     $dnsConf->apply ($path);
