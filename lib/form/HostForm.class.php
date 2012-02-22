@@ -30,7 +30,7 @@ class HostForm extends BaseHostForm
     $this->widgetSchema->setHelps (array (
       'profile_id'           => 'Profil de l\'utilisateur',
       'room_id'              => 'Salle où se situe la machine',
-      'number'               => 'Numéro utilisé comme suffixe dans le hostname',
+      'number'               => "Mettre le numéro de prise, si ce champ n'est pas renseigné, ce sera le dernier numéro de l'IP",
       'ip_address'           => 'Adresse IP',
       'mac_address'          => 'Adresse MAC (format 00:11:22:33:44:55)',
       'comment'              => 'Commentaire (ex: numéro de prise, etc)',
