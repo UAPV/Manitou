@@ -144,7 +144,7 @@ class Host extends BaseHost {
     $this->needDnsUpdate = ($this->isColumnModified (HostPeer::PROFILE_ID) ||
                             $this->isColumnModified (HostPeer::ROOM_ID)    ||
                             $this->isColumnModified (HostPeer::SUBNET_ID)  ||
-                            $this->isColumnModified(HostPeer::NUMBER) ||
+                            $this->isColumnModified (HostPeer::NUMBER)     ||
                             $this->isColumnModified (HostPeer::IP_ADDRESS  ));
 
     return parent::preSave ($con);
