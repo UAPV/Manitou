@@ -159,7 +159,7 @@ Ce message a été envoyé automatiquement. Merci de ne pas y répondre.
 EOF
                   );
 
-                  //sfContext::getInstance()->getMailer()->send($message);
+                  sfContext::getInstance()->getMailer()->send($message);
               }
 
               $key = $entry['ip'];//[str_pad ($entry['ip'], 16)];
@@ -192,6 +192,7 @@ EOF
           $nvContent = implode("\n",$data);
           $contentHeader = implode("\n", $header);
 
+          echo "on ecrit dans le fichier : $path/$filename";die;
           file_put_contents ($path.'/'.$filename, $contentHeader.$nvContent);
       }
 
