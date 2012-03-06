@@ -21,12 +21,12 @@ test:
 
   mailer:
     param:
-      delivery_strategy: none
+      delivery_strategy: realtime
 
 dev:
   mailer:
     param:
-      delivery_strategy: none
+      delivery_strategy: realtime
 
 all:
   routing:

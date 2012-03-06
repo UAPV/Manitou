@@ -36,17 +36,318 @@ class Dns
     );
   }
 
-  /**
-   * Met à jour les fichiers de conf en modifiant le contenu des balise MANITOU_CONF_[START|END]
+  public function apply ($path)
+  {
+      $startTag = '; MANITOU_CONF_BEGIN';
+      $endTag   = '; MANITOU_CONF_END';
+      $tagRegex = '/\n*'.$startTag.'.*'.$endTag.'\n*/s';
+
+      foreach ($this->reverseConf as $filename => $entries)
+      {
+          $contentTest = file_get_contents($path.'/'.$filename);
+          $content = preg_replace ($tagRegex, '', $contentTest);
+          $content = $this->updateSerial($content);
+          $content = explode("\n", $content);
+
+          //on récupére tout ce qu'il y a après startTag.
+          $lengh = count($content);
+          $comment = array();
+          $arrayDns = array();
+
+          $first = true;
+          $header = array();
+          for($i=0; $i < $lengh; $i++)
+          {
+              //on garde le header tant qu'on n'a pas trouvé le premier host
+              if($first)
+                  $header[] = $content[$i];
+
+              //on regarde si la ligne en cours de lecture est un nouvel host
+              $regex = '/\s+IN\s+PTR\s/';
+              $regexCom = '/^;+\s/';
+              if(preg_match($regex,$content[$i]) === 1)
+              {
+                  //on récupère le numéro pour le mettre en clé dans le tableau final
+                  $content[$i] = preg_replace("/[\s](.\d\d)?+/",' ',$content[$i]);
+                  $tmp = explode(' ',$content[$i]);
+                  $clean = str_replace(';','',$tmp[0]);
+                  $keyArray = $clean;
+                  $arrayDns["$keyArray"] = array($comment,$content[$i]);
+                  unset($comment);
+                  $comment = array();
+                  $first = false;
+              }
+              //on est tjs dans le header mais on croise le premier commentaire
+              elseif($first)
+              {
+                if(preg_match($regexCom,$content[$i]) === 1)
+                {
+                    $first = false;
+                    $comment[] = $content[$i];
+                }
+              }
+              //sinon si elle est marquée "DELETION MARKED", on la supprime
+              elseif(preg_match('/^;\s+[MANITOU]\s+MARKED\s+FOR\s+DELETION/', $content[$i]) === 0)
+              {
+                  //on sauvergarde le commentaire en cours pour l'assigner à l'host suivant
+                  $comment[] = $content[$i];
+              }
+          }
+
+          //on rajoute les fichiers de Manitou puis on trie le tableau
+          foreach ($entries as $entry)
+          {
+              $contentTest = implode(' ', $content);
+
+              // Si une entrée STRICTEMENT identique existe on écrit la nouvelle et on envoie un mail pour donner le nom de la machine remplacée
+              $regex = '/^'.preg_quote($entry['ip']).'\s+IN\s+PTR\s+'.preg_quote($entry['fqdn']).'\.\s*$/m';
+              if (preg_match($regex, $contentTest, $matches) === 1)
+              {
+                  //on récupère l'entrée dans le tableau et on la supprime du tableau d'origine (arrayDns)
+                  $key = str_pad ($entry['ip'], 16);
+                  unset($arrayDns["$key"]);
+              }
+              //sinon si l'ip existe deja
+              else if (preg_match('/^'.preg_quote($entry['ip']).'\s+IN\s+PTR/m', $contentTest) > 0)
+              {
+                  //on supprime l'entrée du tableau
+                  $key = str_pad ($entry['ip'], 16);
+                  $lastIp =  $arrayDns["$key"][0];
+                  unset($arrayDns["$key"]);
+
+                  //on envoie un mail
+                  $host = $entry['fqdn'];
+                  $message = sfContext::getInstance()->getMailer()->compose(
+                      array('manitou@univ-avignon.fr' => 'Manitou'),
+                      'fanny.marcel@univ-avignon.fr',
+                      'Modification DNS',
+                      <<<EOF
+                      Manitou a écrasé une ancienne adresse ip pour le fichier { $filename }.
+                      L'ancienne ip : { $lastIp } a été remplacé par { $key } pour { $host }
+
+
+Ce message a été envoyé automatiquement. Merci de ne pas y répondre.
+EOF
+                  );
+
+                  sfContext::getInstance()->getMailer()->send($message);
+              }
+              else if (preg_match('/^[^;].*IN\s+PTR\s+'.preg_quote($entry['fqdn']).'\s*$/m', $contentTest) > 0)
+              {
+                  $fl_array = preg_grep('/^[^;].*IN\s+PTR\s+'.preg_quote($entry['fqdn']).'\s*$/m', $arrayDns);
+
+                  //on supprime l'entrée du tableau
+                  foreach($fl_array as $cle => $ligne)
+                  {
+                      $ip = $cle[0];
+                      unset($arrayDns["$cle"]);
+                  }
+
+                  //on envoie un mail
+                  $newFqdn = $entry['fqdn'];
+                  $ip = $entry['ip'];
+                  $message = sfContext::getInstance()->getMailer()->compose(
+                      array('manitou@univ-avignon.fr' => 'Manitou'),
+                      'fanny.marcel@univ-avignon.fr',
+                      'Modification DNS',
+                      <<<EOF
+                      Manitou a écrasé une ligne pour le fichier { $filename }.
+                      L'ancien fqdn  a été remplacé par { $newFqdn } pour l'adresse ip { $ip }
+
+
+Ce message a été envoyé automatiquement. Merci de ne pas y répondre.
+EOF
+                  );
+
+                  sfContext::getInstance()->getMailer()->send($message);
+              }
+
+              $key = $entry['ip'];//[str_pad ($entry['ip'], 16)];
+              $com = array("; UPDATED BY MANITOU --> DON'T TOUCH ;)");
+              $newContent = str_pad ($entry['ip'], 16).' IN PTR '.$entry['fqdn']."\n";
+              $arrayDns["$key"] = array($com, $newContent);
+          }
+          ksort($arrayDns);
+
+          $data = array();
+          //on écrit dans le fichier les lignes
+          foreach($arrayDns as $key => $ligne)
+          {
+              if( $key != "")
+              {
+                  foreach($ligne as $nvLigne)
+                  {
+                      if(is_array($nvLigne))
+                      {
+                          foreach($nvLigne as $comment)
+                              $data[] = $comment;
+                      }
+                      else
+                          $data[] = $nvLigne;
+                  }
+              }
+          }
+
+          //on récupère le tableau de content en string puis on l'écrit dans le fichier
+          $nvContent = implode("\n",$data);
+          $contentHeader = implode("\n", $header);
+
+          file_put_contents ($path.$filename, $contentHeader.$nvContent);
+      }
+
+      /*foreach ($this->conf as $filename => $entries)
+      {
+         $contentTest = file_get_contents($path.'/'.$filename);
+         $content = preg_replace ($tagRegex, '', $contentTest);
+         $content = $this->updateSerial($content);
+         $content = explode("\n", $content);
+
+         //on récupére tout ce qu'il y a après startTag.
+         $lengh = count($content);
+         $comment = array();
+         $arrayDns = array();
+         $first = true;
+         $header = array();
+
+         for($i=0; $i < $lengh; $i++)
+         {
+           //on garde le header tant qu'on n'a pas trouvé le premier host
+           if(!$first)
+              $header[] = $content[$i];
+
+           //on regarde si la ligne en cours de lecture est un nouvel host
+           $regex = '/^[A-Za-z].*\s+IN\s+A/';
+           if(preg_match($regex,$content[$i]) === 1)
+           {
+               echo "nouvel host : ".$content[$i];
+              //on récupère l'adresse ip pour le mettre en clé dans le tableau final
+              $ip = preg_replace("/^[a-z]+\s+IN\s+A\s/",' ',$content[$i]);
+              $ip = str_replace(' ','',$ip);
+              $arrayDns["$ip"] = array($comment,$content[$i]);
+              unset($comment);
+              $comment = array();
+              $first = false;
+           }
+           //on est tjs dans le header mais on croise le premier commentaire
+           elseif($first)
+           {
+               if(preg_match($regexCom,$content[$i]) === 1)
+               {
+                   $first = false;
+                   $comment[] = $content[$i];
+               }
+           }
+           //sinon si elle est marquée "DELETION MARKED", on la supprime
+           elseif(preg_match('/^;\s+[MANITOU]\s+MARKED\s+FOR\s+DELETION/', $content[$i]) === 0)
+           {
+               //on sauvergarde le commentaire en cours pour l'assigner à l'host suivant
+               $comment[] = $content[$i];
+           }
+         }
+          die;
+          var_dump($arrayDns);die;
+
+         //on rajoute les fichiers de Manitou puis on trie le tableau
+         //on regarde si une entrée existe déjà pour tel host
+         foreach ($entries as $entry)
+         {
+             $contentTest = implode(' ', $content);
+
+             // Si une entrée STRICTEMENT identique existe on écrit la nouvelle et on envoie un mail pour donner le nom de la machine remplacée
+           /*  $regex = '/^'.preg_quote($entry['ip']).'\s+IN\s+PTR\s+'.preg_quote($entry['fqdn']).'\.\s*$/m';
+             if (preg_match($regex, $contentTest, $matches) === 1)
+             {
+                //on récupère l'entrée dans le tableau et on la supprime du tableau d'origine (arrayDns)
+                unset($arrayDns[""]);
+             }
+             // Sinon manitou perd la main et on commente l'ajout prévu
+             else if (preg_match('/^'.$entry['hostname'].'\s+IN\s+A/m', $content) > 0)
+                 $newContent .= '; MANITOU_ERROR hostname already exists : ';
+             else if (preg_match('/^[^;].*IN\s+A\s+'.preg_quote($entry['ip']).'\s*$/m', $content) > 0)
+                 $newContent .= '; MANITOU_ERROR ip already exists : ';
+
+           $regex = '/^'.preg_quote($entry['hostname']).'\s+IN\s+PTR\s+'.preg_quote($entry['ip']).'\.\s*$/m';
+           //if (preg_match($regex, $content, $matches) === 1)
+            //on écrit un mail
+           $key = str_pad($entry['hostname'], 24);
+           $com = array("; UPDATED BY MANITOU --> DON'T TOUCH ;)");
+           $newContent = str_pad ($entry['hostname'], 24).' IN PTR '.$entry['ip']."\n";
+           $arrayDns[$key] = array($com, $newContent);
+         }
+
+         ksort($arrayDns);
+         $data = array();
+
+         //on écrit dans le fichier les lignes
+         foreach($arrayDns as $key=>$ligne)
+         {
+           if($key != "")
+           {
+             foreach($ligne as $nvLigne)
+             {
+               if(is_array($nvLigne))
+               {
+                  foreach($nvLigne as $comment)
+                      $data[] = $comment;
+               }
+               else
+                  $data[] = $nvLigne;
+              }
+            }
+          }
+
+          //on récupère le tableau de content en string puis on l'écrit dans le fichier
+          $nvContent = implode("\n",$data);
+          $contentHeader = implode("\n", $header);
+          $filePath = $path.$filename.'.new';
+
+          file_put_contents ($filePath, $contentHeader.$nvContent);
+        }*/
+
+          $startTag = "; MANITOU_CONF_BEGIN";
+          $endTag   = "; MANITOU_CONF_END";
+          $tagRegex = "/\n*".$startTag.".*".$endTag."\n*/";
+
+          foreach ($this->conf as $filename => $entries)
+          {
+              $content = file_get_contents($path.'/'.$filename);
+              $content = preg_replace ($tagRegex, '', $content);
+              $content = $this->updateSerial($content);
+
+              $newContent = "\n\n$startTag\n;===================\n";
+              foreach ($entries as $entry)
+              {
+                  // Si une entrée STRICTEMENT identique existe on commente l'originale
+                  $regex = '/^'.preg_quote($entry['hostname']).'\s+IN\s+A\s+'.preg_quote($entry['ip']).'\s*$/m';
+                  if (preg_match($regex, $content, $matches) === 1)
+                      $content = preg_replace ($regex, '; [MANITOU] MARKED FOR DELETION : '.$matches[0], $content);
+                  // Sinon manitou perd la main et on commente l'ajout prévu
+                  else if (preg_match('/^'.$entry['hostname'].'\s+IN\s+A/m', $content) > 0)
+                      $newContent .= '; MANITOU_ERROR hostname already exists : ';
+                  else if (preg_match('/^[^;].*IN\s+A\s+'.preg_quote($entry['ip']).'\s*$/m', $content) > 0)
+                      $newContent .= '; MANITOU_ERROR ip already exists : ';
+
+                  $newContent .= str_pad ($entry['hostname'], 24).'IN      A       '.$entry['ip']."\n";
+              }
+              $newContent .= $endTag."\n\n";
+
+
+              file_put_contents ($path.'/'.$filename, $content.$newContent);
+          }
+   }
+
+      /**
+   * Ancienne mise à jour les fichiers de conf en modifiant le contenu des balise MANITOU_CONF_[START|END]
    *
    * @param  $path
    * @return void
    */
-  public function apply ($path)
+  public function apply2 ($path)
   {
-    $startTag = '; MANITOU_CONF_BEGIN';
-    $endTag   = '; MANITOU_CONF_END';
-    $tagRegex = '/\n*'.$startTag.'.*'.$endTag.'\n*/s';
+
+    $startTag = "; MANITOU_CONF_BEGIN";
+    $endTag   = "; MANITOU_CONF_END";
+    $tagRegex = "/\n*".$startTag.".*".$endTag."\n*/";
 
     foreach ($this->conf as $filename => $entries)
     {
