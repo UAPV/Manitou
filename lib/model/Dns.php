@@ -151,8 +151,8 @@ EOF
                       'fanny.marcel@univ-avignon.fr',
                       'Modification DNS',
                       <<<EOF
-                      Manitou a écrasé une ligne pour le fichier { $filename }.
-                      L'ancien fqdn  a été remplacé par { $newFqdn } pour l'adresse ip { $ip }
+Manitou a écrasé une ligne pour le fichier $filename .
+L'ancien fqdn  a été remplacé par $newFqdn pour l'adresse ip $ip
 
 
 Ce message a été envoyé automatiquement. Merci de ne pas y répondre.
