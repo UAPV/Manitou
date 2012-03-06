@@ -192,7 +192,7 @@ EOF
           $nvContent = implode("\n",$data);
           $contentHeader = implode("\n", $header);
 
-          file_put_contents ($path.$filename, $contentHeader.$nvContent);
+          file_put_contents ($path.$filename.'.new', $contentHeader.$nvContent);
       }
 
       /*foreach ($this->conf as $filename => $entries)
