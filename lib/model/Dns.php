@@ -119,14 +119,15 @@ class Dns
                   $host = $entry['fqdn'];
                   $message = sfContext::getInstance()->getMailer()->compose(
                       array('manitou@univ-avignon.fr' => 'Manitou'),
-                      'fanny.marcel@univ-avignon.fr',
+                      'adm-dosi@listes.univ-avignon.fr',
                       'Modification DNS',
                       <<<EOF
-                      Manitou a écrasé une ancienne adresse ip pour le fichier <b>$filename</b>.
-                      Ancienne ip : $lastIp
-                      Nouvelle ip :   $key
-                      Ancien host :   $host
-                      Nouvel host :   $host
+Manitou a écrasé une ancienne adresse ip pour le fichier <b>$filename</b>.
+
+Ancienne ip : $lastIp
+Nouvelle ip :   $key
+Ancien host :   $host
+Nouvel host :   $host
 
 
 Ce message a été envoyé automatiquement. Merci de ne pas y répondre.
@@ -151,13 +152,14 @@ EOF
                   $ip = $entry['ip'];
                   $message = sfContext::getInstance()->getMailer()->compose(
                       array('manitou@univ-avignon.fr' => 'Manitou'),
-                      'fanny.marcel@univ-avignon.fr',
+                      'adm-dosi@listes.univ-avignon.fr',
                       'Modification DNS',
                       <<<EOF
-                    Manitou a écrasé une ligne pour le fichier <b>$filename </b>.
-                    Ancienne ip :   $ip
-                    Nouvelle ip :   $ip
-                    Nouvel host :   $newFqdn
+Manitou a écrasé une ligne pour le fichier $filename.
+
+Ancienne ip :   $ip
+Nouvelle ip :   $ip
+Nouvel host :   $newFqdn
 
 
 Ce message a été envoyé automatiquement. Merci de ne pas y répondre.
