@@ -122,8 +122,11 @@ class Dns
                       'fanny.marcel@univ-avignon.fr',
                       'Modification DNS',
                       <<<EOF
-                      Manitou a écrasé une ancienne adresse ip pour le fichier { $filename }.
-                      L'ancienne ip : { $lastIp } a été remplacé par { $key } pour { $host }
+                      Manitou a écrasé une ancienne adresse ip pour le fichier <b>$filename</b>.
+                      Ancienne ip : $lastIp
+                      Nouvelle ip :   $key
+                      Ancien host :   $host
+                      Nouvel host :   $host
 
 
 Ce message a été envoyé automatiquement. Merci de ne pas y répondre.
@@ -151,8 +154,10 @@ EOF
                       'fanny.marcel@univ-avignon.fr',
                       'Modification DNS',
                       <<<EOF
-Manitou a écrasé une ligne pour le fichier $filename .
-L'ancien fqdn  a été remplacé par $newFqdn pour l'adresse ip $ip
+                    Manitou a écrasé une ligne pour le fichier <b>$filename </b>.
+                    Ancienne ip :   $ip
+                    Nouvelle ip :   $ip
+                    Nouvel host :   $newFqdn
 
 
 Ce message a été envoyé automatiquement. Merci de ne pas y répondre.
@@ -427,7 +432,7 @@ EOF
     if ($matches[1] == $currentDate)
       $counter = str_pad(((int) $matches[2]) + 1, 2, '0', STR_PAD_LEFT);
 
-    $serial = "\n\t\t".$currentDate.$counter.' ; '.$serialId.' '.date('c');
+    $serial = "\n\t\t".$currentDate.$counter."\t; ".$serialId.' '.date('c');
 
     return preg_replace ($serialRegex, $serial, $conf);
   }
