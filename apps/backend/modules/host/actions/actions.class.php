@@ -150,11 +150,27 @@ class hostActions extends autoHostActions
              $data['have'] = false;
       }
       else
-      {
           $data['have'] = false;
-      }
 
       return $this->returnJSON($data);
+  }
+
+  public function executeInDnsHostname(sfWebRequest $request)
+  {
+     $profile = $request->getParameter('profile');
+     $room = $request->getParameter('room');
+     $suffixe = $request->getParameter('suffixe');
+
+     $hostname = $profile.'-'.$room.'-'.$suffixe;
+
+
+
+     if(count($host) > 0)
+       $data['have'] = true;
+     else
+       $data['have'] = false;
+
+     return $this->returnJSON($data);
   }
 
   /**

@@ -112,6 +112,11 @@ image_server_status:
 inDnsCheck:
   url:    /host/inDns
   param:  { module: host, action: inDns }
+
+inDnsHostname:
+  url:    /host/inDnsHostname
+  param:  { module: host, action: inDnsHostname }
+
 # default rules
 homepage:
   url:   /

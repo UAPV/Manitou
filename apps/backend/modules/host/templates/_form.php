@@ -36,5 +36,23 @@
                 }
             })
         })
+
+        //on regarde quand il fait save si l'hote existe deja et on lui demande validation apres un confirm
+       /* $('.sf_admin_action_save input').click(function(){
+          var profile = $("#profile").val();
+          var room = $("#room").val();
+          var suffixe = $("#suffixe").val();
+          $.ajax({
+            url:     '<?php echo url_for("@inDnsHostname") ?>',
+            data:    { profil: profile, room: room, suffixe: suffixe },
+            success: function(data){
+              if(data.have)
+              {
+                confirm("Attention, cet hostname est deja présent dans le DNS et va etre effacé.")
+                  return false;
+              }
+            }
+          })
+        })*/
     });
 </script>
