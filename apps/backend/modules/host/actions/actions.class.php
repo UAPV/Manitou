@@ -21,12 +21,71 @@ class hostActions extends autoHostActions
     $this->redirect ('@image_new?host_id='.$host->getId());
   }
 
+  public function processForm(sfWebRequest $request, sfForm $form)
+  {
+      $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
+      if ($form->isValid())
+      {
+         $notice = $form->getObject()->isNew() ? 'The item was created successfully.' : 'The item was updated successfully.';
+         $this->dispatcher->notify(new sfEvent($this, 'admin.save_object', array('object' => $Host)));
+
+         if ($request->hasParameter('_save_and_add'))
+         {
+            $this->getUser()->setFlash('notice', $notice.' You can add another one below.');
+            $this->redirect('@host_new');
+         }
+         else
+         {
+            $this->getUser()->setFlash('notice', $notice);
+            $this->redirect(array('sf_route' => 'host_edit', 'sf_subject' => $Host));
+         }
+      }
+      else
+      {
+          $this->getUser()->setFlash('error', 'The item has not been saved due to some errors.', false);
+      }
+  }
+
   /**
    * Action appelée par le biais du menu déroulant sur la liste des machines
    */
   public function executeBatchRestore(sfWebRequest $request)
   {
     $ids = $request->getParameter('ids');
+    $hosts = HostQuery::create()->findById($ids);
+    $message = false;
+    $dataDns = array();
+    $dataLdap = array();
+
+    foreach($hosts as $host)
+    {
+       //on regarde si les hotes spécifiés sont dans le dns ou non
+       if(!$host->hasDnsRecord())
+       {
+           $dataDns[] = $host->getHostname();
+           $message = false;
+       }
+    }
+    $dataDns = implode(',', $dataDns);
+
+    $ldap = new uapvLdap();
+    $this->getContext()->set('ldap', $ldap);
+    foreach($hosts as $host)
+    {
+       //on regarde dans le ldap si l'hote y est
+        $data = $ldap->search('cn='.$host->getHostname());
+        var_dump($data);die;
+        if(count($data) == 0)
+        {
+            $dataLdap[] = $host->getHostname();
+            $message = false;
+        }
+    }
+    $dataLdap = implode(',', $dataLdap);
+
+    if($message)
+      $this->getUser()->setFlash('notice','Le(s) hôte(s) <b>'.$dataDns.'</b> n(e) est(sont) pas dans le DNS<br/>Le(s) hôte(s) <b>'.$dataLdap.'</b> n(e) est(sont) pas dans le LDAP');
+
     $this->redirect ($this->getContext()->getRouting()->generate('image_restore', array ('ids' => $ids)));
   }
 
@@ -76,6 +135,26 @@ class hostActions extends autoHostActions
         $this->getUser()->setFlash('error', 'Création échouée.', false);
       }
     }
+  }
+
+  public function executeInDns(sfWebRequest $request)
+  {
+      $ip = $request->getParameter('ip');
+      $host = HostQuery::create()->findOneByIpAddress($ip);
+
+      if(count($host) > 0)
+      {
+          if($host->hasDnsRecord())
+             $data['have'] = true;
+          else
+             $data['have'] = false;
+      }
+      else
+      {
+          $data['have'] = false;
+      }
+
+      return $this->returnJSON($data);
   }
 
   /**

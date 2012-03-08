@@ -134,3 +134,9 @@ ul#image_server_status li .hostname {
 #sf_admin_container .sf_admin_form_field_hosts li {
     display: block;
 }
+
+#alert{
+  color: red;
+  font-size: 14px;
+  padding-top: 2px;
+}

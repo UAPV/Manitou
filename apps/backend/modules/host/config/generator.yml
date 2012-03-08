@@ -34,6 +34,7 @@ generator:
           _delete:    ~
       filter:
         display: [profile_id, room_id, subnet_id, ip_address, mac_address, pxe_file_id]
-      form:    ~
-      edit:    ~
+      form:   ~
+      edit:
+        title:   Edition de l'hôte %%hostname%%
       new:     ~
