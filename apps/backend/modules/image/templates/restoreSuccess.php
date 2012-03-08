@@ -1,4 +1,5 @@
 <?php include_partial('image/assets') ?>
+<?php use_helper('I18N') ?>
 
 <div id="sf_admin_container">
   <h1>Restauration</h1>

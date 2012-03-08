@@ -20,6 +20,4 @@ generator:
       filter:  ~
       form:    ~
       edit:    ~
-      new:
-        actions:
-          save: { label: Créer }
+      new:     ~

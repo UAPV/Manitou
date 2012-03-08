@@ -22,7 +22,6 @@ generator:
       list:
         title: Gestion des machines
         display: [=hostname, ip_address, mac_address, subnet, pxe]
-        max_per_page: 50
         batch_actions:
           _delete:    ~
           restore:    { label: Restaurer une image }

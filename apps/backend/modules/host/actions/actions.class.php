@@ -160,12 +160,21 @@ class hostActions extends autoHostActions
      $profile = $request->getParameter('profile');
      $room = $request->getParameter('room');
      $suffixe = $request->getParameter('suffixe');
+     $subnet = $request->getParameter('subnet');
 
      $hostname = $profile.'-'.$room.'-'.$suffixe;
 
+     //on crée le nom du fichier à lire
+     $subnetObjet = SubnetQuery::create()->findPk($subnet);
+     $ipBase = $subnetObjet->getIpAddress();
+     $ipBase = substr ($ipBase, 0, strpos ($ipBase, '.0'));
+     $filename = 'db.'.$ipBase;
 
+     //on ouvre le fichier est on regarde si il y a un enregistrement
+     $content = file($filename);
+     $regex = "/^$hostname$/";
 
-     if(count($host) > 0)
+     if(preg_match($regex, $content) > 0)
        $data['have'] = true;
      else
        $data['have'] = false;
@@ -189,5 +198,11 @@ class hostActions extends autoHostActions
     }
 
     return $this->renderText($json);
+  }
+
+  public function executeSetMaxPerPage(sfWebRequest $request)
+  {
+    $this->getUser()->setAttribute('host.max_per_page', $max = $request->getParameter('max'));
+    $this->redirect('@host');
   }
 }

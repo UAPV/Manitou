@@ -48,17 +48,17 @@ class imageActions extends autoImageActions
 
       if ($isNew)
       {
-        $command = CommandPeer::getCreateImageCommand($Image);
-        $command->setArgument('state', $form->getValue('state'));
-        $command->exec();
+          $command = CommandPeer::getCreateImageCommand($Image);
+          $command->setArgument('state', $form->getValue('state'));
+          $command->exec();
 
-        $this->getUser()->setFlash('notice', $notice);
-        $this->redirect('command_list');
+          $this->getUser()->setFlash('notice', $notice);
+          $this->redirect('command_list');
       }
       else
       {
-        $this->getUser()->setFlash('notice', $notice);
-        $this->redirect(array('sf_route' => 'image_edit', 'sf_subject' => $Image));
+          $this->getUser()->setFlash('notice', $notice);
+          $this->redirect(array('sf_route' => 'image_edit', 'sf_subject' => $Image));
       }
     }
     else
@@ -79,6 +79,7 @@ class imageActions extends autoImageActions
     if ($request->isMethod ('post'))
     {
       $this->form->bind($request->getParameter ($this->form->getName ()));
+
       if ($this->form->isValid ())
       {
         $this->restore ($this->form);
