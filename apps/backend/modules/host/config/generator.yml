@@ -32,7 +32,11 @@ generator:
           _edit:      ~
           _delete:    ~
       filter:
-        display: [profile_id, room_id, subnet_id, ip_address, mac_address, pxe_file_id]
+        display: [profile_id, room_id, subnet_id, ip_address, mac_address, pxe_file_id, contain ]
+        fields:
+          contain:
+            label: Champ libre avec regex
+            help:  Recherche dans id, adresse ip, adresse mac, commentaires et suffixe
       form:   ~
       edit:
         title:   Edition de l'hôte %%hostname%%
