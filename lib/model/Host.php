@@ -182,4 +182,27 @@ class Host extends BaseHost {
     }
   }
 
+  public function ipAlreadyExist()
+  {
+     $host = HostQuery::create()->findOneByIpAddress($this->getIpAddress());
+
+     if(count($host) > 0)
+       return true;
+     else
+       return false;
+
+  }
+  public function hostnameAlreadyExist()
+  {
+      $host = HostQuery::create()
+         ->filterByRoomId($this->getRoomId())
+         ->filterBySubnetId($this->getSubnetId())
+         ->filterByNumber($this->getNumber())
+         ->find();
+
+     if(count($host) > 0)
+       return true;
+     else
+       return false;
+  }
 } // Host

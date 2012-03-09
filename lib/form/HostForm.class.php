@@ -9,12 +9,16 @@
  */
 class HostForm extends BaseHostForm
 {
+
   public function configure()
   {
+    //$this->widgetSchema['hostname'] = new sfWidgetFormInputText();
+
     unset ($this['created_at']);
     unset ($this['updated_at']);
     
     $this->widgetSchema->setLabels (array (
+      'hostname'             => 'Nom',
       'profile_id'           => 'Profil',
       'room_id'              => 'Salle',
       'number'               => 'Suffixe',
@@ -24,10 +28,11 @@ class HostForm extends BaseHostForm
       'custom_conf'          => 'Conf DHCP',
       'cloned_from_image_id' => 'Image système',
       'subnet_id'            => 'Subnet',
-      'pxe_file_id'          => 'Fichier PXE',
+      'pxe_file_id'          => 'Fichier PXE'
     ));
 
     $this->widgetSchema->setHelps (array (
+      'hostname'             => 'Nom de l\'hôte',
       'profile_id'           => 'Profil de l\'utilisateur',
       'room_id'              => 'Salle où se situe la machine',
       'number'               => "Mettre le numéro de prise, si ce champ n'est pas renseigné, ce sera le dernier numéro de l'IP",

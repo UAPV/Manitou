@@ -31,8 +31,8 @@ class sfValidatorHost extends sfValidatorBase
     $this->addMessage('ip_same_as_dns',         'L\'adresse ip "%value%" n\'est pas autorisée car elle correspond au DNS');
     $this->addMessage('ip_same_as_gateway',     'L\'adresse ip "%value%" n\'est pas autorisée car elle correspond à la passerelle');
     $this->addMessage('ip_in_dhcp_range',       'L\'adresse ip "%value%" n\'est pas autorisée car elle est dans la plage d\'adresses IP délivrées par le DHCP');
-    $this->addMessage('ip_already_in_dns',      'L\'adresse ip "%value%" existe déjà dans le DNS, veuillez la supprimer puis recommencer.');
-    $this->addMessage('hostname_already_in_dns','Le nom d\'hôte "%value%" existe déjà dans le DNS, veuillez le supprimer puis recommencer.');
+    $this->addMessage('ip_already_in_manitou',      'L\'adresse ip "%value%" existe déjà dans Manitou, veuillez la supprimer puis recommencer.');
+    $this->addMessage('hostname_already_in_manitou','Le nom d\'hôte "%value%" existe déjà dans Manitou, veuillez le supprimer puis recommencer.');
   }
 
   /**
@@ -65,18 +65,19 @@ class sfValidatorHost extends sfValidatorBase
       throw new sfValidatorError($this, 'ip_in_dhcp_range', array('value' => $values['ip_address']));
 
     // Si la machine est nouvelle
-    if ($this->getOption('host_object')->isNew())
-    {
-      if ($tmpHost->hasDnsRecordForIp())
-        throw new sfValidatorError($this, 'ip_already_in_dns', array('value' => $values['ip_address']));
+   // if ($this->getOption('host_object')->isNew())
+    //{
+      if ($tmpHost->ipAlreadyExist())
+        throw new sfValidatorError($this, 'ip_already_in_manitou', array('value' => $values['ip_address']));
 
-      if ($tmpHost->hasDnsRecordForHostname())
-        throw new sfValidatorError($this, 'hostname_already_in_dns', array('value' => $tmpHost->getHostname()));
-    }
+      if ($tmpHost->hostnameAlreadyExist())
+
+        throw new sfValidatorError($this, 'hostname_already_in_manitou', array('value' => $tmpHost->getHostname()));
+    /*}
     else if ($this->getOption('host_object')->getIpAddress() != $values['ip_address'] && $tmpHost->hasDnsRecordForIp())
     {
-      throw new sfValidatorError($this, 'ip_already_in_dns', array('value' => $values['ip_address']));
-    }
+       throw new sfValidatorError($this, 'ip_already_in_dns', array('value' => $values['ip_address']));
+    } */
 
     return $values;
   }

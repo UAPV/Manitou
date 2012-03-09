@@ -21,31 +21,6 @@ class hostActions extends autoHostActions
     $this->redirect ('@image_new?host_id='.$host->getId());
   }
 
-  public function processForm(sfWebRequest $request, sfForm $form)
-  {
-      $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
-      if ($form->isValid())
-      {
-         $notice = $form->getObject()->isNew() ? 'The item was created successfully.' : 'The item was updated successfully.';
-         $this->dispatcher->notify(new sfEvent($this, 'admin.save_object', array('object' => $Host)));
-
-         if ($request->hasParameter('_save_and_add'))
-         {
-            $this->getUser()->setFlash('notice', $notice.' You can add another one below.');
-            $this->redirect('@host_new');
-         }
-         else
-         {
-            $this->getUser()->setFlash('notice', $notice);
-            $this->redirect(array('sf_route' => 'host_edit', 'sf_subject' => $Host));
-         }
-      }
-      else
-      {
-          $this->getUser()->setFlash('error', 'The item has not been saved due to some errors.', false);
-      }
-  }
-
   /**
    * Action appelée par le biais du menu déroulant sur la liste des machines
    */
@@ -150,7 +125,13 @@ class hostActions extends autoHostActions
              $data['have'] = false;
       }
       else
-          $data['have'] = false;
+      {
+          $ip = implode('.', array_reverse( explode('.', $ip)));
+          if(dns_check_record ($ip.'.in-addr.arpa', 'PTR') > 0)
+            $data['have'] = true;
+          else
+            $data['have'] = false;
+      }
 
       return $this->returnJSON($data);
   }

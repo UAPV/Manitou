@@ -19,7 +19,7 @@
 
 <script type="text/javascript">
     $(document).ready (function () {
-        // Quand le focus est enlevé de l'input adresse ip, on vérifie qu'elle corresponde avec la synthaxe d'une adresse ip avant d'envoyer la requete ajax
+        // Quand le focus est enlevé de l'input adresse ip, on vérifie qu'elle corresponde avec la syntaxe d'une adresse ip avant d'envoyer la requete ajax
         $('#host_ip_address').focusout(function(){
             var ip = $("#host_ip_address").val();
             $("#alert").html('');
@@ -38,21 +38,23 @@
         })
 
         //on regarde quand il fait save si l'hote existe deja et on lui demande validation apres un confirm
-       /* $('.sf_admin_action_save input').click(function(){
+        $('.sf_admin_action_save input').click(function(){
           var profile = $("#profile").val();
           var room = $("#room").val();
           var suffixe = $("#suffixe").val();
+          var subnet = $("#subnet").val();
           $.ajax({
             url:     '<?php echo url_for("@inDnsHostname") ?>',
-            data:    { profil: profile, room: room, suffixe: suffixe },
+            data:    { profil: profile, room: room, suffixe: suffixe, subnet: subnet },
             success: function(data){
               if(data.have)
               {
-                confirm("Attention, cet hostname est deja présent dans le DNS et va etre effacé.")
-                  return false;
+                  if (confirm("Attention, cet hostname est deja présent dans le DNS et va etre effacé. Etes-vous sur de vouloir continuer ?")) {}
+                  else
+                   return false;
               }
             }
           })
-        })*/
+        })
     });
 </script>
