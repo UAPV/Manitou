@@ -120,7 +120,10 @@ class hostActions extends autoHostActions
       if(count($host) > 0)
       {
           if($host->hasDnsRecord())
+          {
+             $data['host'] = $host->getHostname();
              $data['have'] = true;
+          }
           else
              $data['have'] = false;
       }
@@ -128,7 +131,11 @@ class hostActions extends autoHostActions
       {
           $ip = implode('.', array_reverse( explode('.', $ip)));
           if(dns_check_record ($ip.'.in-addr.arpa', 'PTR') > 0)
+          {
             $data['have'] = true;
+            $valDns = dns_get_record($ip.'.in-addr.arpa');
+            $data['host'] = $valDns[0]['host'];
+          }
           else
             $data['have'] = false;
       }
@@ -138,25 +145,19 @@ class hostActions extends autoHostActions
 
   public function executeInDnsHostname(sfWebRequest $request)
   {
-     $profile = $request->getParameter('profile');
-     $room = $request->getParameter('room');
+     $profileId = $request->getParameter('profile');
+     $roomId = $request->getParameter('room');
      $suffixe = $request->getParameter('suffixe');
-     $subnet = $request->getParameter('subnet');
 
-     $hostname = $profile.'-'.$room.'-'.$suffixe;
+     $profile = ProfileQuery::create()
+                ->findPk($profileId);
+     $room = RoomQuery::create()
+                ->findPk($roomId);
 
-     //on crée le nom du fichier à lire
-     $subnetObjet = SubnetQuery::create()->findPk($subnet);
-     $ipBase = $subnetObjet->getIpAddress();
-     $ipBase = substr ($ipBase, 0, strpos ($ipBase, '.0'));
-     $filename = 'db.'.$ipBase;
+     $hostname = $profile->getName().'-'.$room->getName().'-'.$suffixe.".univ-avignon.fr";
 
-     //on ouvre le fichier est on regarde si il y a un enregistrement
-     $content = file($filename);
-     $regex = "/^$hostname$/";
-
-     if(preg_match($regex, $content) > 0)
-       $data['have'] = true;
+     if(dns_check_record ($hostname, 'A'))
+         $data['have'] = true;
      else
        $data['have'] = false;
 
