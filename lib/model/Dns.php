@@ -119,7 +119,8 @@ class Dns
                   $host = $entry['fqdn'];
                   $message = sfContext::getInstance()->getMailer()->compose(
                       array('manitou@univ-avignon.fr' => 'Manitou'),
-                      'adm-dosi@listes.univ-avignon.fr',
+                      'fanny.marcel@univ-avignon.fr',
+                      //'adm-dosi@listes.univ-avignon.fr',
                       'Modification DNS',
                       <<<EOF
 Manitou a écrasé une ancienne adresse ip pour le fichier <b>$filename</b>.
@@ -198,7 +199,7 @@ EOF
           //on récupère le tableau de content en string puis on l'écrit dans le fichier
           $nvContent = implode("\n",$data);
           $contentHeader = implode("\n", $header);
-
+                                                   die;
           file_put_contents ($path.$filename, $contentHeader.$nvContent);
       }
 
@@ -338,7 +339,7 @@ EOF
               }
               $newContent .= $endTag."\n\n";
 
-
+                                           die;
               file_put_contents ($path.'/'.$filename, $content.$newContent);
           }
    }
