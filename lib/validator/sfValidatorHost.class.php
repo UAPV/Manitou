@@ -65,16 +65,16 @@ class sfValidatorHost extends sfValidatorBase
       throw new sfValidatorError($this, 'ip_in_dhcp_range', array('value' => $values['ip_address']));
 
     // Si la machine est nouvelle
-   // if ($this->getOption('host_object')->isNew())
-    //{
+    if ($this->getOption('host_object')->isNew())
+    {
       if ($tmpHost->ipAlreadyExist())
         throw new sfValidatorError($this, 'ip_already_in_manitou', array('value' => $values['ip_address']));
 
       if ($tmpHost->hostnameAlreadyExist())
 
         throw new sfValidatorError($this, 'hostname_already_in_manitou', array('value' => $tmpHost->getHostname()));
-    /*}
-    else if ($this->getOption('host_object')->getIpAddress() != $values['ip_address'] && $tmpHost->hasDnsRecordForIp())
+    }
+   /* else if ($this->getOption('host_object')->getIpAddress() != $values['ip_address'] && $tmpHost->hasDnsRecordForIp())
     {
        throw new sfValidatorError($this, 'ip_already_in_dns', array('value' => $values['ip_address']));
     } */
