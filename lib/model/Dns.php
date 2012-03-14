@@ -149,7 +149,7 @@ Ce message a été envoyé automatiquement. Merci de ne pas y répondre.
 EOF
                   );
 
-                 // sfContext::getInstance()->getMailer()->send($message);
+                  sfContext::getInstance()->getMailer()->send($message);
               }
               else if (preg_match('/^[^;].*IN\s+PTR\s+'.preg_quote($entry['fqdn']).'\s*$/m', $contentTest) > 0)
               {
@@ -185,7 +185,7 @@ Ce message a été envoyé automatiquement. Merci de ne pas y répondre.
 EOF
                   );
 
-                  //sfContext::getInstance()->getMailer()->send($message);
+                  sfContext::getInstance()->getMailer()->send($message);
               }
 
               $key = $entry['ip'];//[str_pad ($entry['ip'], 16)];
