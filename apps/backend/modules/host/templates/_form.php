@@ -47,6 +47,7 @@
             {
               tableau = ip.split('.');
               suffixe = tableau[3];
+              $("#host_number").val(suffixe);
             }
             checkDns(profile, room, suffixe, false);
         })
