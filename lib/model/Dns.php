@@ -183,7 +183,27 @@ EOF
               $keyInv = $tab[1].','.$tab[0];
               $arrayDns["$keyInv"]["$key"] = array($com, $newContent);
           }
-          ksort($arrayDns);
+
+          function compare($a,$b)
+          {
+              $dataA = explode(',',$a);
+              $dataB = explode(',',$b);
+
+              if($dataA[0] == $dataB[0])
+              {
+                  if($dataA[1] >= $dataB[1])
+                      return 1;
+                  else
+                      return -1;
+              }
+              elseif($dataA[0] > $dataB[0])
+                  return 1;
+              else
+                  return -1;
+
+          }
+
+          uksort($arrayDns, 'compare');
 
           $data = array();
           //on écrit dans le fichier les lignes
@@ -449,4 +469,6 @@ EOF
 
     return preg_replace ($serialRegex, $serial, $conf);
   }
+
+
 }
