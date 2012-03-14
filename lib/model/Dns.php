@@ -144,7 +144,6 @@ EOF
                   //on supprime l'entrée du tableau
                   foreach($fl_array as $cle => $ligne)
                   {
-                      $ip = $cle[0];
                       unset($arrayDns["$cle"]);
                   }
 
