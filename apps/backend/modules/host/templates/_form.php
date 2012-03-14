@@ -52,6 +52,8 @@
                 {
                     alert("Attention, cet hostname est deja présent dans le DNS et va etre effacé si vous sauvegardez !");
                 }
+                else
+                    alert("Le nom est disponible");
             }
         })
          return false;
