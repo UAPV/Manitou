@@ -72,7 +72,9 @@ class Dns
                   $tmp = explode(' ',$content[$i]);
                   $clean = str_replace(';','',$tmp[0]);
                   $keyArray = $clean;
-                  $arrayDns["$keyArray"] = array($comment,$content[$i]);
+                  $tab = explode('.',$keyArray);
+                  $keyInv = $tab[1].','.$tab[0];
+                  $arrayDns["$keyInv"]["$keyArray"] = array($comment,$content[$i]);
                   unset($comment);
                   $comment = array();
                   $first = false;
@@ -105,15 +107,19 @@ class Dns
               {
                   //on récupère l'entrée dans le tableau et on la supprime du tableau d'origine (arrayDns)
                   $key = str_pad ($entry['ip'], 16);
-                  unset($arrayDns["$key"]);
+                  $tab = explode('.',$key);
+                  $keyInv = $tab[1].','.$tab[0];
+                  unset($arrayDns["$keyInv"]["$key"]);
               }
               //sinon si l'ip existe deja
               else if (preg_match('/^'.preg_quote($entry['ip']).'\s+IN\s+PTR/m', $contentTest) > 0)
               {
                   //on supprime l'entrée du tableau
                   $key = str_pad ($entry['ip'], 16);
+                  $tab = explode('.',$key);
+                  $keyInv = $tab[1].','.$tab[0];
                   $lastIp =  $arrayDns["$key"][0];
-                  unset($arrayDns["$key"]);
+                  unset($arrayDns["$keyInv"]["$key"]);
 
                   //on envoie un mail
                   $host = $entry['fqdn'];
@@ -143,7 +149,9 @@ EOF
                   //on supprime l'entrée du tableau
                   foreach($fl_array as $cle => $ligne)
                   {
-                      unset($arrayDns["$cle"]);
+                      $tab = explode('.',$cle);
+                      $keyInv = $tab[1].','.$tab[0];
+                      unset($arrayDns["$keyInv"]["$cle"]);
                   }
 
                   //on envoie un mail
@@ -171,7 +179,9 @@ EOF
               $key = $entry['ip'];//[str_pad ($entry['ip'], 16)];
               $com = array("; UPDATED BY MANITOU --> DON'T TOUCH ;)");
               $newContent = str_pad ($entry['ip'], 16).' IN PTR '.$entry['fqdn']."\n";
-              $arrayDns["$key"] = array($com, $newContent);
+              $tab = explode('.',$key);
+              $keyInv = $tab[1].','.$tab[0];
+              $arrayDns["$keyInv"]["$key"] = array($com, $newContent);
           }
           ksort($arrayDns);
 
@@ -181,7 +191,10 @@ EOF
           {
               if( $key != "")
               {
-                  foreach($ligne as $nvLigne)
+                  $tabTmp = explode(',',$key);
+                  $cle = $tabTmp[1].'.'.$tabTmp[0];
+
+                  foreach($ligne[$cle] as $nvLigne)
                   {
                       if(is_array($nvLigne))
                       {

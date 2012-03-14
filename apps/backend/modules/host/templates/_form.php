@@ -20,9 +20,15 @@
 <script type="text/javascript">
     $(document).ready (function () {
 
+        $("#host_ip_address").css("border","1 px solid #ccc");
+        $("#host_number").css("border","1 px solid #ccc");
+
         // Quand le focus est enlevé de l'input adresse ip, on vérifie qu'elle corresponde avec la syntaxe d'une adresse ip avant d'envoyer la requete ajax
         $('#host_ip_address').focusout(function(){
             var ip = $("#host_ip_address").val();
+            var profile = $("#host_profile_id").val();
+            var room = $("#host_room_id").val();
+            var suffixe = $("#host_number").val();
             $("#alert").html('');
             $("#host_ip_address").css("border","1 px solid #ccc");
             $.ajax({
@@ -36,6 +42,13 @@
                    }
                 }
             })
+
+            if(suffixe == "")
+            {
+              tableau = ip.split('.');
+              suffixe = tableau[3];
+            }
+            checkDns(profile, room, suffixe, false);
         })
 
     //on regarde quand il fait save si l'hote existe deja et on lui demande validation apres un confirm
@@ -43,20 +56,35 @@
         var profile = $("#host_profile_id").val();
         var room = $("#host_room_id").val();
         var suffixe = $("#host_number").val();
-        var url = '<?php echo url_for("@inDnsHostname") ?>';
-        $.ajax({
-            url:    url,
-            data:    { profile: profile, room: room, suffixe: suffixe },
-            success: function(data){
-                if(data.have)
-                {
-                    alert("Attention, cet hostname est deja présent dans le DNS et va etre effacé si vous sauvegardez !");
-                }
-                else
-                    alert("Le nom est disponible");
-            }
-        })
-         return false;
+        checkDns(profile, room, suffixe, true);
     })
   });
+
+  function checkDns(profile, room, suffixe, test)
+  {
+      var url = '<?php echo url_for("@inDnsHostname") ?>';
+      $.ajax({
+          url:    url,
+          data:    { profile: profile, room: room, suffixe: suffixe },
+          success: function(data){
+              if(data.have)
+              {
+                  if(test)
+                    alert("Attention, cet hostname est deja présent dans le DNS et va etre effacé si vous sauvegardez !");
+                  else
+                  {
+                    $(".sf_admin_form_field_number").append('<div id="alert">Attention, cet hostname est deja présent dans le DNS et va etre effacé si vous sauvegardez</div>')
+                    $("#host_number").css("border","1px solid red");
+                  }
+              }
+              else
+              {
+                if(test)
+                  alert("Le nom est disponible");
+              }
+          }
+      })
+      return false;
+  }
+
 </script>
