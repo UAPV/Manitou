@@ -22,6 +22,7 @@
 
         $("#host_ip_address").css("border","1 px solid #ccc");
         $("#host_number").css("border","1 px solid #ccc");
+        $("#alert").remove();
 
         // Quand le focus est enlevé de l'input adresse ip, on vérifie qu'elle corresponde avec la syntaxe d'une adresse ip avant d'envoyer la requete ajax
         $('#host_ip_address').focusout(function(){
@@ -58,6 +59,7 @@
         var room = $("#host_room_id").val();
         var suffixe = $("#host_number").val();
         checkDns(profile, room, suffixe, true);
+         return false;
     })
   });
 

@@ -44,7 +44,7 @@ class Dns
 
       foreach ($this->reverseConf as $filename => $entries)
       {
-          $contentTest = file_get_contents($path.'/'.$filename);
+          $contentTest = file_get_contents($path.$filename);
           $content = preg_replace ($tagRegex, '', $contentTest);
           $content = $this->updateSerial($content);
           $content = explode("\n", $content);
@@ -73,7 +73,10 @@ class Dns
                   $clean = str_replace(';','',$tmp[0]);
                   $keyArray = $clean;
                   $tab = explode('.',$keyArray);
-                  $keyInv = $tab[1].','.$tab[0];
+                  if(count($tab) > 1)
+                    $keyInv = $tab[1].','.$tab[0];
+                  else
+                    $keyInv = $tab[0];
                   $arrayDns["$keyInv"]["$keyArray"] = array($comment,$content[$i]);
                   unset($comment);
                   $comment = array();
@@ -108,7 +111,10 @@ class Dns
                   //on récupère l'entrée dans le tableau et on la supprime du tableau d'origine (arrayDns)
                   $key = str_pad ($entry['ip'], 16);
                   $tab = explode('.',$key);
-                  $keyInv = $tab[1].','.$tab[0];
+                  if(count($tab) > 1)
+                      $keyInv = $tab[1].','.$tab[0];
+                  else
+                      $keyInv = $tab[0];
                   unset($arrayDns["$keyInv"]["$key"]);
               }
               //sinon si l'ip existe deja
@@ -117,7 +123,10 @@ class Dns
                   //on supprime l'entrée du tableau
                   $key = str_pad ($entry['ip'], 16);
                   $tab = explode('.',$key);
-                  $keyInv = $tab[1].','.$tab[0];
+                  if(count($tab) > 1)
+                      $keyInv = $tab[1].','.$tab[0];
+                  else
+                      $keyInv = $tab[0];
                   $lastIp =  $arrayDns["$key"][0];
                   unset($arrayDns["$keyInv"]["$key"]);
 
@@ -140,7 +149,7 @@ Ce message a été envoyé automatiquement. Merci de ne pas y répondre.
 EOF
                   );
 
-                  sfContext::getInstance()->getMailer()->send($message);
+                 // sfContext::getInstance()->getMailer()->send($message);
               }
               else if (preg_match('/^[^;].*IN\s+PTR\s+'.preg_quote($entry['fqdn']).'\s*$/m', $contentTest) > 0)
               {
@@ -150,7 +159,10 @@ EOF
                   foreach($fl_array as $cle => $ligne)
                   {
                       $tab = explode('.',$cle);
-                      $keyInv = $tab[1].','.$tab[0];
+                      if(count($tab) > 1)
+                          $keyInv = $tab[1].','.$tab[0];
+                      else
+                          $keyInv = $tab[0];
                       unset($arrayDns["$keyInv"]["$cle"]);
                   }
 
@@ -173,19 +185,25 @@ Ce message a été envoyé automatiquement. Merci de ne pas y répondre.
 EOF
                   );
 
-                  sfContext::getInstance()->getMailer()->send($message);
+                  //sfContext::getInstance()->getMailer()->send($message);
               }
 
               $key = $entry['ip'];//[str_pad ($entry['ip'], 16)];
               $com = array("; UPDATED BY MANITOU --> DON'T TOUCH ;)");
               $newContent = str_pad ($entry['ip'], 16).' IN PTR '.$entry['fqdn']."\n";
               $tab = explode('.',$key);
-              $keyInv = $tab[1].','.$tab[0];
+              if(count($tab) > 1)
+                  $keyInv = $tab[1].','.$tab[0];
+              else
+                  $keyInv = $tab[0];
               $arrayDns["$keyInv"]["$key"] = array($com, $newContent);
           }
 
-          function compare($a,$b)
+
+          if(!function_exists('compare'))
           {
+             function compare($a,$b)
+             {
               $dataA = explode(',',$a);
               $dataB = explode(',',$b);
 
@@ -200,7 +218,7 @@ EOF
                   return 1;
               else
                   return -1;
-
+            }
           }
 
           uksort($arrayDns, 'compare');
@@ -212,7 +230,10 @@ EOF
               if( $key != "")
               {
                   $tabTmp = explode(',',$key);
-                  $cle = $tabTmp[1].'.'.$tabTmp[0];
+                  if(count($tabTmp) > 1)
+                      $cle = $tabTmp[1].'.'.$tabTmp[0];
+                  else
+                      $cle = $tabTmp[0];
 
                   foreach($ligne[$cle] as $nvLigne)
                   {
@@ -469,6 +490,8 @@ EOF
 
     return preg_replace ($serialRegex, $serial, $conf);
   }
+
+
 
 
 }
