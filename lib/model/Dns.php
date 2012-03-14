@@ -119,8 +119,7 @@ class Dns
                   $host = $entry['fqdn'];
                   $message = sfContext::getInstance()->getMailer()->compose(
                       array('manitou@univ-avignon.fr' => 'Manitou'),
-                      'fanny.marcel@univ-avignon.fr',
-                      //'adm-dosi@listes.univ-avignon.fr',
+                      'adm-dosi@listes.univ-avignon.fr',
                       'Modification DNS',
                       <<<EOF
 Manitou a écrasé une ancienne adresse ip pour le fichier <b>$filename</b>.
