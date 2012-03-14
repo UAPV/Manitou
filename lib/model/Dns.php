@@ -137,9 +137,9 @@ EOF
 
                   sfContext::getInstance()->getMailer()->send($message);
               }
-              else if (preg_match('/^[^;].*IN\s+PTR\s+'.preg_quote($entry['fqdn']).'\s*$/m', $contentTest) > 0)
+              else if (@preg_match('/^[^;].*IN\s+PTR\s+'.preg_quote($entry['fqdn']).'\s*$/m', $contentTest) > 0)
               {
-                  $fl_array = preg_grep('/^[^;].*IN\s+PTR\s+'.preg_quote($entry['fqdn']).'\s*$/m', $arrayDns);
+                  $fl_array = @preg_grep('/^[^;].*IN\s+PTR\s+'.preg_quote($entry['fqdn']).'\s*$/m', $arrayDns);
 
                   //on supprime l'entrée du tableau
                   foreach($fl_array as $cle => $ligne)
@@ -199,7 +199,7 @@ EOF
           //on récupère le tableau de content en string puis on l'écrit dans le fichier
           $nvContent = implode("\n",$data);
           $contentHeader = implode("\n", $header);
-                                                   die;
+
           file_put_contents ($path.$filename, $contentHeader.$nvContent);
       }
 
@@ -339,7 +339,6 @@ EOF
               }
               $newContent .= $endTag."\n\n";
 
-                                           die;
               file_put_contents ($path.'/'.$filename, $content.$newContent);
           }
    }
