@@ -134,7 +134,7 @@ class hostActions extends autoHostActions
           {
             $data['have'] = true;
             $valDns = dns_get_record($ip.'.in-addr.arpa');
-            $data['host'] = $valDns[0]['host'];
+            $data['host'] = $valDns[0]['target'];
           }
           else
             $data['have'] = false;

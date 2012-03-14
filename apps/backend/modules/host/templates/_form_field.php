@@ -18,7 +18,7 @@
 
       <div class="content">
           <?php echo $form[$name]->render($attributes instanceof sfOutputEscaper ? $attributes->getRawValue() : $attributes) ?>
-          <?php if($name == 'number') echo '<br/><button id="testDns">Vérifier la disponibilité du nom.</button>'?>
+          <?php if($name == 'number') echo '<br/><button id="testDns">Vérifier la disponibilité du nom dans le DNS.</button>'?>
       </div>
   </div>
 <?php endif; ?>
