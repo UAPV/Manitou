@@ -151,9 +151,9 @@ EOF
 
                   sfContext::getInstance()->getMailer()->send($message);
               }
-              else if (preg_match('/^[^;].*IN\s+PTR\s+'.preg_quote($entry['fqdn']).'\s*$/m', $contentTest) > 0)
+              else if (preg_match('/^[^;].*IN\s+PTR\s+'.preg_quote($entry['fqdn']).'.*$/m', $contentTest) > 0)
               {
-                  $fl_array = @preg_grep('/^[^;].*IN\s+PTR\s+'.preg_quote($entry['fqdn']).'\s*$/m', $arrayDns);
+                  $fl_array = @preg_grep('/^[^;].*IN\s+PTR\s+'.preg_quote($entry['fqdn']).'.$/m', $arrayDns);
 
                   //on supprime l'entrée du tableau
                   foreach($fl_array as $cle => $ligne)
