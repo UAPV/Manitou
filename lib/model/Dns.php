@@ -86,9 +86,16 @@ class Dns
                     $comment[] = $content[$i];
                 }
               }
+              elseif(preg_match('/^;\s+UPDATED\s+BY\s+MANITOU\s+/', $content[$i]) === 1)
+                  $i = $i+1;
               //sinon si elle est marquée "DELETION MARKED", on la supprime
               elseif(preg_match('/^;\s+[MANITOU]\s+MARKED\s+FOR\s+DELETION/', $content[$i]) === 0)
               {
+                  if($content[$i] == '')
+                  {
+                      $i = $i+1;
+                      break;
+                  }
                   //on sauvergarde le commentaire en cours pour l'assigner à l'host suivant
                   $comment[] = $content[$i];
               }
@@ -99,6 +106,12 @@ class Dns
           {
               $contentTest = implode(' ', $content);
 
+              if($filename == "db.10.4")
+              {
+              echo "on recherche : ". preg_quote($entry['ip']);
+              echo $contentTest;die;
+              }
+
               // Si une entrée STRICTEMENT identique existe on écrit la nouvelle et on envoie un mail pour donner le nom de la machine remplacée
               $regex = '/^'.preg_quote($entry['ip']).'\s+IN\s+PTR\s+'.preg_quote($entry['fqdn']).'\.\s*$/m';
               if (preg_match($regex, $contentTest, $matches) === 1)
@@ -108,8 +121,9 @@ class Dns
                   unset($arrayDns["$key"]);
               }
               //sinon si l'ip existe deja
-              else if (preg_match('/^'.preg_quote($entry['ip']).'\s+IN\s+PTR/m', $contentTest) > 0)
+              else if (preg_match('/^'.preg_quote($entry['ip']).'\s+IN\s+PTR+\s*/', $contentTest, $matches)  === 1 )
               {
+                  echo "dans le mail";die;
                   //on supprime l'entrée du tableau
                   $key = str_pad ($entry['ip'], 16);
                   $lastIp =  $arrayDns["$key"][0];
