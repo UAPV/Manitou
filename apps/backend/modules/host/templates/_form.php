@@ -26,6 +26,7 @@
 
         // Quand le focus est enlevé de l'input adresse ip, on vérifie qu'elle corresponde avec la syntaxe d'une adresse ip avant d'envoyer la requete ajax
         $('#host_ip_address').focusout(function(){
+            $("#alert").remove();
             var ip = $("#host_ip_address").val();
             var profile = $("#host_profile_id").val();
             var room = $("#host_room_id").val();
