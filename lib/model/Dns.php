@@ -72,12 +72,12 @@ class Dns
                   $tmp = explode(' ',$content[$i]);
                   $clean = str_replace(';','',$tmp[0]);
                   $keyArray = $clean;
-                  $tab = explode('.',$keyArray);
+                  /*$tab = explode('.',$keyArray);
                   if(count($tab) > 1)
                     $keyInv = $tab[1].','.$tab[0];
                   else
-                    $keyInv = $tab[0];
-                  $arrayDns["$keyInv"]["$keyArray"] = array($comment,$content[$i]);
+                    $keyInv = $tab[0]; */
+                  $arrayDns["$keyArray"] = array($comment,$content[$i]);
                   unset($comment);
                   $comment = array();
                   $first = false;
@@ -110,25 +110,15 @@ class Dns
               {
                   //on récupère l'entrée dans le tableau et on la supprime du tableau d'origine (arrayDns)
                   $key = str_pad ($entry['ip'], 16);
-                  $tab = explode('.',$key);
-                  if(count($tab) > 1)
-                      $keyInv = $tab[1].','.$tab[0];
-                  else
-                      $keyInv = $tab[0];
-                  unset($arrayDns["$keyInv"]["$key"]);
+                  unset($arrayDns["$key"]);
               }
               //sinon si l'ip existe deja
               else if (preg_match('/^'.preg_quote($entry['ip']).'\s+IN\s+PTR/m', $contentTest) > 0)
               {
                   //on supprime l'entrée du tableau
                   $key = str_pad ($entry['ip'], 16);
-                  $tab = explode('.',$key);
-                  if(count($tab) > 1)
-                      $keyInv = $tab[1].','.$tab[0];
-                  else
-                      $keyInv = $tab[0];
                   $lastIp =  $arrayDns["$key"][0];
-                  unset($arrayDns["$keyInv"]["$key"]);
+                  unset($arrayDns["$key"]);
 
                   //on envoie un mail
                   $host = $entry['fqdn'];
@@ -153,19 +143,11 @@ EOF
               }
               else if (preg_match('/^[^;].*IN\s+PTR\s+'.preg_quote($entry['fqdn']).'.*$/m', $contentTest) > 0)
               {
-                  $fl_array = @preg_grep('/^[^;].*IN\s+PTR\s+'.preg_quote($entry['fqdn']).'.$/m', $arrayDns);
-
                   //on supprime l'entrée du tableau
-                  foreach($fl_array as $cle => $ligne)
+                  foreach($arrayDns as $cle => $host)
                   {
-                      echo $cle;die;
-                      $tab = explode('.',$cle);
-                      if(count($tab) > 1)
-                          $keyInv = $tab[1].','.$tab[0];
-                      else
-                          $keyInv = $tab[0];
-
-                      unset($arrayDns["$keyInv"]["$cle"]);
+                      if(preg_match('/^[^;].*IN\s+PTR\s+'.preg_quote($entry['fqdn']).'.*$/m', $host[1]) > 0)
+                          unset($arrayDns["$cle"]);
                   }
 
                   //on envoie un mail
@@ -193,12 +175,12 @@ EOF
               $key = $entry['ip'];//[str_pad ($entry['ip'], 16)];
               $com = array("; UPDATED BY MANITOU --> DON'T TOUCH ;)");
               $newContent = str_pad ($entry['ip'], 16).' IN PTR '.$entry['fqdn']."\n";
-              $tab = explode('.',$key);
-              if(count($tab) > 1)
+             // $tab = explode('.',$key);
+             /* if(count($tab) > 1)
                   $keyInv = $tab[1].','.$tab[0];
               else
-                  $keyInv = $tab[0];
-              $arrayDns["$keyInv"]["$key"] = array($com, $newContent);
+                  $keyInv = $tab[0];*/
+              $arrayDns["$key"] = array($com, $newContent);
           }
 
 
@@ -209,14 +191,14 @@ EOF
               $dataA = explode(',',$a);
               $dataB = explode(',',$b);
 
-              if($dataA[0] == $dataB[0])
+              if($dataA[1] == $dataB[1])
               {
-                  if($dataA[1] >= $dataB[1])
+                  if($dataA[0] >= $dataB[0])
                       return 1;
                   else
                       return -1;
               }
-              elseif($dataA[0] > $dataB[0])
+              elseif($dataA[1] > $dataB[1])
                   return 1;
               else
                   return -1;
@@ -231,13 +213,13 @@ EOF
           {
               if( $key != "")
               {
-                  $tabTmp = explode(',',$key);
+                  /*$tabTmp = explode(',',$key);
                   if(count($tabTmp) > 1)
                       $cle = $tabTmp[1].'.'.$tabTmp[0];
                   else
-                      $cle = $tabTmp[0];
+                      $cle = $tabTmp[0]; */
 
-                  foreach($ligne[$cle] as $nvLigne)
+                  foreach($ligne as $nvLigne)
                   {
                       if(is_array($nvLigne))
                       {
