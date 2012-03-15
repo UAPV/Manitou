@@ -70,13 +70,7 @@ class Dns
                   //on récupère le numéro pour le mettre en clé dans le tableau final
                   $content[$i] = preg_replace("/[\s](.\d\d)?+/",' ',$content[$i]);
                   $tmp = explode(' ',$content[$i]);
-                  $clean = str_replace(';','',$tmp[0]);
-                  $keyArray = $clean;
-                  /*$tab = explode('.',$keyArray);
-                  if(count($tab) > 1)
-                    $keyInv = $tab[1].','.$tab[0];
-                  else
-                    $keyInv = $tab[0]; */
+                  $keyArray = str_replace(';','',$tmp[0]);
                   $arrayDns["$keyArray"] = array($comment,$content[$i]);
                   unset($comment);
                   $comment = array();
@@ -88,6 +82,7 @@ class Dns
                 if(preg_match($regexCom,$content[$i]) === 1)
                 {
                     $first = false;
+                    unset($header[$i]);
                     $comment[] = $content[$i];
                 }
               }
@@ -139,7 +134,7 @@ Ce message a été envoyé automatiquement. Merci de ne pas y répondre.
 EOF
                   );
 
-                  sfContext::getInstance()->getMailer()->send($message);
+                sfContext::getInstance()->getMailer()->send($message);
               }
               else if (preg_match('/^[^;].*IN\s+PTR\s+'.preg_quote($entry['fqdn']).'.*$/m', $contentTest) > 0)
               {
@@ -169,17 +164,12 @@ Ce message a été envoyé automatiquement. Merci de ne pas y répondre.
 EOF
                   );
 
-                  sfContext::getInstance()->getMailer()->send($message);
+                sfContext::getInstance()->getMailer()->send($message);
               }
 
-              $key = $entry['ip'];//[str_pad ($entry['ip'], 16)];
+              $key = $entry['ip'];
               $com = array("; UPDATED BY MANITOU --> DON'T TOUCH ;)");
               $newContent = str_pad ($entry['ip'], 16).' IN PTR '.$entry['fqdn']."\n";
-             // $tab = explode('.',$key);
-             /* if(count($tab) > 1)
-                  $keyInv = $tab[1].','.$tab[0];
-              else
-                  $keyInv = $tab[0];*/
               $arrayDns["$key"] = array($com, $newContent);
           }
 
@@ -191,17 +181,27 @@ EOF
               $dataA = explode(',',$a);
               $dataB = explode(',',$b);
 
-              if($dataA[1] == $dataB[1])
+              if(count($dataA) > 1 && count($dataB) > 1)
+              {
+                  if($dataA[1] == $dataB[1])
+                  {
+                      if($dataA[0] >= $dataB[0])
+                          return 1;
+                      else
+                          return -1;
+                  }
+                  elseif($dataA[1] > $dataB[1])
+                      return 1;
+                  else
+                      return -1;
+              }
+              else
               {
                   if($dataA[0] >= $dataB[0])
                       return 1;
                   else
                       return -1;
               }
-              elseif($dataA[1] > $dataB[1])
-                  return 1;
-              else
-                  return -1;
             }
           }
 
@@ -213,12 +213,6 @@ EOF
           {
               if( $key != "")
               {
-                  /*$tabTmp = explode(',',$key);
-                  if(count($tabTmp) > 1)
-                      $cle = $tabTmp[1].'.'.$tabTmp[0];
-                  else
-                      $cle = $tabTmp[0]; */
-
                   foreach($ligne as $nvLigne)
                   {
                       if(is_array($nvLigne))
@@ -236,7 +230,7 @@ EOF
           $nvContent = implode("\n",$data);
           $contentHeader = implode("\n", $header);
 
-          file_put_contents ($path.$filename, $contentHeader.$nvContent);
+          file_put_contents ($path.$filename, $contentHeader."\n".$nvContent);
       }
 
       /*foreach ($this->conf as $filename => $entries)
