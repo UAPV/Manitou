@@ -158,11 +158,13 @@ EOF
                   //on supprime l'entrée du tableau
                   foreach($fl_array as $cle => $ligne)
                   {
+                      echo $cle;die;
                       $tab = explode('.',$cle);
                       if(count($tab) > 1)
                           $keyInv = $tab[1].','.$tab[0];
                       else
                           $keyInv = $tab[0];
+
                       unset($arrayDns["$keyInv"]["$cle"]);
                   }
 
