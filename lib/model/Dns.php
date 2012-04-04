@@ -141,7 +141,7 @@ Ce message a été envoyé automatiquement. Merci de ne pas y répondre.
 EOF
                   );
 
-                sfContext::getInstance()->getMailer()->send($message);
+                //sfContext::getInstance()->getMailer()->send($message);
               }
               else if (preg_match('/^[^;].*IN\s+PTR\s+'.preg_quote($entry['fqdn']).'.*$/m', $contentTest) > 0)
               {
@@ -171,7 +171,7 @@ Ce message a été envoyé automatiquement. Merci de ne pas y répondre.
 EOF
                   );
 
-                sfContext::getInstance()->getMailer()->send($message);
+                //sfContext::getInstance()->getMailer()->send($message);
               }
 
               $key = $entry['ip'];
@@ -352,7 +352,7 @@ Ce message a été envoyé automatiquement. Merci de ne pas y répondre.
 EOF
                  );
 
-                 sfContext::getInstance()->getMailer()->send($message);
+                 //sfContext::getInstance()->getMailer()->send($message);
              }
              //si le hostname existe deja
              else if (preg_match('/^'.$entry['hostname'].'\s+IN\s+A/m', $contentTest) > 0)
@@ -385,7 +385,7 @@ Ce message a été envoyé automatiquement. Merci de ne pas y répondre.
 EOF
                  );
 
-                 sfContext::getInstance()->getMailer()->send($message);
+                 //sfContext::getInstance()->getMailer()->send($message);
              }
 
            $key = str_pad($entry['hostname'], 24);
