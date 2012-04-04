@@ -417,7 +417,7 @@ EOF
           //on récupère le tableau de content en string puis on l'écrit dans le fichier
           $nvContent = implode("\n",$data);
           $contentHeader = implode("\n", $header);
-          $filePath = $path.$filename.'.new';
+          $filePath = $path.$filename;
 
           file_put_contents ($filePath, $contentHeader.$nvContent);
         }
