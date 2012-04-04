@@ -126,7 +126,7 @@ class Dns
                   $host = $entry['fqdn'];
                   $message = sfContext::getInstance()->getMailer()->compose(
                       array('manitou@univ-avignon.fr' => 'Manitou'),
-                      'adm-dosi@listes.univ-avignon.fr',
+                      'root-admin@listes.univ-avignon.fr',
                       'Modification DNS',
                       <<<EOF
 Manitou a écrasé une ancienne adresse ip pour le fichier <b>$filename</b>.
@@ -157,7 +157,7 @@ EOF
                   $ip = $entry['ip'];
                   $message = sfContext::getInstance()->getMailer()->compose(
                       array('manitou@univ-avignon.fr' => 'Manitou'),
-                      'adm-dosi@listes.univ-avignon.fr',
+                      'root-admin@listes.univ-avignon.fr',
                       'Modification DNS',
                       <<<EOF
 Manitou a écrasé une ligne pour le fichier $filename.
@@ -338,7 +338,7 @@ EOF
                  $lastIp = $entry['ip'];
                  $message = sfContext::getInstance()->getMailer()->compose(
                      array('manitou@univ-avignon.fr' => 'Manitou'),
-                     'adm-dosi@listes.univ-avignon.fr',
+                     'root-admin@listes.univ-avignon.fr',
                      'Modification DNS',
                      <<<EOF
                      Manitou a écrasé un hote pour l'adresse ip suivante pour le fichier <b>$filename</b>.
@@ -371,7 +371,7 @@ EOF
                  $ip = $entry['ip'];
                  $message = sfContext::getInstance()->getMailer()->compose(
                      array('manitou@univ-avignon.fr' => 'Manitou'),
-                     'adm-dosi@listes.univ-avignon.fr',
+                     'root-admin@listes.univ-avignon.fr',
                      'Modification DNS',
                      <<<EOF
                      Manitou a écrasé une ligne pour le fichier <b>$filename</b>.
