@@ -265,7 +265,7 @@ EOF
          for($i=0; $i < $lengh; $i++)
          {
            //on garde le header tant qu'on n'a pas trouvé le premier host
-           if(!$first)
+           if($first)
               $header[] = $content[$i];
 
            //on regarde si la ligne en cours de lecture est un nouvel host
@@ -313,7 +313,7 @@ EOF
              $contentTest = implode(' ', $content);
 
              // Si une entrée STRICTEMENT identique existe on écrit la nouvelle et on envoie un mail pour donner le nom de la machine remplacée
-             $regex = '/^'.preg_quote($entry['hostname']).'\s+IN\s+A\s+'.preg_quote($entry['ip']).'\s*$/m';;
+             $regex = '/^'.preg_quote($entry['hostname']).'\s+IN\s+A\s+'.preg_quote($entry['ip']).'\s*$/m';
              if (preg_match($regex, $contentTest, $matches) === 1)
              {
                 //on récupère l'entrée dans le tableau et on la supprime du tableau d'origine (arrayDns)
@@ -390,7 +390,7 @@ EOF
 
            $key = str_pad($entry['hostname'], 24);
            $com = array("; UPDATED BY MANITOU --> DON'T TOUCH ;)");
-           $newContent = str_pad ($entry['hostname'], 24).' IN PTR '.$entry['ip']."\n";
+           $newContent = str_pad ($entry['hostname'], 24).'    IN    A    '.$entry['ip'].".\n";
            $arrayDns[$key] = array($com, $newContent);
          }
 
