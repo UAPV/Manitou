@@ -49,7 +49,6 @@ class hostActions extends autoHostActions
     {
        //on regarde dans le ldap si l'hote y est
         $data = $ldap->search('cn='.$host->getHostname());
-        var_dump($data);die;
         if(count($data) == 0)
         {
             $dataLdap[] = $host->getHostname();

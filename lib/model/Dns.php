@@ -7,8 +7,13 @@ class Dns
 
   public function setHosts ($hosts)
   {
-    foreach ($hosts as $host)
-      $this->addHost($host);
+    if(is_array($hosts))
+    {
+      foreach ($hosts as $host)
+        $this->addHost($host);
+    }
+    else
+      $this->addHost($hosts);
   }
 
   public function addHost ($host)
@@ -21,7 +26,6 @@ class Dns
       'ip'        => $host->getIpAddress (),
       'hostname'  => $host->getHostname (),
     );
-
 
     $ipBase = $host->getSubnet ()->getIpAddress();
     $ipBase = substr ($ipBase, 0, strpos ($ipBase, '.0'));

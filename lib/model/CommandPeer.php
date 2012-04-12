@@ -98,13 +98,18 @@ class CommandPeer extends BaseCommandPeer {
    * @param  $hosts     Tableau ou Object de la classe Host
    * @return Command
    */
-  public static function runDnsUpdate ()
+  public static function runDnsUpdate ($hosts = null)
   {
     self::runDnsPreUpdate();
 
     $path = sfConfig::get('sf_manitou_dns_conf_path');
 
-    $hosts = HostQuery::create()->withColumn('INET_ATON(Host.IpAddress)','a')->orderBy('a','asc')->find ();
+    //on récupère les hosts modifiés
+    if($hosts == null)
+    {
+        $hosts = HostQuery::create()->withColumn('INET_ATON(Host.IpAddress)','a')->orderBy('a','asc')->find ();
+    }
+
     $dnsConf = new Dns ();
     $dnsConf->setHosts ($hosts);
     $dnsConf->apply ($path);

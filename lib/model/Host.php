@@ -158,7 +158,7 @@ class Host extends BaseHost {
   public function postDelete(PropelPDO $con = null)
   {
     parent::postDelete ($con);
-    CommandPeer::runDnsUpdate ();
+    CommandPeer::runDnsUpdate ($this);
     CommandPeer::runDhcpdUpdate ();
   }
 
@@ -178,7 +178,11 @@ class Host extends BaseHost {
 
       // Mise à jour du DNS si nécessaire
       if ($this->needDnsUpdate === true)
-        CommandPeer::runDnsUpdate ();
+        CommandPeer::runDnsUpdate ($this);
+    }
+    else
+    {
+
     }
   }
 
