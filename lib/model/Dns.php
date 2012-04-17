@@ -120,8 +120,10 @@ class Dns
 
               $contentTest = implode(' ', $content);
 
+              $ipSearched = trim(str_pad ($entry['ip'], 16));
+
               // Si une entrée STRICTEMENT identique existe, on écrit la nouvelle
-              $regex = '/^'.preg_quote(str_pad ($entry['ip'], 16)).'\s+IN\s+PTR\s+'.preg_quote($entry['fqdn']).'\.\s*$/';
+              $regex = '/^'.preg_quote($ipSearched).'\s*+IN\s*+PTR\s*+'.preg_quote($entry['fqdn']).'\.\s*$/';
 
               echo "on compare : ".$regex.' avec '.$contentTest;
               die;
