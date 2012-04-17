@@ -321,10 +321,17 @@ EOF
            }
        }
 
+
          foreach ($entries as $entry)
          {
              $contentTest = implode(' ', $content);
+             $ipClean = trim($entry['ip']);
 
+             if($filename == 'db.univ-avignon.fr')
+             {
+
+               echo '/^[^;].*IN\s*A\s*'.preg_quote($ipClean).'\s*$/';
+             }
              // Si une entrée STRICTEMENT identique existe on écrit la nouvelle et on envoie un mail pour donner le nom de la machine remplacée
              $regex = '/^'.preg_quote($entry['hostname']).'\s+IN\s+A\s+'.preg_quote($entry['ip']).'\s*$/';
              if (preg_match($regex, $contentTest, $matches) === 1)
@@ -334,7 +341,7 @@ EOF
                 unset($arrayDns["$key"]);
              }
              //sinon si l'ip existe deja
-             else if (preg_match('/^[^;].*IN\s+A\s+'.preg_quote($entry['ip']).'\s*$/', $contentTest, $matches)  === 1 )
+             else if (preg_match('/^[^;].*IN\s*A\s*'.preg_quote($ipClean).'\s*$/', $contentTest, $matches)  === 1 )
              {
                  //on supprime l'entrée du tableau, on recherche l'hote correspondant a l'ip
                  foreach($arrayDns as $cle => $host)
@@ -406,7 +413,6 @@ EOF
            $newContent = str_pad ($entry['hostname'], 24).'    IN    A    '.$entry['ip']."\n";
            $arrayDns[$key] = array($com, $newContent);
          }
-
 
          $data = array();
 
