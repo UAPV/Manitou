@@ -169,6 +169,7 @@ EOF
                   {
                       if(preg_match('/^[^;].*IN\s+PTR\s+'.preg_quote($entry['fqdn']).'.*$/m', $host[1]) > 0)
                           unset($arrayDns["$cle"]);
+                      $lastIp = $cle;
                   }
 
                   //on envoie un mail
@@ -181,7 +182,7 @@ EOF
                       <<<EOF
 Manitou a écrasé une ligne pour le fichier $filename.
 
-Ancienne ip :   $ip
+Ancienne ip :   $lastIp
 Nouvelle ip :   $ip
 Nouvel host :   $newFqdn
 
