@@ -113,10 +113,10 @@ class Dns
           //on rajoute les fichiers de Manitou puis on trie le tableau
           foreach ($entries as $entry)
           {
-              foreach($arrayDns as $array)
+              /*foreach($arrayDns as $array)
               {
                  $content[] = implode(' ', $array);
-              }
+              }*/
 
               $contentTest = implode(' ', $content);
 
@@ -327,10 +327,10 @@ EOF
 
          foreach ($entries as $entry)
          {
-             foreach($arrayDns as $array)
+             /*foreach($arrayDns as $array)
              {
                  $content[] = implode(' ', $array);
-             }
+             }*/
 
              $contentTest = implode(' ', $content);
 
