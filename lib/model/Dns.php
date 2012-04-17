@@ -113,10 +113,13 @@ class Dns
           //on rajoute les fichiers de Manitou puis on trie le tableau
           foreach ($entries as $entry)
           {
-              $contentTest = implode(' ', $content);
+              $contentTest = implode(' ', $arrayDns);
 
               // Si une entrée STRICTEMENT identique existe, on écrit la nouvelle
               $regex = '/^'.preg_quote(str_pad ($entry['ip'], 16)).'\s+IN\s+PTR\s+'.preg_quote($entry['fqdn']).'\.\s*$/';
+
+              echo "on compare : ".$regex.' avec '.$contentTest;
+              die;
 
               if (preg_match($regex, $contentTest, $matches) === 1)
               {
