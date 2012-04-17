@@ -121,6 +121,7 @@ class Dns
               $contentTest = implode(' ', $content);
 
               $ipSearched = trim(str_pad ($entry['ip'], 16));
+              $fqdnSearched = trim($entry['fqdn']);
 
               // Si une entrée STRICTEMENT identique existe, on écrit la nouvelle
               $regex = '/^'.preg_quote($ipSearched).'\s*+IN\s*+PTR\s*+'.preg_quote($entry['fqdn']).'\.\s*$/';
@@ -161,7 +162,6 @@ EOF
 
                 sfContext::getInstance()->getMailer()->send($message);
               }
-              $fqdnSearched = trim($entry['fqdn']);
               else if (preg_match('/^[^;].*IN\s+PTR\s+'.preg_quote($fqdnSearched).'.*$/m', $contentTest) > 0)
               {
                   //on supprime l'entrée du tableau
