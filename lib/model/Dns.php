@@ -113,19 +113,10 @@ class Dns
           //on rajoute les fichiers de Manitou puis on trie le tableau
           foreach ($entries as $entry)
           {
-              /*foreach($arrayDns as $array)
-              {
-                 $content[] = implode(' ', $array);
-              }*/
-
               $contentTest = implode(' ', $content);
 
-              $ipSearched = trim(str_pad ($entry['ip'], 16));
-              $fqdnSearched = trim($entry['fqdn']);
-
-              // Si une entrée STRICTEMENT identique existe, on écrit la nouvelle
-              $regex = '/^'.preg_quote($ipSearched).'\s*+IN\s*+PTR\s*+'.preg_quote($entry['fqdn']).'\.\s*$/';
-
+              // Si une entrée STRICTEMENT identique existe on écrit la nouvelle et on envoie un mail pour donner le nom de la machine remplacée
+              $regex = '/^'.preg_quote($entry['ip']).'\s+IN\s+PTR\s+'.preg_quote($entry['fqdn']).'\.\s*$/m';
               if (preg_match($regex, $contentTest, $matches) === 1)
               {
                   //on récupère l'entrée dans le tableau et on la supprime du tableau d'origine (arrayDns)
@@ -133,10 +124,10 @@ class Dns
                   unset($arrayDns["$key"]);
               }
               //sinon si l'ip existe deja
-              else if (preg_match('/^'.preg_quote($ipSearched).'\s+IN\s+PTR+\s*/', $contentTest, $matches)  === 1 )
+              else if (preg_match('/^'.preg_quote($entry['ip']).'\s+IN\s+PTR+\s*/', $contentTest, $matches)  === 1 )
               {
                   //on supprime l'entrée du tableau
-                  $key = trim(str_pad ($entry['ip'], 16));
+                  $key = str_pad ($entry['ip'], 16);
                   $lastIp =  $arrayDns["$key"][0];
                   unset($arrayDns["$key"]);
 
@@ -144,8 +135,7 @@ class Dns
                   $host = $entry['fqdn'];
                   $message = sfContext::getInstance()->getMailer()->compose(
                       array('manitou@univ-avignon.fr' => 'Manitou'),
-                      'fanny.marcel@univ-avignon.fr',
-                      //'root-admin@listes.univ-avignon.fr',
+                      'root-admin@listes.univ-avignon.fr',
                       'Modification DNS',
                       <<<EOF
 Manitou a écrasé une ancienne adresse ip pour le fichier <b>$filename</b>.
@@ -162,27 +152,26 @@ EOF
 
                 //sfContext::getInstance()->getMailer()->send($message);
               }
-              else if (preg_match('/^[^;].*IN\s+PTR\s+'.preg_quote($fqdnSearched).'.*$/m', $contentTest) > 0)
+              else if (preg_match('/^[^;].*IN\s+PTR\s+'.preg_quote($entry['fqdn']).'.*$/m', $contentTest) > 0)
               {
                   //on supprime l'entrée du tableau
                   foreach($arrayDns as $cle => $host)
                   {
                       if(preg_match('/^[^;].*IN\s+PTR\s+'.preg_quote($entry['fqdn']).'.*$/m', $host[1]) > 0)
                           unset($arrayDns["$cle"]);
-                      $lastIp = $cle;
                   }
 
                   //on envoie un mail
-                  $newFqdn = $fqdnSearched;
+                  $newFqdn = $entry['fqdn'];
                   $ip = $entry['ip'];
                   $message = sfContext::getInstance()->getMailer()->compose(
                       array('manitou@univ-avignon.fr' => 'Manitou'),
-                      'fanny.marcel@univ-avignon.fr',//'root-admin@listes.univ-avignon.fr',
+                      'root-admin@listes.univ-avignon.fr',
                       'Modification DNS',
                       <<<EOF
 Manitou a écrasé une ligne pour le fichier $filename.
 
-Ancienne ip :   $lastIp
+Ancienne ip :   $ip
 Nouvelle ip :   $ip
 Nouvel host :   $newFqdn
 
@@ -196,7 +185,7 @@ EOF
 
               $key = $entry['ip'];
               $com = array("; UPDATED BY MANITOU --> DON'T TOUCH ;)");
-              $newContent = str_pad ($entry['ip'], 16).' IN PTR '.$entry['fqdn'].".\n";
+              $newContent = str_pad ($entry['ip'], 16).' IN PTR '.$entry['fqdn']."\n";
               $arrayDns["$key"] = array($com, $newContent);
           }
 
@@ -264,8 +253,7 @@ EOF
           $nvContent = implode("\n",$data);
           $contentHeader = implode("\n", $header);
 
-          file_put_contents ($path.$filename, $contentHeader."\n".$nvContent);
-      }
+          file_put_contents ($path.$filename.'.new', $contentHeader."\n".$nvContent);
       }
 
       foreach ($this->conf as $filename => $entries)
@@ -327,14 +315,7 @@ EOF
 
          foreach ($entries as $entry)
          {
-             /*foreach($arrayDns as $array)
-             {
-                 $content[] = implode(' ', $array);
-             }*/
-
              $contentTest = implode(' ', $content);
-
-             //$ipSearched = trim(str_pad ($entry['ip'], 16));
 
              // Si une entrée STRICTEMENT identique existe on écrit la nouvelle et on envoie un mail pour donner le nom de la machine remplacée
              $regex = '/^'.preg_quote($entry['hostname']).'\s+IN\s+A\s+'.preg_quote($entry['ip']).'\s*$/m';
@@ -362,7 +343,7 @@ EOF
                  $lastIp = $entry['ip'];
                  $message = sfContext::getInstance()->getMailer()->compose(
                      array('manitou@univ-avignon.fr' => 'Manitou'),
-                     'fanny.marcel@univ-avignon.fr',//'root-admin@listes.univ-avignon.fr',
+                     'root-admin@listes.univ-avignon.fr',
                      'Modification DNS',
                      <<<EOF
                      Manitou a écrasé un hote pour l'adresse ip suivante pour le fichier <b>$filename</b>.
@@ -395,7 +376,7 @@ EOF
                  $ip = $entry['ip'];
                  $message = sfContext::getInstance()->getMailer()->compose(
                      array('manitou@univ-avignon.fr' => 'Manitou'),
-                     'fanny.marcel@univ-avignon.fr',//'root-admin@listes.univ-avignon.fr',
+                     'root-admin@listes.univ-avignon.fr',
                      'Modification DNS',
                      <<<EOF
                      Manitou a écrasé une ligne pour le fichier <b>$filename</b>.
@@ -444,8 +425,9 @@ EOF
           $contentHeader = implode("\n", $header);
           $filePath = $path.$filename;
 
-          file_put_contents ($filePath, $contentHeader."\n".$nvContent);
+          file_put_contents ($filePath.'.new', $contentHeader."\n".$nvContent);
         }
+      }
       }
   }
 
