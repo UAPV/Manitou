@@ -140,3 +140,30 @@ ul#image_server_status li .hostname {
   font-size: 14px;
   padding-top: 2px;
 }
+
+.box_svn_st{
+ background-color: black;
+ margin-top: 10px;
+ width: 30%;
+ color: #ccc;
+ padding: 10px;
+ line-height: 100%;
+ font-size: 13px;
+ background: #222;
+ font-weight: bold;
+ border: 1px solid #ccc;
+}
+
+.submitButton {
+    height: 32px;
+    overflow: hidden;
+    border: none;
+    cursor: pointer;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    padding: 2px 10px;
+    -moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
+    -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
+    background-color: #E1E1E1;
+}

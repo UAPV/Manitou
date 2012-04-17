@@ -7,13 +7,8 @@ class Dns
 
   public function setHosts ($hosts)
   {
-    if(is_array($hosts))
-    {
       foreach ($hosts as $host)
         $this->addHost($host);
-    }
-    else
-      $this->addHost($hosts);
   }
 
   public function addHost ($host)
@@ -40,7 +35,14 @@ class Dns
     );
   }
 
-  public function apply ($path)
+ /**
+   *  Mise à jour des fichiers de conf en modifiant le contenu des balise MANITOU_CONF_[START|END]
+   *
+   * @param  $path
+   * @param $filesToChange fichiers qu'il faut modifier et commiter si un seul host est touché
+   * @return void
+   */
+  public function apply ($path, $filesToChange = null)
   {
       $startTag = '; MANITOU_CONF_BEGIN';
       $endTag   = '; MANITOU_CONF_END';
@@ -48,7 +50,10 @@ class Dns
 
       foreach ($this->reverseConf as $filename => $entries)
       {
-          $contentTest = file_get_contents($path.$filename);
+          //si il s'agit du fichier à modifier
+          if(in_array($filename, $filesToChange))
+          {
+              $contentTest = file_get_contents($path.$filename);
           $content = preg_replace ($tagRegex, '', $contentTest);
           $content = $this->updateSerial($content);
           $content = explode("\n", $content);
@@ -130,7 +135,8 @@ class Dns
                   $host = $entry['fqdn'];
                   $message = sfContext::getInstance()->getMailer()->compose(
                       array('manitou@univ-avignon.fr' => 'Manitou'),
-                      'root-admin@listes.univ-avignon.fr',
+                      'fanny.marcel@univ-avignon.fr',
+                      //'root-admin@listes.univ-avignon.fr',
                       'Modification DNS',
                       <<<EOF
 Manitou a écrasé une ancienne adresse ip pour le fichier <b>$filename</b>.
@@ -145,7 +151,7 @@ Ce message a été envoyé automatiquement. Merci de ne pas y répondre.
 EOF
                   );
 
-                //sfContext::getInstance()->getMailer()->send($message);
+                sfContext::getInstance()->getMailer()->send($message);
               }
               else if (preg_match('/^[^;].*IN\s+PTR\s+'.preg_quote($entry['fqdn']).'.*$/m', $contentTest) > 0)
               {
@@ -161,7 +167,7 @@ EOF
                   $ip = $entry['ip'];
                   $message = sfContext::getInstance()->getMailer()->compose(
                       array('manitou@univ-avignon.fr' => 'Manitou'),
-                      'root-admin@listes.univ-avignon.fr',
+                      'fanny.marcel@univ-avignon.fr',//'root-admin@listes.univ-avignon.fr',
                       'Modification DNS',
                       <<<EOF
 Manitou a écrasé une ligne pour le fichier $filename.
@@ -175,15 +181,14 @@ Ce message a été envoyé automatiquement. Merci de ne pas y répondre.
 EOF
                   );
 
-                //sfContext::getInstance()->getMailer()->send($message);
+                sfContext::getInstance()->getMailer()->send($message);
               }
 
               $key = $entry['ip'];
               $com = array("; UPDATED BY MANITOU --> DON'T TOUCH ;)");
-              $newContent = str_pad ($entry['ip'], 16).' IN PTR '.$entry['fqdn']."\n";
+              $newContent = str_pad ($entry['ip'], 16).' IN PTR '.$entry['fqdn'].".\n";
               $arrayDns["$key"] = array($com, $newContent);
           }
-
 
           if(!function_exists('compare'))
           {
@@ -249,11 +254,14 @@ EOF
           $nvContent = implode("\n",$data);
           $contentHeader = implode("\n", $header);
 
-          file_put_contents ($path.$filename, $contentHeader."\n".$nvContent);
+          file_put_contents ($path.$filename.'.new', $contentHeader."\n".$nvContent);
+      }
       }
 
       foreach ($this->conf as $filename => $entries)
       {
+         if(in_array($filename, $filesToChange))
+         {
          $contentTest = file_get_contents($path.'/'.$filename);
          $content = preg_replace ($tagRegex, '', $contentTest);
          $content = $this->updateSerial($content);
@@ -301,17 +309,12 @@ EOF
            elseif(preg_match('/^;\s+\[MANITOU\]\s+MARKED\s+FOR\s+DELETION/', $content[$i]) === 0)
            {
                if($content[$i] == '')
-               {
                    $i = $i+1;
-                   break;
-               }
                //on sauvergarde le commentaire en cours pour l'assigner à l'host suivant
                $comment[] = $content[$i];
            }
          }
 
-         //on rajoute les fichiers de Manitou puis on trie le tableau
-         //on regarde si une entrée existe déjà pour tel host
          foreach ($entries as $entry)
          {
              $contentTest = implode(' ', $content);
@@ -342,7 +345,7 @@ EOF
                  $lastIp = $entry['ip'];
                  $message = sfContext::getInstance()->getMailer()->compose(
                      array('manitou@univ-avignon.fr' => 'Manitou'),
-                     'root-admin@listes.univ-avignon.fr',
+                     'fanny.marcel@univ-avignon.fr',//'root-admin@listes.univ-avignon.fr',
                      'Modification DNS',
                      <<<EOF
                      Manitou a écrasé un hote pour l'adresse ip suivante pour le fichier <b>$filename</b>.
@@ -356,7 +359,7 @@ Ce message a été envoyé automatiquement. Merci de ne pas y répondre.
 EOF
                  );
 
-                 //sfContext::getInstance()->getMailer()->send($message);
+                 sfContext::getInstance()->getMailer()->send($message);
              }
              //si le hostname existe deja
              else if (preg_match('/^'.$entry['hostname'].'\s+IN\s+A/m', $contentTest) > 0)
@@ -375,7 +378,7 @@ EOF
                  $ip = $entry['ip'];
                  $message = sfContext::getInstance()->getMailer()->compose(
                      array('manitou@univ-avignon.fr' => 'Manitou'),
-                     'root-admin@listes.univ-avignon.fr',
+                     'fanny.marcel@univ-avignon.fr',//'root-admin@listes.univ-avignon.fr',
                      'Modification DNS',
                      <<<EOF
                      Manitou a écrasé une ligne pour le fichier <b>$filename</b>.
@@ -389,14 +392,15 @@ Ce message a été envoyé automatiquement. Merci de ne pas y répondre.
 EOF
                  );
 
-                 //sfContext::getInstance()->getMailer()->send($message);
+                 sfContext::getInstance()->getMailer()->send($message);
              }
 
            $key = str_pad($entry['hostname'], 24);
            $com = array("; UPDATED BY MANITOU --> DON'T TOUCH ;)");
-           $newContent = str_pad ($entry['hostname'], 24).'    IN    A    '.$entry['ip'].".\n";
+           $newContent = str_pad ($entry['hostname'], 24).'    IN    A    '.$entry['ip']."\n";
            $arrayDns[$key] = array($com, $newContent);
          }
+
 
          $data = array();
 
@@ -423,9 +427,10 @@ EOF
           $contentHeader = implode("\n", $header);
           $filePath = $path.$filename;
 
-          file_put_contents ($filePath, $contentHeader.$nvContent);
+          file_put_contents ($filePath.'.new', $contentHeader."\n".$nvContent);
         }
-   }
+      }
+  }
 
       /**
    * Ancienne mise à jour les fichiers de conf en modifiant le contenu des balise MANITOU_CONF_[START|END]

@@ -98,21 +98,37 @@ class CommandPeer extends BaseCommandPeer {
    * @param  $hosts     Tableau ou Object de la classe Host
    * @return Command
    */
-  public static function runDnsUpdate ($hosts = null)
+  public static function runDnsUpdate ($host = null)
   {
     self::runDnsPreUpdate();
 
     $path = sfConfig::get('sf_manitou_dns_conf_path');
 
-    //on récupère les hosts modifiés
-    if($hosts == null)
+    //si le filesHost n'est pas nul et qu'un tableau de hosts est passé en parametre (plusieurs hosts touchées par une même action)
+    if($host != null && is_array($host))
     {
-        $hosts = HostQuery::create()->withColumn('INET_ATON(Host.IpAddress)','a')->orderBy('a','asc')->find ();
+        $arrayFilesToChange = array();
+
+        foreach($host as $h)
+        {
+            $filenameReverse = 'db.'.$h->getDomainName ();
+            $ipBase = $h->getSubnet ()->getIpAddress();
+            $ipBase = substr ($ipBase, 0, strpos ($ipBase, '.0'));
+            $filenameConf = 'db.'.$ipBase;
+            $arrayFilesToChange[] = $filenameReverse;
+            $arrayFilesToChange[] = $filenameConf;
+        }
     }
+    //si une string contenant les filenames a changer est passée en paramètre
+    elseif($host != null && !is_array($host))
+        $arrayFilesToChange = explode(' ',$host);
+
+    //on récupère les hosts modifiés
+    $hosts = HostQuery::create()->withColumn('INET_ATON(Host.IpAddress)','a')->orderBy('a','asc')->find ();
 
     $dnsConf = new Dns ();
     $dnsConf->setHosts ($hosts);
-    $dnsConf->apply ($path);
+    $dnsConf->apply ($path, $arrayFilesToChange);
 
     $command = new Command ();
     $command->setCommand (sfConfig::get('sf_manitou_dns_update_command'));
@@ -130,5 +146,34 @@ class CommandPeer extends BaseCommandPeer {
 
     return $command->exec ();
   }
+
+ /**
+  *
+  */
+  public static function runPxeFilesDnsUpdate($host)
+  {
+    $path = sfConfig::get('sf_manitou_dns_conf_path');
+
+    $command = new Command ();
+    $command->setCommand (sfConfig::get('sf_manitou_dns_update_specific_files_command'));
+    $command->setArgument ('conf_path', $path);
+    $command->setArgument ('list_files', $host);
+    $command->setLabel ('Modification fichier PXE- Mise à jour des entrées du DNS');
+
+    return $command->exec ();
+  }
+
+ /* public static function getSvnStatus()
+  {
+      echo "on arrive ici";die;
+    $path = sfConfig::get('sf_manitou_dns_conf_path');
+
+    $command = new Command ();
+    $command->setCommand (sfConfig::get('sf_manitou_svn_status'));
+    $command->setArgument ('conf_path', $path);
+    $command->setLabel ('Statut SVN');
+
+    return $command->exec ();
+  }*/
 
 } // CommandPeer

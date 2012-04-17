@@ -25,10 +25,8 @@ class pxe_fileActions extends autoPxe_fileActions
        if ($this->form->isValid ())
        {
          $this->saveAndReload($this->form);
-         //on vérifie qu'en base ça ait enregistré
-	 //on met a jour la conf dhcp
-	   $this->getUser()->setFlash('notice', 'Le fichier PXE a été ajouté aux machines');
-           $this->redirect ('command_list');
+	     $this->getUser()->setFlash('notice', 'Le fichier PXE a été ajouté aux machines');
+         $this->redirect ('command_list');
        }
      }  
   }
@@ -37,13 +35,32 @@ class pxe_fileActions extends autoPxe_fileActions
   {
     $hosts = $form->getHosts();
     $file = $form->getPxe();
+    $finalFile = array();
 
     foreach($hosts as $host)
     {
       $host->setPxeFileId($file->getId());
       $host->save();
+      $filename = 'db.'.$host->getDomainName ();
+
+      if (! array_key_exists($filename, $finalFile))
+      {
+        $finalFile[$filename] = $filename;
+      }
+
+      $ipBase = $host->getSubnet ()->getIpAddress();
+      $ipBase = substr ($ipBase, 0, strpos ($ipBase, '.0'));
+      $filename = 'db.'.$ipBase;
+      if (! array_key_exists($filename, $finalFile))
+          $finalFile [$filename] = $filename;
     }
 
-  CommandPeer::runDhcpdUpdate ();
+    $finalFile = implode(" ", $finalFile);
+
+    //on la fin, on lance la commande pour mettre a jour le dhcp
+    CommandPeer::runDhcpdUpdate ();
+
+    //on met a jout la conf dns
+    CommandPeer::runDnsUpdate($finalFile);
   }
 }

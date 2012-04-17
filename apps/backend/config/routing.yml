@@ -73,6 +73,10 @@ command_list:
   url:   /command
   param: { module: command, action: index }
 
+command_svn_status:
+  url:   /commande/status
+  param: { module: command, action: svnStatus }
+
 command_show:
   url:     /command/:id
   class:   sfPropel15Route

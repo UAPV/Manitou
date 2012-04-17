@@ -11,7 +11,13 @@
   <?php endforeach ?>
 </ul>
 
+<div style='margin-top: 30px;margin-bottom: 30px;'>
+    <input class='submitButton' id='svn_status' style="padding: 5px;" type='submit' value='Voir le statut SVN' />
 
+    <div class='box'>
+        <div class='box_svn_st' data-href="<?php echo url_for('@command_svn_status') ?>"></div>
+    </div>
+</div>
 <h2>Commandes exécutées</h2>
 <ul id="command_list">
   <?php foreach ($commands as $command): ?>
@@ -44,6 +50,15 @@
       });
     }
 
+    function showSvnStatus(e, server){
+         $.get($('.box_svn_st', server).data('href'), function (status) {
+            console.log (status);
+            $( ".box" ).toggle(500);
+            $('.box_svn_st', server).html(status);
+         });
+    }
+
+    $( ".box" ).hide();
     setInterval (updateRunningCommands, 7000);
     setInterval (updateImageServerStatus, 30000);
 
@@ -55,6 +70,10 @@
         $.get($(this).attr('href'));
 
       return e.preventDefault();
+    });
+
+    $('#svn_status').live ('click', function (e){
+       showSvnStatus();
     });
 
   });

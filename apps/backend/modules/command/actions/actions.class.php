@@ -39,4 +39,16 @@ class commandActions extends sfActions
     else
       return $this->renderText ('todo');
   }
+
+  public function executeSvnStatus(sfWebRequest $request)
+  {
+    $path = sfConfig::get('sf_manitou_dns_conf_path');
+
+    $command = sfConfig::get ('sf_manitou_svn_status');
+    $command = str_replace ('%conf_path%', escapeshellarg($path) ,$command);
+
+    exec ($command, $status, $returnCode);
+
+    return $this->renderText (implode ("<br />", $status));
+  }
 }
