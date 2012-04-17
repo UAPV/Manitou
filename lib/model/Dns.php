@@ -264,7 +264,7 @@ EOF
           $nvContent = implode("\n",$data);
           $contentHeader = implode("\n", $header);
 
-          file_put_contents ($path.$filename.'.new', $contentHeader."\n".$nvContent);
+          file_put_contents ($path.$filename, $contentHeader."\n".$nvContent);
       }
       }
 
@@ -444,7 +444,7 @@ EOF
           $contentHeader = implode("\n", $header);
           $filePath = $path.$filename;
 
-          file_put_contents ($filePath.'.new', $contentHeader."\n".$nvContent);
+          file_put_contents ($filePath, $contentHeader."\n".$nvContent);
         }
       }
   }
