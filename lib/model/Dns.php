@@ -255,7 +255,7 @@ EOF
           $contentHeader = implode("\n", $header);
 
           file_put_contents ($path.$filename, $contentHeader."\n".$nvContent);
-      }
+        }
       }
 
       foreach ($this->conf as $filename => $entries)
@@ -312,7 +312,8 @@ EOF
                if($content[$i] == '')
                    $i = $i+1;
                //on sauvergarde le commentaire en cours pour l'assigner à l'host suivant
-               $comment[] = $content[$i];
+               if(isset($content[$i]))
+                 $comment[] = $content[$i];
            }
          }
 
@@ -321,7 +322,7 @@ EOF
              $contentTest = implode(' ', $content);
 
              // Si une entrée STRICTEMENT identique existe on écrit la nouvelle et on envoie un mail pour donner le nom de la machine remplacée
-             $regex = '/^'.preg_quote($entry['hostname']).'\s+IN\s+A\s+'.preg_quote($entry['ip']).'\s*$/m';
+             $regex = '/^'.preg_quote($entry['hostname']).'\s+IN\s+A\s+'.preg_quote($entry['ip']).'\s*$/';
              if (preg_match($regex, $contentTest, $matches) === 1)
              {
                 //on récupère l'entrée dans le tableau et on la supprime du tableau d'origine (arrayDns)
@@ -329,12 +330,12 @@ EOF
                 unset($arrayDns["$key"]);
              }
              //sinon si l'ip existe deja
-             else if (preg_match('/^[^;].*IN\s+A\s+'.preg_quote($entry['ip']).'\s*$/m', $contentTest, $matches)  === 1 )
+             else if (preg_match('/^[^;].*IN\s+A\s+'.preg_quote($entry['ip']).'\s*$/', $contentTest, $matches)  === 1 )
              {
                  //on supprime l'entrée du tableau, on recherche l'hote correspondant a l'ip
                  foreach($arrayDns as $cle => $host)
                  {
-                     if(preg_match('/^'.$entry['hostname'].'\s+IN\s+A/m', $host[1]) > 0)
+                     if(preg_match('/^'.$entry['hostname'].'\s+IN\s+A/', $host[1]) > 0)
                      {
                          $oldHost = $cle;
                          unset($arrayDns["$cle"]);
@@ -363,7 +364,7 @@ EOF
                  //sfContext::getInstance()->getMailer()->send($message);
              }
              //si le hostname existe deja
-             else if (preg_match('/^'.$entry['hostname'].'\s+IN\s+A/m', $contentTest) > 0)
+             else if (preg_match('/^'.$entry['hostname'].'\s+IN\s+A/', $contentTest) > 0)
              {
                  //on récupère l'ancienne ip
                  $ligne = $arrayDns["$key"][1];
