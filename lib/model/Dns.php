@@ -125,9 +125,6 @@ class Dns
               // Si une entrée STRICTEMENT identique existe, on écrit la nouvelle
               $regex = '/^'.preg_quote($ipSearched).'\s*+IN\s*+PTR\s*+'.preg_quote($entry['fqdn']).'\.\s*$/';
 
-              echo "on compare : ".$regex.' avec '.$contentTest;
-              die;
-
               if (preg_match($regex, $contentTest, $matches) === 1)
               {
                   //on récupère l'entrée dans le tableau et on la supprime du tableau d'origine (arrayDns)
@@ -135,10 +132,10 @@ class Dns
                   unset($arrayDns["$key"]);
               }
               //sinon si l'ip existe deja
-              else if (preg_match('/^'.preg_quote($entry['ip']).'\s+IN\s+PTR+\s*/', $contentTest, $matches)  === 1 )
+              else if (preg_match('/^'.preg_quote($ipSearched).'\s+IN\s+PTR+\s*/', $contentTest, $matches)  === 1 )
               {
                   //on supprime l'entrée du tableau
-                  $key = str_pad ($entry['ip'], 16);
+                  $key = trim(str_pad ($entry['ip'], 16));
                   $lastIp =  $arrayDns["$key"][0];
                   unset($arrayDns["$key"]);
 
@@ -164,7 +161,8 @@ EOF
 
                 sfContext::getInstance()->getMailer()->send($message);
               }
-              else if (preg_match('/^[^;].*IN\s+PTR\s+'.preg_quote($entry['fqdn']).'.*$/m', $contentTest) > 0)
+              $fqdnSearched = trim($entry['fqdn']);
+              else if (preg_match('/^[^;].*IN\s+PTR\s+'.preg_quote($fqdnSearched).'.*$/m', $contentTest) > 0)
               {
                   //on supprime l'entrée du tableau
                   foreach($arrayDns as $cle => $host)
@@ -174,7 +172,7 @@ EOF
                   }
 
                   //on envoie un mail
-                  $newFqdn = $entry['fqdn'];
+                  $newFqdn = $fqdnSearched;
                   $ip = $entry['ip'];
                   $message = sfContext::getInstance()->getMailer()->compose(
                       array('manitou@univ-avignon.fr' => 'Manitou'),
@@ -328,7 +326,14 @@ EOF
 
          foreach ($entries as $entry)
          {
+             foreach($arrayDns as $array)
+             {
+                 $content[] = implode(' ', $array);
+             }
+
              $contentTest = implode(' ', $content);
+
+             //$ipSearched = trim(str_pad ($entry['ip'], 16));
 
              // Si une entrée STRICTEMENT identique existe on écrit la nouvelle et on envoie un mail pour donner le nom de la machine remplacée
              $regex = '/^'.preg_quote($entry['hostname']).'\s+IN\s+A\s+'.preg_quote($entry['ip']).'\s*$/m';
