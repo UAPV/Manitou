@@ -279,7 +279,7 @@ EOF
            //on regarde si la ligne en cours de lecture est un nouvel host
            $regex = '/^[A-Za-z].*\s+IN\s+A/';
            $regexCom = '/^;+\s/';
-           if(preg_match($regex,$content[$i]) === 1)
+           if(preg_match($regex,$content[$i]) === 1 && preg_match('/^;\s+UPDATED\s+BY\s+MANITOU\s+/', $content[$i]) === 0)
            {
               //on récupère l'adresse ip pour le mettre en clé dans le tableau final
               $hostname = preg_replace('/\s+IN\s+A\s+.*/','',$content[$i]);
@@ -288,6 +288,8 @@ EOF
               unset($comment);
               $comment = array();
               $first = false;
+
+              echo "on récupère un nouvel host : $content[$i] <br />";
            }
            //on est tjs dans le header mais on croise le premier commentaire
            elseif($first && preg_match('/^;\s+UPDATED\s+BY\s+MANITOU\s+/', $content[$i]) === 0)
@@ -298,14 +300,14 @@ EOF
                    unset($header[$i]);
                    $comment[] = $content[$i];
                }
+               echo "on croise le premier comm dans le header : $content[$i] <br />";
            }
            elseif(preg_match('/^;\s+UPDATED\s+BY\s+MANITOU\s+/', $content[$i]) === 1)
            {
-               if($content[$i] == '')
-               {
-                   $i = $i+1;
-                   break;
-               }
+              $i = $i+1;
+              //break;
+
+               echo "on ne garde pas un updated by manitou : $content[$i] <br />";
            }
            //sinon si elle est marquée "DELETION MARKED", on la supprime
            elseif(preg_match('/^;\s+\[MANITOU\]\s+MARKED\s+FOR\s+DELETION/', $content[$i]) === 0)
@@ -313,9 +315,15 @@ EOF
              //on sauvergarde le commentaire en cours pour l'assigner à l'host suivant
              if(isset($content[$i]))
                $comment[] = $content[$i];
+
+               echo "sinon, c'est un commentaire : $content[$i] <br />";
            }
        }
 
+             if($filename == "db.univ-avignon.fr")
+             {
+//die;
+             }
 
          foreach ($entries as $entry)
          {
