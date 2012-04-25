@@ -288,8 +288,6 @@ EOF
               unset($comment);
               $comment = array();
               $first = false;
-
-              echo "on récupère un nouvel host : $content[$i] <br />";
            }
            //on est tjs dans le header mais on croise le premier commentaire
            elseif($first && preg_match('/^;\s+UPDATED\s+BY\s+MANITOU\s+/', $content[$i]) === 0)
@@ -300,14 +298,10 @@ EOF
                    unset($header[$i]);
                    $comment[] = $content[$i];
                }
-               echo "on croise le premier comm dans le header : $content[$i] <br />";
            }
            elseif(preg_match('/^;\s+UPDATED\s+BY\s+MANITOU\s+/', $content[$i]) === 1)
            {
               $i = $i+1;
-              //break;
-
-               echo "on ne garde pas un updated by manitou : $content[$i] <br />";
            }
            //sinon si elle est marquée "DELETION MARKED", on la supprime
            elseif(preg_match('/^;\s+\[MANITOU\]\s+MARKED\s+FOR\s+DELETION/', $content[$i]) === 0)
@@ -316,14 +310,8 @@ EOF
              if(isset($content[$i]))
                $comment[] = $content[$i];
 
-               echo "sinon, c'est un commentaire : $content[$i] <br />";
            }
        }
-
-             if($filename == "db.univ-avignon.fr")
-             {
-//die;
-             }
 
          foreach ($entries as $entry)
          {
