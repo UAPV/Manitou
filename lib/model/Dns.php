@@ -55,11 +55,12 @@ class Dns
           {
               $contentTest = file_get_contents($path.$filename);
           $content = preg_replace ($tagRegex, '', $contentTest);
-          $content = $this->updateSerial($content);
+          //$content = $this->updateSerial($content);
           $content = explode("\n", $content);
 
           //on récupére tout ce qu'il y a après startTag.
           $lengh = count($content);
+              echo "longueur : ".$lengh;
           $comment = array();
           $arrayDns = array();
 
