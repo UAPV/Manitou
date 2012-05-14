@@ -106,7 +106,7 @@ class Dns
               elseif(preg_match('/^;\s+\[MANITOU\]\s+MARKED\s+FOR\s+DELETION/', $content[$i]) === 0)
               {
                   //on sauvergarde le commentaire en cours pour l'assigner à l'host suivant
-                  if(isset($content[$i]))
+                  if(isset($content[$i]) && $content[$i] != '')
                       $comment[] = $content[$i];
               }
           }
