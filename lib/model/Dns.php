@@ -68,14 +68,19 @@ class Dns
           $header = array();
           for($i=0; $i < $lengh; $i++)
           {
+              echo $content[$i]."<br/>";
+
               //on garde le header tant qu'on n'a pas trouvé le premier host
               if($first)
+              {
                   $header[] = $content[$i];
+                  break;
+              }
 
               //on regarde si la ligne en cours de lecture est un nouvel host
               $regex = '/\s+IN\s+PTR\s/';
               $regexCom = '/^;+\s/';
-              echo $content[$i]."<br/>";
+
               if(preg_match($regex,$content[$i]) === 1)
               {
                   //on récupère le numéro pour le mettre en clé dans le tableau final
@@ -112,7 +117,7 @@ class Dns
               }
           }
 
-              print_r($content);die;
+              print_r($arrayDns);die;
 
           //on rajoute les fichiers de Manitou puis on trie le tableau
           foreach ($entries as $entry)
