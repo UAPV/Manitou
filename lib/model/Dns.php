@@ -97,16 +97,16 @@ class Dns
                 }
               }
               elseif(preg_match('/^;\s+UPDATED\s+BY\s+MANITOU\s+/', $content[$i]) === 1)
+              {
                   $i = $i+1;
+              }
               //sinon si elle est marquée "DELETION MARKED", on la supprime
               elseif(preg_match('/^;\s+\[MANITOU\]\s+MARKED\s+FOR\s+DELETION/', $content[$i]) === 0)
               {
-                  if($content[$i] == '')
-                  {
-                      $i = $i+1;
-                  }
                   //on sauvergarde le commentaire en cours pour l'assigner à l'host suivant
-                  $comment[] = $content[$i];
+                  if(isset($content[$i]))
+                      $comment[] = $content[$i];
+
               }
           }
 
