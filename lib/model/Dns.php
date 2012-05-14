@@ -72,10 +72,7 @@ class Dns
 
               //on garde le header tant qu'on n'a pas trouvé le premier host
               if($first)
-              {
                   $header[] = $content[$i];
-                  break;
-              }
 
               //on regarde si la ligne en cours de lecture est un nouvel host
               $regex = '/\s+IN\s+PTR\s/';
@@ -110,7 +107,6 @@ class Dns
                   if($content[$i] == '')
                   {
                       $i = $i+1;
-                      break;
                   }
                   //on sauvergarde le commentaire en cours pour l'assigner à l'host suivant
                   $comment[] = $content[$i];
