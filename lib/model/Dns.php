@@ -60,7 +60,6 @@ class Dns
 
           //on récupére tout ce qu'il y a après startTag.
           $lengh = count($content);
-              echo "longueur : ".$lengh;
           $comment = array();
           $arrayDns = array();
 
@@ -68,8 +67,6 @@ class Dns
           $header = array();
           for($i=0; $i < $lengh; $i++)
           {
-              echo $content[$i]."<br/>";
-
               //on garde le header tant qu'on n'a pas trouvé le premier host
               if($first)
                   $header[] = $content[$i];
@@ -112,8 +109,6 @@ class Dns
                   $comment[] = $content[$i];
               }
           }
-
-              print_r($arrayDns);die;
 
           //on rajoute les fichiers de Manitou puis on trie le tableau
           foreach ($entries as $entry)
