@@ -74,6 +74,7 @@ class Dns
               //on regarde si la ligne en cours de lecture est un nouvel host
               $regex = '/\s+IN\s+PTR\s/';
               $regexCom = '/^;+\s/';
+              echo $content[$i]."<br/>";
               if(preg_match($regex,$content[$i]) === 1)
               {
                   //on récupère le numéro pour le mettre en clé dans le tableau final
