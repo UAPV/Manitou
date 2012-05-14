@@ -67,6 +67,8 @@ class Dns
           $header = array();
           for($i=0; $i < $lengh; $i++)
           {
+
+              echo $content[$i];
               //on garde le header tant qu'on n'a pas trouvé le premier host
               if($first)
                   $header[] = $content[$i];
@@ -106,9 +108,10 @@ class Dns
                   //on sauvergarde le commentaire en cours pour l'assigner à l'host suivant
                   if(isset($content[$i]))
                       $comment[] = $content[$i];
-
               }
           }
+
+                  print_r($arrayDns);die;
 
           //on rajoute les fichiers de Manitou puis on trie le tableau
           foreach ($entries as $entry)
