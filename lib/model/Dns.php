@@ -112,7 +112,7 @@ class Dns
               }
           }
 
-              print_r($arrayDns);die;
+              print_r($content);die;
 
           //on rajoute les fichiers de Manitou puis on trie le tableau
           foreach ($entries as $entry)
