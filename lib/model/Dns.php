@@ -282,7 +282,7 @@ EOF
            //on regarde si la ligne en cours de lecture est un nouvel host
            $regex = '/^[A-Za-z].*\s+IN\s+A/';
            $regexCom = '/^;+\s/';
-           if(preg_match($regex,$content[$i]) === 1 && preg_match('/^;\s+UPDATED\s+BY\s+MANITOU\s+/', $content[$i]) === 0)
+           if(preg_match($regex,$content[$i]) === 1)
            {
               //on récupère l'adresse ip pour le mettre en clé dans le tableau final
               $hostname = preg_replace('/\s+IN\s+A\s+.*/','',$content[$i]);
