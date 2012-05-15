@@ -284,6 +284,7 @@ EOF
            $regexCom = '/^;+\s/';
            if(preg_match($regex,$content[$i]) === 1)
            {
+               echo $content[$i]."<br/>";
               //on récupère l'adresse ip pour le mettre en clé dans le tableau final
               $hostname = preg_replace('/\s+IN\s+A\s+.*/','',$content[$i]);
               $hostname = str_replace(' ','',$hostname);
