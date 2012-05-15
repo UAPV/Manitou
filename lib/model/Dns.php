@@ -316,8 +316,6 @@ EOF
            }
        }
 
-             print_r($arrayDns);die;
-
          foreach ($entries as $entry)
          {
              foreach($arrayDns as $key => $line)
