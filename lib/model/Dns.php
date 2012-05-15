@@ -280,7 +280,7 @@ EOF
              $header[] = $content[$i];
 
            //on regarde si la ligne en cours de lecture est un nouvel host
-           $regex = '/^[A-Za-z].*\s+IN\s+A/';
+           $regex = '/^[A-Za-z0-9].*\s+IN\s+A/';
            $regexCom = '/^;+\s/';
            if(preg_match($regex,$content[$i]) === 1)
            {
