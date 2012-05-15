@@ -398,6 +398,7 @@ EOF
 
              $key = str_pad($entry['hostname'], 24);
              $com = array("; UPDATED BY MANITOU --> DON'T TOUCH ;)");
+             $key = str_replace(' ','',$key);
              $newContent = str_pad ($entry['hostname'], 24).'    IN    A    '.$entry['ip']."\n";
              $arrayDns[$key] = array($com, $newContent);
          }
