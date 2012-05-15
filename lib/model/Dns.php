@@ -289,6 +289,8 @@ EOF
               $hostname = preg_replace('/\s+IN\s+A\s+.*/','',$content[$i]);
               $hostname = str_replace(' ','',$hostname);
 
+               echo "on a le hostname ".$hostname."<br/>";
+
               if(!in_array($arrayDns, $hostname))
                 $arrayDns["$hostname"] = array($comment,$content[$i]);
               else
