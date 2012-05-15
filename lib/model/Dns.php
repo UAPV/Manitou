@@ -316,9 +316,9 @@ EOF
            }
        }
 
-               /*   print_r($arrayDns);
+               print_r($arrayDns);
              echo "<br/>Puis les entrees manitou :<br/>";
-             print_r($entries);die;*/
+             print_r($entries);die;
 
          foreach ($entries as $entry)
          {
