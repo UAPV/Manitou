@@ -271,6 +271,7 @@ EOF
          $arrayDns = array();
          $first = true;
          $header = array();
+         $cpt = 0;
 
 
          for($i=0; $i < $lengh; $i++)
@@ -282,8 +283,8 @@ EOF
            //on regarde si la ligne en cours de lecture est un nouvel host
            $regex = '/^[A-Za-z0-9].*\s+IN\s+A/';
            $regexCom = '/^;+\s/';
-             echo $content[$i]."<br/>";
-             if(preg_match($regex,$content[$i]) === 1)
+
+           if(preg_match($regex,$content[$i]) === 1)
            {
               //on récupère l'adresse ip pour le mettre en clé dans le tableau final
               $hostname = preg_replace('/\s+IN\s+A\s+.*/','',$content[$i]);
@@ -292,12 +293,11 @@ EOF
               if(!array_key_exists($hostname, $arrayDns))
               {
                 $arrayDns["$hostname"] = array($comment,$content[$i]);
-                echo "n'existe pas, on le met dans le tableau";
               }
               else
               {
-                  $arrayDns["$hostname.2"] = array($comment,$content[$i]);
-                  echo "existe, on le met dans le tableau avec le 2";
+                  $arrayDns["$hostname-$cpt"] = array($comment,$content[$i]);
+                  $cpt++;
               }
 
               unset($comment);
@@ -327,8 +327,6 @@ EOF
 
            }
        }
-
-             print_r($arrayDns);die;
 
          foreach ($entries as $entry)
          {
