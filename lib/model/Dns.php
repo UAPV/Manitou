@@ -289,9 +289,7 @@ EOF
               $hostname = preg_replace('/\s+IN\s+A\s+.*/','',$content[$i]);
               $hostname = str_replace(' ','',$hostname);
 
-               echo "on a le hostname ".$hostname."<br/>";
-
-              if(!array_key_exists($arrayDns, $hostname))
+              if(!array_key_exists($hostname, $arrayDns))
               {
                 $arrayDns["$hostname"] = array($comment,$content[$i]);
                 echo "n'existe pas, on le met dans le tableau";
