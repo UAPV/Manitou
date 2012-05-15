@@ -109,6 +109,8 @@ class Dns
               }
           }
 
+              print_r($arrayDns);die;
+
           //on rajoute les fichiers de Manitou puis on trie le tableau
           foreach ($entries as $entry)
           {
