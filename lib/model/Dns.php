@@ -321,7 +321,7 @@ EOF
          {
              foreach($arrayDns as $key => $line)
              {
-                 echo $entry.'<br/>';
+
                  $ipClean = trim($entry['ip']);
 
                  // Si une entrée STRICTEMENT identique existe on écrit la nouvelle et on envoie un mail pour donner le nom de la machine remplacée
