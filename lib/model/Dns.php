@@ -403,7 +403,7 @@ EOF
              $arrayDns[$key] = array($com, $newContent);
          }
 
-             print_r($arrayDns);die;
+             //print_r($arrayDns);die;
          $data = array();
 
          //on écrit dans le fichier les lignes
