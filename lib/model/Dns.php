@@ -287,7 +287,12 @@ EOF
               //on récupère l'adresse ip pour le mettre en clé dans le tableau final
               $hostname = preg_replace('/\s+IN\s+A\s+.*/','',$content[$i]);
               $hostname = str_replace(' ','',$hostname);
-              $arrayDns["$hostname"] = array($comment,$content[$i]);
+
+              if(!in_array($arrayDns, $hostname))
+                $arrayDns["$hostname"] = array($comment,$content[$i]);
+              else
+                  $arrayDns["$hostname.2"] = array($comment,$content[$i]);
+
               unset($comment);
               $comment = array();
               $first = false;
@@ -315,6 +320,8 @@ EOF
 
            }
        }
+
+             print_r($arrayDns);die;
 
          foreach ($entries as $entry)
          {
