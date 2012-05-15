@@ -292,9 +292,15 @@ EOF
                echo "on a le hostname ".$hostname."<br/>";
 
               if(!in_array($arrayDns, $hostname))
+              {
                 $arrayDns["$hostname"] = array($comment,$content[$i]);
+                echo "n'existe pas, on le met dans le tableau";
+              }
               else
+              {
                   $arrayDns["$hostname.2"] = array($comment,$content[$i]);
+                  echo "existe, on le met dans le tableau avec le 2";
+              }
 
               unset($comment);
               $comment = array();
