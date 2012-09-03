@@ -253,7 +253,6 @@ EOF
 
           file_put_contents ($path.$filename, $contentHeader."\n".$nvContent);
         }
-				die;
       }
 
       foreach ($this->conf as $filename => $entries)
