@@ -67,7 +67,6 @@ class Dns
           $header = array();
           for($i=0; $i < $lengh; $i++)
           {
-              //echo $content[$i]."<br/>";
               //on garde le header tant qu'on n'a pas trouvé le premier host
               if($first)
                   $header[] = $content[$i];
@@ -78,8 +77,10 @@ class Dns
 
               if(preg_match($regex,$content[$i]) === 1)
               {
+								  echo "resultat intial : ".$content[$i];
                   //on récupère le numéro pour le mettre en clé dans le tableau final
                   $content[$i] = preg_replace("/[\s](.\d\d)?+/",' ',$content[$i]);
+								echo "resultat final : ".$content[$i];
                   $tmp = explode(' ',$content[$i]);
                   $keyArray = str_replace(';','',$tmp[0]);
                   $arrayDns["$keyArray"] = array($comment,$content[$i]);
@@ -254,6 +255,7 @@ EOF
 
           file_put_contents ($path.$filename, $contentHeader."\n".$nvContent);
         }
+				die;
       }
 
       foreach ($this->conf as $filename => $entries)
@@ -327,6 +329,7 @@ EOF
 
            }
        }
+
 
          foreach ($entries as $entry)
          {
