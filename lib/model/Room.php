@@ -25,6 +25,10 @@ class Room extends BaseRoom {
     return $this->getName ();
   }
 
+	public function setName($v){
+		return parent::setName(strtolower($v));
+	}
+
   /**
    * Code to be run before persisting the object
    *

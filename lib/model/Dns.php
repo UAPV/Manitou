@@ -72,8 +72,8 @@ class Dns
                   $header[] = $content[$i];
 
               //on regarde si la ligne en cours de lecture est un nouvel host
-              $regex = '/\s+IN\s+PTR\s/';
-              $regexCom = '/^;+\s/';
+              $regex = '/\s+IN\s+PTR\s/i';
+              $regexCom = '/^;+\s/i';
 
               if(preg_match($regex,$content[$i]) === 1)
               {
@@ -96,12 +96,12 @@ class Dns
                     $comment[] = $content[$i];
                 }
               }
-              elseif(preg_match('/^;\s+UPDATED\s+BY\s+MANITOU\s+/', $content[$i]) === 1)
+              elseif(preg_match('/^;\s+UPDATED\s+BY\s+MANITOU\s+/i', $content[$i]) === 1)
               {
                   $i = $i+1;
               }
               //sinon si elle est marquée "DELETION MARKED", on la supprime
-              elseif(preg_match('/^;\s+\[MANITOU\]\s+MARKED\s+FOR\s+DELETION/', $content[$i]) === 0)
+              elseif(preg_match('/^;\s+\[MANITOU\]\s+MARKED\s+FOR\s+DELETION/i', $content[$i]) === 0)
               {
                   //on sauvergarde le commentaire en cours pour l'assigner à l'host suivant
                   if(isset($content[$i]) && $content[$i] != '')
