@@ -147,6 +147,12 @@ class Host extends BaseHost {
                             $this->isColumnModified (HostPeer::NUMBER)     ||
                             $this->isColumnModified (HostPeer::IP_ADDRESS  ));
 
+		if($this->getNumber() == '')
+		{
+			$tab =	explode('.',$this->getIpAddress());
+			$this->setNumber($tab[3]);
+		}
+
     return parent::preSave ($con);
   }
 
