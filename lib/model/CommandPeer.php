@@ -34,6 +34,7 @@ class CommandPeer extends BaseCommandPeer {
     HostQuery::create()->find(); // Juste pour remplir le cache de propel
     $subnets  = SubnetQuery::create ()->find ();
     $confPath = sfConfig::get('sf_manitou_dhcpd_conf_path');
+		$tabDrbl = array();
 
     sfContext::getInstance()->getConfiguration()->loadHelpers('Partial');
     sfConfig::set('sf_escaping_strategy', false);
@@ -41,17 +42,29 @@ class CommandPeer extends BaseCommandPeer {
     {
       $filename = $confPath.'/'.$subnet->getName().'.conf';
       file_put_contents ($filename, get_partial ('dhcpd/subnet.conf', array ('subnet' => $subnet)));
+
+			//On récupère le nom des serveurs associé au subnet
+			$hostnameDrbl = $subnet->getImageServer()->getHostname();
+			$tabHost = explode('.', $hostnameDrbl);
+
+			if(!in_array($tabHost[0], $tabDrbl))
+			{
+				$tabDrbl[] = $tabHost[0];
+			}
     }
 
-    CommandPeer::getDhcpdUpdateCommand()->exec ();
+    CommandPeer::getDhcpdUpdateCommand($tabDrbl)->exec ();
   }
 
-  public static function getDhcpdUpdateCommand ()
+  public static function getDhcpdUpdateCommand ($tabDrbl = null)
   {
+		$labelDrbl = implode(' , ',$tabDrbl);
     $command = new Command ();
     $command->setCommand (sfConfig::get('sf_manitou_dhcp_update_command'));
     $command->setArgument ('conf_path', sfConfig::get('sf_manitou_dhcpd_conf_path'));
     $command->setArgument ('user_name', sfContext::getInstance()->getUser()->getProfileVar('displayname') );
+		$command->setLabel ($labelDrbl.' - Regénération de la conf DHCP');
+
    return $command;
   }
 
@@ -77,6 +90,8 @@ class CommandPeer extends BaseCommandPeer {
   {
     $command = new Command();
     $command->setCommand(sfConfig::get('sf_manitou_restore_image_command'));
+		$command->setLabel('Restauration d\'image');
+
     return $command;
   }
 
@@ -86,6 +101,7 @@ class CommandPeer extends BaseCommandPeer {
     $command->setCommand (sfConfig::get('sf_manitou_dns_pre_update_command'));
     $command->setArgument ('conf_path', sfConfig::get('sf_manitou_dns_conf_path'));
     $command->setLabel ('Mise à jour des fichiers de conf du DNS');
+
     return $command->exec (false); // obligé d'attendre le retour de la commande pour que le svn commit
                                    // qui va suivre fonctionne correctement
   }
@@ -109,6 +125,7 @@ class CommandPeer extends BaseCommandPeer {
     if($host != null && is_array($host))
     {
         $arrayFilesToChange = array();
+				$tabDrbl = array();
 
         foreach($host as $h)
         {
@@ -118,7 +135,14 @@ class CommandPeer extends BaseCommandPeer {
             $filenameConf = 'db.'.$ipBase;
             $arrayFilesToChange[] = $filenameReverse;
             $arrayFilesToChange[] = $filenameConf;
-        }
+
+						//On récupère le nom des serveurs associé au subnet
+						$hostnameDrbl = $h->getSubnet ()->getImageServer()->getHostname();
+						$tabHost = explode('.', $hostnameDrbl);
+
+						if(!in_array($tabHost[0], $tabDrbl))
+							$tabDrbl[] = $tabHost[0];
+				}
 
 				foreach($otherFiles as $file)
 				{
@@ -136,6 +160,7 @@ class CommandPeer extends BaseCommandPeer {
     $hosts = HostQuery::create()->withColumn('INET_ATON(Host.IpAddress)','a')->orderBy('a','asc')->find ();
 
 		array_unique($arrayFilesToChange);
+		$labelDrbl = implode(' , ',$tabDrbl);
 
     $dnsConf = new Dns ();
     $dnsConf->setHosts ($hosts);
@@ -145,7 +170,8 @@ class CommandPeer extends BaseCommandPeer {
     $command->setCommand (sfConfig::get('sf_manitou_dns_update_command'));
     $command->setArgument ('conf_path', $path);
     $command->setArgument ('user_name', sfContext::getInstance()->getUser()->getProfileVar('displayname') );
-    $command->setLabel ('Mise à jour des entrées du DNS');
+		$command->setArgument('comments', 'ceci est un test');
+    $command->setLabel ($labelDrbl.' - Mise à jour des entrées du DNS');
     
     return $command->exec ();
   }
@@ -165,12 +191,14 @@ class CommandPeer extends BaseCommandPeer {
   public static function runPxeFilesDnsUpdate($host)
   {
     $path = sfConfig::get('sf_manitou_dns_conf_path');
+		$hostnameDrbl = $host->getSubnet()->getImageServer()->getHostname();
+		$labelDrbl = explode('.',$hostnameDrbl);
 
     $command = new Command ();
     $command->setCommand (sfConfig::get('sf_manitou_dns_update_specific_files_command'));
     $command->setArgument ('conf_path', $path);
     $command->setArgument ('list_files', $host);
-    $command->setLabel ('Modification fichier PXE- Mise à jour des entrées du DNS');
+    $command->setLabel ($labelDrbl[0].' - Modification fichier PXE- Mise à jour des entrées du DNS');
 
     return $command->exec ();
   }
