@@ -14,11 +14,12 @@ generator:
     config:
       actions: ~
       fields:
-        hostname:     { label: Nom }
-        ip_address:   { label: Adresse Ip }
-        mac_address:  { label: Adresse Mac }
-        subnet:       { label: Subnet }
-        pxe:          { label: Fichier Pxe }
+        hostname:          { label: Nom }
+        ip_address:        { label: Adresse Ip }
+        mac_address:       { label: Adresse Mac }
+        subnet:            { label: Subnet }
+        pxe:               { label: Fichier Pxe }
+        commentSvn:        { label: Commentaire SVN }
       list:
         title: Gestion des machines
         display: [=hostname, ip_address, mac_address, subnet, pxe]

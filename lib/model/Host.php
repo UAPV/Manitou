@@ -21,11 +21,18 @@ class Host extends BaseHost {
 
   protected $needDnsUpdate = null;
 	protected $oldSubnet = null;
+	protected static $commentSvn = 'Mise a jour SVN';
 
   public function __toString ()
   {
     return $this->getHostname ();
   }
+
+	public static function setCommentSvn($v)
+	{
+		if($v != null)
+			self::$commentSvn = $v;
+	}
 
   public function getHostname ()
   {
@@ -168,7 +175,6 @@ class Host extends BaseHost {
 			$tab =	explode('.',$this->getIpAddress());
 			$this->setNumber($tab[3]);
 		}
-
     return parent::preSave ($con);
   }
 
@@ -197,7 +203,7 @@ class Host extends BaseHost {
 
     if($_SERVER['PATH_INFO'] != "/addPxe")
     {
-       CommandPeer::runDhcpdUpdate ();
+       CommandPeer::runDhcpdUpdate (null, self::$commentSvn);
 
       // Mise à jour du DNS si nécessaire
       if ($this->needDnsUpdate === true)
@@ -205,10 +211,10 @@ class Host extends BaseHost {
 				if($this->subnetChanged)
 				{
 					$otherFile = array($this->oldSubnet->getDomainName(), $this->oldSubnet->getIpAddress());
-					CommandPeer::runDnsUpdate (array($this), array($otherFile));
+					CommandPeer::runDnsUpdate (array($this), array($otherFile),self::$commentSvn);
 				}
 				else
-					CommandPeer::runDnsUpdate (array($this));
+					CommandPeer::runDnsUpdate (array($this), null, self::$commentSvn);
 			}
 
     }

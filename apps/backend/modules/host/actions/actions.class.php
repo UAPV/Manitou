@@ -186,4 +186,36 @@ class hostActions extends autoHostActions
     $this->getUser()->setAttribute('host.max_per_page', $max = $request->getParameter('max'));
     $this->redirect('@host');
   }
+
+	protected function processForm(sfWebRequest $request, sfForm $form)
+	{
+		$form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
+		if ($form->isValid())
+		{
+			$commentSVN = $form->getValue('commentSvn');
+			$notice = $form->getObject()->isNew() ? 'The item was created successfully.' : 'The item was updated successfully.';
+
+			Host::setCommentSvn($commentSVN);
+			$Host = $form->save();
+
+			$this->dispatcher->notify(new sfEvent($this, 'admin.save_object', array('object' => $Host)));
+
+			if ($request->hasParameter('_save_and_add'))
+			{
+				$this->getUser()->setFlash('notice', $notice.' You can add another one below.');
+
+				$this->redirect('@host_new');
+			}
+			else
+			{
+				$this->getUser()->setFlash('notice', $notice);
+
+				$this->redirect(array('sf_route' => 'host_edit', 'sf_subject' => $Host));
+			}
+		}
+		else
+		{
+			$this->getUser()->setFlash('error', 'The item has not been saved due to some errors.', false);
+		}
+	}
 }
