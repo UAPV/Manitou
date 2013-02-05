@@ -20,6 +20,7 @@
 class Host extends BaseHost {
 
   protected $needDnsUpdate = null;
+	protected $oldSubnet = null;
 
   public function __toString ()
   {
@@ -129,6 +130,19 @@ class Host extends BaseHost {
     return dns_check_record ($this->getHostname(), 'ANY');
   }
 
+	public function setIpAddress($v)
+	{
+		$this->oldIp = $this->getIpAddress();
+		return parent::setIpAddress($v);
+	}
+
+	public function setSubnetId($v)
+	{
+		$oldSubnetId = $this->getSubnetId();
+		$this->oldSubnet = SubnetPeer::retrieveByPK($oldSubnetId);
+
+		return parent::setSubnetId($v);
+	}
 
   /**
    * Code to be run before persisting the object
@@ -146,6 +160,8 @@ class Host extends BaseHost {
                             $this->isColumnModified (HostPeer::SUBNET_ID)  ||
                             $this->isColumnModified (HostPeer::NUMBER)     ||
                             $this->isColumnModified (HostPeer::IP_ADDRESS  ));
+
+		$this->subnetChanged = $this->isColumnModified (HostPeer::SUBNET_ID);
 
 		if($this->getNumber() == '')
 		{
@@ -185,7 +201,16 @@ class Host extends BaseHost {
 
       // Mise à jour du DNS si nécessaire
       if ($this->needDnsUpdate === true)
-        CommandPeer::runDnsUpdate (array($this));
+			{
+				if($this->subnetChanged)
+				{
+					$otherFile = array($this->oldSubnet->getDomainName(), $this->oldSubnet->getIpAddress());
+					CommandPeer::runDnsUpdate (array($this), array($otherFile));
+				}
+				else
+					CommandPeer::runDnsUpdate (array($this));
+			}
+
     }
   }
 

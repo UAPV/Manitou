@@ -99,7 +99,7 @@ class CommandPeer extends BaseCommandPeer {
    * @param  $hosts     Tableau ou Object de la classe Host
    * @return Command
    */
-  public static function runDnsUpdate ($host = null)
+  public static function runDnsUpdate ($host = null, $otherFiles = null)
   {
     self::runDnsPreUpdate();
 
@@ -119,6 +119,14 @@ class CommandPeer extends BaseCommandPeer {
             $arrayFilesToChange[] = $filenameReverse;
             $arrayFilesToChange[] = $filenameConf;
         }
+
+				foreach($otherFiles as $file)
+				{
+					$filenameReverse = 'db.'.$file[0];
+					$filenameConf = 'db.'.substr ($file[1], 0, strpos ($file[1], '.0'));
+					$arrayFilesToChange[] = $filenameReverse;
+					$arrayFilesToChange[] = $filenameConf;
+				}
     }
     //si une string contenant les filenames a changer est passée en paramètre
     elseif($host != null && !is_array($host))
@@ -126,6 +134,8 @@ class CommandPeer extends BaseCommandPeer {
 
     //on récupère les hosts modifiés
     $hosts = HostQuery::create()->withColumn('INET_ATON(Host.IpAddress)','a')->orderBy('a','asc')->find ();
+
+		array_unique($arrayFilesToChange);
 
     $dnsConf = new Dns ();
     $dnsConf->setHosts ($hosts);
