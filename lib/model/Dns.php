@@ -536,7 +536,7 @@ EOF
     if ($matches[1] == $currentDate)
       $counter = str_pad(((int) $matches[2]) + 1, 2, '0', STR_PAD_LEFT);
 
-    $serial = "\n\t\t".$currentDate.$counter."\t; ".$serialId.' '.date('c');
+    $serial = "\n\t\t".$currentDate.$counter."\t; ".$serialId;//.' '.date('c');
 
     return preg_replace ($serialRegex, $serial, $conf);
   }
