@@ -26,7 +26,7 @@ class CommandPeer extends BaseCommandPeer {
    * @static
    * @return void
  */
-  public static function runDhcpdUpdate ()
+  public static function runDhcpdUpdate ($comm = null)
   {
     if (!sfContext::hasInstance())
       return;
@@ -53,7 +53,7 @@ class CommandPeer extends BaseCommandPeer {
 			}
     }
 
-    CommandPeer::getDhcpdUpdateCommand($tabDrbl)->exec ();
+    CommandPeer::getDhcpdUpdateCommand($tabDrbl,$comm)->exec ();
   }
 
   public static function getDhcpdUpdateCommand ($tabDrbl = null, $comm)
@@ -63,7 +63,7 @@ class CommandPeer extends BaseCommandPeer {
     $command->setCommand (sfConfig::get('sf_manitou_dhcp_update_command'));
     $command->setArgument ('conf_path', sfConfig::get('sf_manitou_dhcpd_conf_path'));
     $command->setArgument ('user_name', sfContext::getInstance()->getUser()->getProfileVar('displayname') );
-		$command->setArgument('comments', $comm);
+		$command->setArgument('comments', addslashes($comm));
 		$command->setLabel ($labelDrbl.' - Regénération de la conf DHCP');
 
    return $command;
@@ -171,7 +171,7 @@ class CommandPeer extends BaseCommandPeer {
     $command->setCommand (sfConfig::get('sf_manitou_dns_update_command'));
     $command->setArgument ('conf_path', $path);
     $command->setArgument ('user_name', sfContext::getInstance()->getUser()->getProfileVar('displayname') );
-		$command->setArgument('comments', $comment);
+		$command->setArgument('comments', addslashes($comment));
     $command->setLabel ($labelDrbl.' - Mise à jour des entrées du DNS');
 
     return $command->exec ();
