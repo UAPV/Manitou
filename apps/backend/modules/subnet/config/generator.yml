@@ -13,7 +13,9 @@ generator:
 
     config:
       actions: ~
-      fields:  ~
+      fields:
+        range_begin:    { label: Dynamic range begin }
+        range_end:      { label: Dynamic range end }
       list:
         title: Gestion des subnets
         display: [=name, ip_address, netmask, domain_name, dns_server, image_server, pxe_file]
