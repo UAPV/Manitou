@@ -63,7 +63,14 @@ class CommandPeer extends BaseCommandPeer {
     $command->setCommand (sfConfig::get('sf_manitou_dhcp_update_command'));
     $command->setArgument ('conf_path', sfConfig::get('sf_manitou_dhcpd_conf_path'));
     $command->setArgument ('user_name', sfContext::getInstance()->getUser()->getProfileVar('displayname') );
-		$command->setArgument('comments', addslashes($comm));
+
+		if(isset($comm))
+		{
+			if(count(explode("'",$comm)) > 1)
+				$comm = implode("\'", $comm);
+		}
+
+		$command->setArgument('comments', $comm);
 		$command->setLabel ($labelDrbl.' - Regénération de la conf DHCP');
 
    return $command;
@@ -171,7 +178,14 @@ class CommandPeer extends BaseCommandPeer {
     $command->setCommand (sfConfig::get('sf_manitou_dns_update_command'));
     $command->setArgument ('conf_path', $path);
     $command->setArgument ('user_name', sfContext::getInstance()->getUser()->getProfileVar('displayname') );
-		$command->setArgument('comments', addslashes($comment));
+
+		if(isset($comment))
+		{
+			if(count(explode("'",$comment)) > 1)
+				$comm = implode("\'", $comment);
+		}
+
+		$command->setArgument('comments', $comment);
     $command->setLabel ($labelDrbl.' - Mise à jour des entrées du DNS');
 
     return $command->exec ();
