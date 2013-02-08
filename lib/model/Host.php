@@ -22,6 +22,7 @@ class Host extends BaseHost {
   protected $needDnsUpdate = null;
 	protected $oldSubnet = null;
 	protected static $commentSvn = 'Mise a jour SVN';
+	protected $new = null;
 
   public function __toString ()
   {
@@ -175,7 +176,14 @@ class Host extends BaseHost {
 			$tab =	explode('.',$this->getIpAddress());
 			$this->setNumber($tab[3]);
 		}
-    return parent::preSave ($con);
+
+		if($this->isNew())
+			$this->new = true;
+		else
+			$this->new = false;
+
+
+		return parent::preSave ($con);
   }
 
   /**
@@ -208,7 +216,7 @@ class Host extends BaseHost {
       // Mise à jour du DNS si nécessaire
       if ($this->needDnsUpdate === true)
 			{
-				if($this->subnetChanged)
+				if($this->subnetChanged && !$this->new)
 				{
 					$otherFile = array($this->oldSubnet->getDomainName(), $this->oldSubnet->getIpAddress());
 					CommandPeer::runDnsUpdate (array($this), array($otherFile),self::$commentSvn);
