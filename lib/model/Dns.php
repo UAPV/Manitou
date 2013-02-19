@@ -79,8 +79,9 @@ class Dns
               {
                   //on récupère le numéro pour le mettre en clé dans le tableau final
                   //$content[$i] = preg_replace("/(\s)+/",' ',$content[$i]);
+								echo 'content de i : <pre>';var_dump($content[$i]);echo '</pre><br/>';
                   $tmp = explode(' ',$content[$i]);
-								echo '<pre>';var_dump($tmp);echo '</pre>';
+								echo 'tableau explode : <pre>';var_dump($tmp);echo '</pre><br/>';
 								$keyArray = str_replace(';','',$tmp[0]);
                   $arrayDns["$keyArray"] = array($comment,$content[$i]);
                   unset($comment);
