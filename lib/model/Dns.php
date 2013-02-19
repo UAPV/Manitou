@@ -226,6 +226,10 @@ EOF
             }
           }
 
+						echo "<pre>";
+						var_dump($arrayDns);
+						echo "</pre>";die;
+
           uksort($arrayDns, 'compare');
 
           $data = array();
