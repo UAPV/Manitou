@@ -196,7 +196,6 @@ EOF
               $dataA = explode('.',$a);
               $dataB = explode('.',$b);
 
-							echo "on compare ".$a." avec ".$b."<br/><br/>";
               if(count($dataA) > 1 && count($dataB) > 1)
               {
                   if($dataA[1] == $dataB[1])
