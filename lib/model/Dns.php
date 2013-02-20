@@ -80,7 +80,7 @@ class Dns
                   //on récupère le numéro pour le mettre en clé dans le tableau final
                   //$content[$i] = preg_replace("/(\s)+/",' ',$content[$i]);
 								//$data = preg_replace('/\s+/g', ' ', $content[$i]);
-								$tmp = explode(' ',$data);
+								$tmp = explode(' ',$content[$i]);
 								$keyArray = str_replace(';','',$tmp[0]);
                   $arrayDns["$keyArray"] = array($comment,$content[$i]);
                   unset($comment);
