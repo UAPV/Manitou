@@ -186,7 +186,7 @@ EOF
               $key = $entry['ip'];
               $com = array("; UPDATED BY MANITOU --> DON'T TOUCH ;)");
               //$newContent = str_pad ($entry['ip'], 16).' IN PTR '.$entry['fqdn'].".\n";
-							$newContent = $entry['ip']."\t".'IN PTR'."\t".$entry['fqdn'].".\n";
+							$newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".\n";
               $arrayDns["$key"] = array($com, $newContent);
           }
 
@@ -413,7 +413,8 @@ EOF
              $key = str_pad($entry['hostname'], 24);
              $com = array("; UPDATED BY MANITOU --> DON'T TOUCH ;)");
              $key = str_replace(' ','',$key);
-             $newContent = str_pad ($entry['hostname'], 24).'    IN    A    '.$entry['ip']."\n";
+            // $newContent = str_pad ($entry['hostname'], 24).'    IN    A    '.$entry['ip']."\n";
+					 $newContent = $entry['hostname']."\t \t".'IN'."\t".'A'."\t".$entry['ip'].".\n";
              $arrayDns[$key] = array($com, $newContent);
          }
 
