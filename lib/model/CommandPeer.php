@@ -127,7 +127,7 @@ class CommandPeer extends BaseCommandPeer {
   {
     self::runDnsPreUpdate();
 
-		echo "commande qu'on appelle avec host : ".$host.", otherFiles : ".$otherFiles." et les commentaires : ".$comment;die;
+		echo "commande qu'on appelle avec host : ";var_dump($host);echo ", otherFiles : ".$otherFiles." et les commentaires : ".$comment;die;
     $path = sfConfig::get('sf_manitou_dns_conf_path');
 
     //si le filesHost n'est pas nul et qu'un tableau de hosts est passé en parametre (plusieurs hosts touchées par une même action)
