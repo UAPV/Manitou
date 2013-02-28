@@ -126,8 +126,6 @@ class CommandPeer extends BaseCommandPeer {
   public static function runDnsUpdate ($host = null, $otherFiles = null, $comment = null)
   {
     self::runDnsPreUpdate();
-
-		echo "commande qu'on appelle avec host : ";var_dump($host);echo ", otherFiles : ".$otherFiles." et les commentaires : ".$comment;die;
     $path = sfConfig::get('sf_manitou_dns_conf_path');
 
     //si le filesHost n'est pas nul et qu'un tableau de hosts est passé en parametre (plusieurs hosts touchées par une même action)
@@ -173,6 +171,8 @@ class CommandPeer extends BaseCommandPeer {
 
     $dnsConf = new Dns ();
     $dnsConf->setHosts ($hosts);
+		echo "le tableau des files a change";
+		var_dump($arrayFilesToChange);die;
     $dnsConf->apply ($path, $arrayFilesToChange);
 
     $command = new Command ();
