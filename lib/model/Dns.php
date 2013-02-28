@@ -44,6 +44,8 @@ class Dns
    */
   public function apply ($path, $filesToChange = null)
   {
+		echo 'on veut supprimer un host dans le fichier : ';
+		var_dump($filesToChange);die;
       $startTag = '; MANITOU_CONF_BEGIN';
       $endTag   = '; MANITOU_CONF_END';
       $tagRegex = '/\n*'.$startTag.'.*'.$endTag.'\n*/s';
