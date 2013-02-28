@@ -50,9 +50,10 @@ class Dns
 
       foreach ($this->reverseConf as $filename => $entries)
       {
+				echo "<pre>";var_dump($filesToChange);echo "</pre>";
           //si il s'agit du fichier à modifier
           if(in_array($filename, $filesToChange))
-          {
+          {echo "<pre>";var_dump($content);echo "</pre>";die;
               $contentTest = file_get_contents($path.$filename);
           $content = preg_replace ($tagRegex, '', $contentTest);
           $content = $this->updateSerial($content);
