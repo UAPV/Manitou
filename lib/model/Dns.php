@@ -33,6 +33,9 @@ class Dns
       'ip'        => implode ('.', array_reverse( explode ('.', $ip))),
       'fqdn'      => $host->getFqdn (),
     );
+
+		var_dump($this->reverseConf);
+		var_dump( $this->conf);
   }
 
  /**
@@ -55,6 +58,7 @@ class Dns
 				echo "on regarde si $filename est dans le tableau <br/>";
           if(in_array($filename, $filesToChange))
           {
+						echo 'on a trouvé un fichier dans le tableau<br/>';
               $contentTest = file_get_contents($path.$filename);
           $content = preg_replace ($tagRegex, '', $contentTest);
           $content = $this->updateSerial($content);
