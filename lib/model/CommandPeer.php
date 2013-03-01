@@ -167,11 +167,19 @@ class CommandPeer extends BaseCommandPeer {
     //on récupère les hosts modifiés
     $hosts = HostQuery::create()->withColumn('INET_ATON(Host.IpAddress)','a')->orderBy('a','asc')->find ();
 
-		echo "<pre>";
-		var_dump($hosts);
-		echo "</pre>";die;
+		//Si $host existe, on le rajoute car c'est peut-être le dernier host de manitou dans ce fichier
+		if($host != null)
+		{
+			$filenameReverse = 'db.'.$host->getDomainName ();
+			$ipBase = $host->getSubnet ()->getIpAddress();
+			$ipBase = substr ($ipBase, 0, strpos ($ipBase, '.0'));
+			$filename = 'db.'.$ipBase;
+			$arrayFilesToChange[] = $filenameReverse;
+			$arrayFilesToChange[] = $filename;
+		}
+
     $dnsConf = new Dns ();
-    $dnsConf->setHosts ($hosts);
+    $dnsConf->setHosts ($hosts, $host);
 
 		if($arrayFilesToChange != null)
 		{
@@ -181,10 +189,6 @@ class CommandPeer extends BaseCommandPeer {
 		else
 			$dnsConf->apply ($path);
 
-		//Si $host existe, on le rajoute car c'est peut-être le dernier host de manitou dans ce fichier
-		$dnsConf = new Dns ();
-		$dnsConf->setHosts ($host);
-		$dnsConf->apply ($path, $arrayFilesToChange);
 die;
     $command = new Command ();
     $command->setCommand (sfConfig::get('sf_manitou_dns_update_command'));
