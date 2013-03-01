@@ -194,7 +194,20 @@ class Host extends BaseHost {
   public function postDelete(PropelPDO $con = null)
   {
     parent::postDelete ($con);
-    CommandPeer::runDnsUpdate (array($this),null, self::$commentSvn);
+
+		$ipBase = $this->getSubnet ()->getIpAddress();
+		$ipBase = substr ($ipBase, 0, strpos ($ipBase, '.0'));
+		$filename = 'db.'.$ipBase;
+		if (! array_key_exists($filename, $this->reverseConf))
+			$this->reverseConf [$filename] = array();
+
+		$ip = substr ($this->getIpAddress (), strlen($ipBase) + 1);
+		$this->reverseConf [$filename][] = array (
+			'ip'        => implode ('.', array_reverse( explode ('.', $ip))),
+			'fqdn'      => $this->getFqdn (),
+		);
+
+    CommandPeer::runDnsUpdate (array($this),$this->reverseConf, self::$commentSvn);
     CommandPeer::runDhcpdUpdate (self::$commentSvn);
   }
 
