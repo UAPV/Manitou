@@ -173,14 +173,14 @@ class CommandPeer extends BaseCommandPeer {
 		//Si $host existe, on le rajoute car c'est peut-être le dernier host de manitou dans ce fichier
 		if($autre != null)
 		{
-			$filenameReverse = 'db.'.$autre->getDomainName ();
+			/*$filenameReverse = 'db.'.$autre->getDomainName ();
 			$ipBase = $autre->getSubnet ()->getIpAddress();
 			$ipBase = substr ($ipBase, 0, strpos ($ipBase, '.0'));
 			$filename = 'db.'.$ipBase;
 			$arrayFilesToChange[] = $filenameReverse;
 			$arrayFilesToChange[] = $filename;
 
-			echo "on rajoute des fichiers dans le arrayFileToChange ".$filenameReverse.' et '.$filename;
+			echo "on rajoute des fichiers dans le arrayFileToChange ".$filenameReverse.' et '.$filename;*/
 
 			echo "<pre>";
 			var_dump($autre);
