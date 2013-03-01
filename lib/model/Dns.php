@@ -5,10 +5,12 @@ class Dns
   protected $conf         = array ();
   protected $reverseConf  = array ();
 
-  public function setHosts ($hosts)
+  public function setHosts ($hosts, $host = null)
   {
       foreach ($hosts as $host)
         $this->addHost($host);
+
+			$this->addHost($host);
   }
 
   public function addHost ($host)
@@ -33,10 +35,6 @@ class Dns
       'ip'        => implode ('.', array_reverse( explode ('.', $ip))),
       'fqdn'      => $host->getFqdn (),
     );
-
-		echo "<pre>";
-		var_dump($this->reverseConf);
-		echo "</pre>";
   }
 
  /**
@@ -56,10 +54,8 @@ class Dns
       foreach ($this->reverseConf as $filename => $entries)
       {
           //si il s'agit du fichier à modifier
-				echo "on regarde si $filename est dans le tableau <br/>";
           if(in_array($filename, $filesToChange))
           {
-						echo 'on a trouvé un fichier dans le tableau<br/>';
               $contentTest = file_get_contents($path.$filename);
           $content = preg_replace ($tagRegex, '', $contentTest);
           $content = $this->updateSerial($content);
@@ -264,7 +260,7 @@ EOF
           file_put_contents ($path.$filename, $contentHeader."\n".$nvContent);
         }
       }
-die;
+
       foreach ($this->conf as $filename => $entries)
       {
          if(in_array($filename, $filesToChange))
