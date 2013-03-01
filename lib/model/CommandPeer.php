@@ -182,6 +182,9 @@ class CommandPeer extends BaseCommandPeer {
 
 			echo "on rajoute des fichiers dans le arrayFileToChange ".$filenameReverse.' et '.$filename;
 
+			echo "<pre>";
+			var_dump($autre);
+			echo "</pre>";die;
 			$dnsConf->addHost($autre);
 			echo "on vient de rajouter le host";
 		}
