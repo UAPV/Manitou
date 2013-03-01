@@ -166,12 +166,18 @@ class CommandPeer extends BaseCommandPeer {
     //on récupère les hosts modifiés
     $hosts = HostQuery::create()->withColumn('INET_ATON(Host.IpAddress)','a')->orderBy('a','asc')->find ();
 
-		array_unique($arrayFilesToChange);
 		$labelDrbl = implode(' , ',$tabDrbl);
 
     $dnsConf = new Dns ();
     $dnsConf->setHosts ($hosts);
-    $dnsConf->apply ($path, $arrayFilesToChange);
+
+		if($arrayFilesToChange != null)
+		{
+			array_unique($arrayFilesToChange);
+    	$dnsConf->apply ($path, $arrayFilesToChange);
+		}
+		else
+			$dnsConf->apply ($path);
 
 		//Si $host existe, on le rajoute car c'est peut-être le dernier host de manitou dans ce fichier
 		$dnsConf = new Dns ();
