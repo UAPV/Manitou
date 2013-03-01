@@ -185,7 +185,7 @@ class CommandPeer extends BaseCommandPeer {
 			echo "<pre>";
 			var_dump($autre);
 			echo "</pre>";die;
-			$dnsConf->addHost($autre);
+			//$dnsConf->addHost($autre);
 			echo "on vient de rajouter le host";
 		}
 
