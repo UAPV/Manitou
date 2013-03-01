@@ -37,7 +37,6 @@ class Dns
 		echo "<pre>";
 		var_dump($this->reverseConf);
 		echo "</pre>";
-die;
   }
 
  /**
