@@ -167,6 +167,9 @@ class CommandPeer extends BaseCommandPeer {
     //on récupère les hosts modifiés
     $hosts = HostQuery::create()->withColumn('INET_ATON(Host.IpAddress)','a')->orderBy('a','asc')->find ();
 
+		echo "<pre>";
+		var_dump($hosts);
+		echo "</pre>";die;
     $dnsConf = new Dns ();
     $dnsConf->setHosts ($hosts);
 
