@@ -123,7 +123,7 @@ class CommandPeer extends BaseCommandPeer {
    * @param  $hosts     Tableau ou Object de la classe Host
    * @return Command
    */
-  public static function runDnsUpdate ($host = null, $otherFiles = null, $comment = null, $host = null)
+  public static function runDnsUpdate ($host = null, $otherFiles = null, $comment = null, $autre = null)
   {
     self::runDnsPreUpdate();
     $path = sfConfig::get('sf_manitou_dns_conf_path');
@@ -171,10 +171,10 @@ class CommandPeer extends BaseCommandPeer {
 		$dnsConf->setHosts ($hosts);
 
 		//Si $host existe, on le rajoute car c'est peut-être le dernier host de manitou dans ce fichier
-		if($host != null)
+		if($autre != null)
 		{
-			$filenameReverse = 'db.'.$host->getDomainName ();
-			$ipBase = $host->getSubnet ()->getIpAddress();
+			$filenameReverse = 'db.'.$autre->getDomainName ();
+			$ipBase = $autre->getSubnet ()->getIpAddress();
 			$ipBase = substr ($ipBase, 0, strpos ($ipBase, '.0'));
 			$filename = 'db.'.$ipBase;
 			$arrayFilesToChange[] = $filenameReverse;
@@ -182,8 +182,8 @@ class CommandPeer extends BaseCommandPeer {
 
 			echo "on rajoute des fichiers dans le arrayFileToChange ".$filenameReverse.' et '.$filename;
 
-			$dnsConf->addHost($host);
-			echo "on vient de rajouter le host";die;
+			$dnsConf->addHost($autre);
+			echo "on vient de rajouter le host";
 		}
 
 
