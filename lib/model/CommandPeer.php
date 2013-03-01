@@ -177,7 +177,7 @@ class CommandPeer extends BaseCommandPeer {
 		$dnsConf = new Dns ();
 		$dnsConf->setHosts ($host);
 		$dnsConf->apply ($path, $arrayFilesToChange);
-
+die;
     $command = new Command ();
     $command->setCommand (sfConfig::get('sf_manitou_dns_update_command'));
     $command->setArgument ('conf_path', $path);
