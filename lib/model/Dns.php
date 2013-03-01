@@ -34,8 +34,12 @@ class Dns
       'fqdn'      => $host->getFqdn (),
     );
 
+		echo "<pre>";
 		var_dump($this->reverseConf);
+		echo "</pre>";
+		echo "<pre>";
 		var_dump( $this->conf);
+		echo "</pre>";
   }
 
  /**
@@ -51,7 +55,7 @@ class Dns
       $endTag   = '; MANITOU_CONF_END';
       $tagRegex = '/\n*'.$startTag.'.*'.$endTag.'\n*/s';
 
-		var_dump($filesToChange);
+
       foreach ($this->reverseConf as $filename => $entries)
       {
           //si il s'agit du fichier à modifier
