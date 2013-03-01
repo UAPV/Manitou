@@ -123,7 +123,7 @@ class CommandPeer extends BaseCommandPeer {
    * @param  $hosts     Tableau ou Object de la classe Host
    * @return Command
    */
-  public static function runDnsUpdate ($host = null, $otherFiles = null, $comment = null)
+  public static function runDnsUpdate ($host = null, $otherFiles = null, $comment = null, $host = null)
   {
     self::runDnsPreUpdate();
     $path = sfConfig::get('sf_manitou_dns_conf_path');
@@ -172,6 +172,11 @@ class CommandPeer extends BaseCommandPeer {
     $dnsConf = new Dns ();
     $dnsConf->setHosts ($hosts);
     $dnsConf->apply ($path, $arrayFilesToChange);
+
+		//Si $host existe, on le rajoute car c'est peut-être le dernier host de manitou dans ce fichier
+		$dnsConf = new Dns ();
+		$dnsConf->setHosts ($host);
+		$dnsConf->apply ($path, $arrayFilesToChange);
 
     $command = new Command ();
     $command->setCommand (sfConfig::get('sf_manitou_dns_update_command'));
