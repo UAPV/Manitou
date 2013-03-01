@@ -158,6 +158,7 @@ class CommandPeer extends BaseCommandPeer {
 					$arrayFilesToChange[] = $filenameReverse;
 					$arrayFilesToChange[] = $filenameConf;
 				}
+			$labelDrbl = implode(' , ',$tabDrbl);
     }
     //si une string contenant les filenames a changer est passée en paramètre
     elseif($host != null && !is_array($host))
@@ -165,8 +166,6 @@ class CommandPeer extends BaseCommandPeer {
 
     //on récupère les hosts modifiés
     $hosts = HostQuery::create()->withColumn('INET_ATON(Host.IpAddress)','a')->orderBy('a','asc')->find ();
-
-		$labelDrbl = implode(' , ',$tabDrbl);
 
     $dnsConf = new Dns ();
     $dnsConf->setHosts ($hosts);
