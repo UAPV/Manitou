@@ -5,12 +5,12 @@ class Dns
   protected $conf         = array ();
   protected $reverseConf  = array ();
 
-  public function setHosts ($hosts, $host = null)
+  public function setHosts ($hosts, $autre = null)
   {
       foreach ($hosts as $host)
         $this->addHost($host);
 
-			$this->addHost($host);
+			$this->addHost($autre);
   }
 
   public function addHost ($host)
@@ -51,11 +51,14 @@ class Dns
       $tagRegex = '/\n*'.$startTag.'.*'.$endTag.'\n*/s';
 
 
+		var_dump($filesToChange);
       foreach ($this->reverseConf as $filename => $entries)
       {
+				echo "on regarde le $filename";
           //si il s'agit du fichier à modifier
           if(in_array($filename, $filesToChange))
           {
+						echo "on est rentré dans le fichier et on le modifie";die;
               $contentTest = file_get_contents($path.$filename);
           $content = preg_replace ($tagRegex, '', $contentTest);
           $content = $this->updateSerial($content);
@@ -260,7 +263,7 @@ EOF
           file_put_contents ($path.$filename, $contentHeader."\n".$nvContent);
         }
       }
-
+die;
       foreach ($this->conf as $filename => $entries)
       {
          if(in_array($filename, $filesToChange))
