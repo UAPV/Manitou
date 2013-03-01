@@ -44,14 +44,10 @@ class Dns
    */
   public function apply ($path, $filesToChange = null)
   {
-		echo "on récupere les fichiers : ";
-		var_dump($this->reverseConf);
-		var_dump($this->conf);die;
       $startTag = '; MANITOU_CONF_BEGIN';
       $endTag   = '; MANITOU_CONF_END';
       $tagRegex = '/\n*'.$startTag.'.*'.$endTag.'\n*/s';
 
-		echo "<pre>";var_dump($filesToChange);echo "</pre>";
       foreach ($this->reverseConf as $filename => $entries)
       {
 				echo "<pre>";var_dump($filesToChange);echo "</pre>";
@@ -68,7 +64,6 @@ class Dns
           $comment = array();
           $arrayDns = array();
 
-						echo "<pre>";var_dump($content);echo "</pre>";die;
           $first = true;
           $header = array();
           for($i=0; $i < $lengh; $i++)
