@@ -178,7 +178,7 @@ class CommandPeer extends BaseCommandPeer {
 		if($other != null)
 		{
 			echo "on a un nouvel host";
-			$dnsConf->setHosts($other, true);
+			$dnsConf->addHost($other);
 		}
 
 
