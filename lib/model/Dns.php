@@ -7,10 +7,20 @@ class Dns
 
   public function setHosts ($hosts, $ok = false)
   {
+		if($ok)
+			echo 'ok est a true';
+
       foreach ($hosts as $host)
 			{
 				if($ok)
-					echo 'ok est a true';
+				{
+					if($ok)
+					{
+						echo "<pre>";
+						var_dump($host);
+						echo "</pre>";
+					}
+				}
         $this->addHost($host, $ok);
 			}
   }
@@ -55,9 +65,9 @@ class Dns
    */
   public function apply ($path, $filesToChange = null)
   {
-		echo "<pre>";
+		/*echo "<pre>";
 		var_dump($this->reverseConf);
-		echo "</pre>";die;
+		echo "</pre>";*/die;
       $startTag = '; MANITOU_CONF_BEGIN';
       $endTag   = '; MANITOU_CONF_END';
       $tagRegex = '/\n*'.$startTag.'.*'.$endTag.'\n*/s';
