@@ -10,20 +10,11 @@ class Dns
 		if($ok)
 			echo 'ok est a true';
 
-		var_dump($hosts);die;
       foreach ($hosts as $host)
-			{
-					if($ok)
-					{
-						echo "<pre>";
-						var_dump($host);
-						echo "</pre>";die;
-					}
-        $this->addHost($host, $ok);
-			}
+        $this->addHost($host);
   }
 
-  public function addHost ($host, $ok = false)
+  public function addHost ($host)
   {
     $filename = 'db.'.$host->getDomainName ();
     if (! array_key_exists($filename, $this->conf))
@@ -46,11 +37,12 @@ class Dns
       'fqdn'      => $host->getFqdn (),
     );
 
-		if($ok)
+		if($host->getId() == 4671)
 		{
-			echo "on rajoute : <pre>";
-			var_dump($this->reverseConf);
-			echo "</pre>";
+			echo "ok, on a notre host avec le filename : ".$filename;
+			echo "<pre>";
+			var_dump($this->reverseConf [$filename]);
+			echo "</pre>";die;
 		}
   }
 
