@@ -151,12 +151,15 @@ class CommandPeer extends BaseCommandPeer {
 							$tabDrbl[] = $tabHost[0];
 				}
 
-				foreach($otherFiles as $file)
+				if($otherFiles != null)
 				{
-					$filenameReverse = 'db.'.$file[0];
-					$filenameConf = 'db.'.substr ($file[1], 0, strpos ($file[1], '.0'));
-					$arrayFilesToChange[] = $filenameReverse;
-					$arrayFilesToChange[] = $filenameConf;
+					foreach($otherFiles as $file)
+					{
+						$filenameReverse = 'db.'.$file[0];
+						$filenameConf = 'db.'.substr ($file[1], 0, strpos ($file[1], '.0'));
+						$arrayFilesToChange[] = $filenameReverse;
+						$arrayFilesToChange[] = $filenameConf;
+					}
 				}
 			$labelDrbl = implode(' , ',$tabDrbl);
     }
