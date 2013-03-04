@@ -37,13 +37,14 @@ class Dns
       'fqdn'      => $host->getFqdn (),
     );
 
-		if($host->getId() == 4671)
+	/*	if($host->getId() == 4671)
 		{
 			echo "ok, on a notre host avec le filename : ".$filename;
 			echo "<pre>";
 			var_dump($this->reverseConf [$filename]);
 			echo "</pre>";die;
-		}
+		}*/
+		echo "getID : ".$host->getId().'<br/>';
   }
 
  /**
@@ -54,7 +55,7 @@ class Dns
    * @return void
    */
   public function apply ($path, $filesToChange = null)
-  {
+  {die;
 		/*echo "<pre>";
 		var_dump($this->reverseConf);
 		echo "</pre>";*/
