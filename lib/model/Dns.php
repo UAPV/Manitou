@@ -57,7 +57,7 @@ class Dns
   {
 		/*echo "<pre>";
 		var_dump($this->reverseConf);
-		echo "</pre>";*/die;
+		echo "</pre>";*/
       $startTag = '; MANITOU_CONF_BEGIN';
       $endTag   = '; MANITOU_CONF_END';
       $tagRegex = '/\n*'.$startTag.'.*'.$endTag.'\n*/s';
