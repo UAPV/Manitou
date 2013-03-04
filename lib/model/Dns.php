@@ -44,7 +44,7 @@ class Dns
 			var_dump($this->reverseConf [$filename]);
 			echo "</pre>";die;
 		}*/
-		echo "getID : ".$host->getId().'<br/>';
+		echo "getID : ".$host->getId().'pour le host avec ip : '.$host->getIpAddress.'<br/>';
   }
 
  /**
