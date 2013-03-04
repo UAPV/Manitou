@@ -48,13 +48,6 @@ class Dns
       $endTag   = '; MANITOU_CONF_END';
       $tagRegex = '/\n*'.$startTag.'.*'.$endTag.'\n*/s';
 
-		echo "<pre>";
-		var_dump($this->reverseConf);
-		echo "</pre>";
-		echo "jjjsjsjsjsjsjj";
-		echo "<pre>";
-		var_dump($filesToChange);
-		echo "</pre>";die;
       foreach ($this->reverseConf as $filename => $entries)
       {
           //si il s'agit du fichier à modifier
