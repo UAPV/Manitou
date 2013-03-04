@@ -57,7 +57,7 @@ class Dns
           //si il s'agit du fichier à modifier
           if(in_array($filename, $filesToChange))
           {
-
+echo "ahaha, $filename est dans le tableau";
               $contentTest = file_get_contents($path.$filename);
           $content = preg_replace ($tagRegex, '', $contentTest);
           $content = $this->updateSerial($content);
