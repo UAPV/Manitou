@@ -18,7 +18,7 @@ class Dns
 					{
 						echo "<pre>";
 						var_dump($host);
-						echo "</pre>";
+						echo "</pre>";die;
 					}
 				}
         $this->addHost($host, $ok);
