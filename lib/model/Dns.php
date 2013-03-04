@@ -49,6 +49,10 @@ class Dns
       $tagRegex = '/\n*'.$startTag.'.*'.$endTag.'\n*/s';
 
 		echo "<pre>";
+		var_dump($this->reverseConf);
+		echo "</pre>";
+		echo "jjjsjsjsjsjsjj";
+		echo "<pre>";
 		var_dump($filesToChange);
 		echo "</pre>";die;
       foreach ($this->reverseConf as $filename => $entries)
