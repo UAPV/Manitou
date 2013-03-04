@@ -8,7 +8,11 @@ class Dns
   public function setHosts ($hosts, $ok = false)
   {
       foreach ($hosts as $host)
+			{
+				if($ok)
+					echo 'ok est a true';
         $this->addHost($host, $ok);
+			}
   }
 
   public function addHost ($host, $ok = false)
