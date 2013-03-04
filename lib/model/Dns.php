@@ -16,6 +16,9 @@ class Dns
 
   public function addHost ($host)
   {
+		echo "<pre>";
+		var_dump($host);
+		echo "</pre>";
     $filename = 'db.'.$host->getDomainName ();
     if (! array_key_exists($filename, $this->conf))
       $this->conf [$filename] = array();
