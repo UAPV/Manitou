@@ -48,11 +48,16 @@ class Dns
       $endTag   = '; MANITOU_CONF_END';
       $tagRegex = '/\n*'.$startTag.'.*'.$endTag.'\n*/s';
 
+		echo "<pre>";
+		var_dump($filesToChange);
+		echo "</pre>";
       foreach ($this->reverseConf as $filename => $entries)
       {
+										echo "on regarde si $filename est dans le tableau";
           //si il s'agit du fichier à modifier
           if(in_array($filename, $filesToChange))
           {
+
               $contentTest = file_get_contents($path.$filename);
           $content = preg_replace ($tagRegex, '', $contentTest);
           $content = $this->updateSerial($content);
@@ -256,7 +261,7 @@ EOF
 
           file_put_contents ($path.$filename, $contentHeader."\n".$nvContent);
         }
-      }
+      }die;
 
       foreach ($this->conf as $filename => $entries)
       {
