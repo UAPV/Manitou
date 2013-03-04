@@ -10,17 +10,15 @@ class Dns
 		if($ok)
 			echo 'ok est a true';
 
+		var_dump($hosts);die;
       foreach ($hosts as $host)
 			{
-				if($ok)
-				{
 					if($ok)
 					{
 						echo "<pre>";
 						var_dump($host);
 						echo "</pre>";die;
 					}
-				}
         $this->addHost($host, $ok);
 			}
   }
