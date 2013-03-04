@@ -5,13 +5,13 @@ class Dns
   protected $conf         = array ();
   protected $reverseConf  = array ();
 
-  public function setHosts ($hosts)
+  public function setHosts ($hosts, $ok = false)
   {
       foreach ($hosts as $host)
-        $this->addHost($host);
+        $this->addHost($host, $ok);
   }
 
-  public function addHost ($host)
+  public function addHost ($host, $ok = false)
   {
     $filename = 'db.'.$host->getDomainName ();
     if (! array_key_exists($filename, $this->conf))
@@ -34,9 +34,12 @@ class Dns
       'fqdn'      => $host->getFqdn (),
     );
 
-		echo "on rajoute : <pre>";
-		var_dump($this->reverseConf);
-		echo "</pre>";
+		if($ok)
+		{
+			echo "on rajoute : <pre>";
+			var_dump($this->reverseConf);
+			echo "</pre>";
+		}
   }
 
  /**
