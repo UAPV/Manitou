@@ -117,10 +117,15 @@ echo "ahaha, $filename est dans le tableau";
                       $comment[] = $content[$i];
               }
           }
-
+echo '<pre>';
+						var_dump($arrayDns);
+						echo "</pre>";
               /*echo "array Dns : <br/>";
               print_r($arrayDns);die;*/
 
+						echo "Entree de manitou hahaha ! <pre>";
+						var_dump($entries);
+						echo "</pre>";
           //on rajoute les fichiers de Manitou puis on trie le tableau
           foreach ($entries as $entry)
           {
