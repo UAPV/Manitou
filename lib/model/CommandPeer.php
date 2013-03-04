@@ -123,7 +123,7 @@ class CommandPeer extends BaseCommandPeer {
    * @param  $hosts     Tableau ou Object de la classe Host
    * @return Command
    */
-  public static function runDnsUpdate ($host = null, $otherFiles = null, $comment = null, $autre = null)
+  public static function runDnsUpdate ($host = null, $otherFiles = null, $comment = null)
   {
     self::runDnsPreUpdate();
     $path = sfConfig::get('sf_manitou_dns_conf_path');
@@ -151,17 +151,13 @@ class CommandPeer extends BaseCommandPeer {
 							$tabDrbl[] = $tabHost[0];
 				}
 
-				if($otherFiles != null)
+				foreach($otherFiles as $file)
 				{
-					foreach($otherFiles as $file)
-					{
-						$filenameReverse = 'db.'.$file[0];
-						$filenameConf = 'db.'.substr ($file[1], 0, strpos ($file[1], '.0'));
-						$arrayFilesToChange[] = $filenameReverse;
-						$arrayFilesToChange[] = $filenameConf;
-					}
+					$filenameReverse = 'db.'.$file[0];
+					$filenameConf = 'db.'.substr ($file[1], 0, strpos ($file[1], '.0'));
+					$arrayFilesToChange[] = $filenameReverse;
+					$arrayFilesToChange[] = $filenameConf;
 				}
-			$labelDrbl = implode(' , ',$tabDrbl);
     }
     //si une string contenant les filenames a changer est passée en paramètre
     elseif($host != null && !is_array($host))
@@ -170,37 +166,14 @@ class CommandPeer extends BaseCommandPeer {
     //on récupère les hosts modifiés
     $hosts = HostQuery::create()->withColumn('INET_ATON(Host.IpAddress)','a')->orderBy('a','asc')->find ();
 
+		array_unique($arrayFilesToChange);
+		$labelDrbl = implode(' , ',$tabDrbl);
 
-		//Si $host existe, on le rajoute car c'est peut-être le dernier host de manitou dans ce fichier
-	/*	if($autre != null)
-		{
-			/*$filenameReverse = 'db.'.$autre->getDomainName ();
-			$ipBase = $autre->getSubnet ()->getIpAddress();
-			$ipBase = substr ($ipBase, 0, strpos ($ipBase, '.0'));
-			$filename = 'db.'.$ipBase;
-			$arrayFilesToChange[] = $filenameReverse;
-			$arrayFilesToChange[] = $filename;
-
-			echo "on rajoute des fichiers dans le arrayFileToChange ".$filenameReverse.' et '.$filename;
-
-			echo "<pre>";
-			var_dump($autre);
-			echo "</pre>";die;
-			//$dnsConf->addHost($autre);
-			echo "on vient de rajouter le host";
-		}*/
-
-
-		$dnsConf = new Dns ();
-		$dnsConf->setHosts ($hosts);
-
-		if($arrayFilesToChange != null)
-		{
-			array_unique($arrayFilesToChange);
-    	$dnsConf->apply ($path, $arrayFilesToChange);
-		}
-		else
-			$dnsConf->apply ($path);
+    $dnsConf = new Dns ();
+    $dnsConf->setHosts ($hosts);
+		echo "le tableau des files a change";
+		var_dump($arrayFilesToChange);die;
+    $dnsConf->apply ($path, $arrayFilesToChange);
 
     $command = new Command ();
     $command->setCommand (sfConfig::get('sf_manitou_dns_update_command'));
