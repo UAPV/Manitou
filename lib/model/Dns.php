@@ -255,6 +255,9 @@ EOF
               }
           }
 
+						echo "<pre>";
+						var_dump($data);
+						echo "</pre>";
           //on récupère le tableau de content en string puis on l'écrit dans le fichier
           $nvContent = implode("\n",$data);
           $contentHeader = implode("\n", $header);
