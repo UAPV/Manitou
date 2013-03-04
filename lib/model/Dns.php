@@ -5,20 +5,14 @@ class Dns
   protected $conf         = array ();
   protected $reverseConf  = array ();
 
-  public function setHosts ($hosts, $ok = false)
+  public function setHosts ($hosts)
   {
-		if($ok)
-			echo 'ok est a true';
-
-      foreach ($hosts as $host)
-        $this->addHost($host);
+    foreach ($hosts as $host)
+      $this->addHost($host);
   }
 
   public function addHost ($host)
   {
-		echo "<pre>";
-		var_dump($host);
-		echo "</pre>";
     $filename = 'db.'.$host->getDomainName ();
     if (! array_key_exists($filename, $this->conf))
       $this->conf [$filename] = array();
@@ -39,15 +33,6 @@ class Dns
       'ip'        => implode ('.', array_reverse( explode ('.', $ip))),
       'fqdn'      => $host->getFqdn (),
     );
-
-	/*	if($host->getId() == 4671)
-		{
-			echo "ok, on a notre host avec le filename : ".$filename;
-			echo "<pre>";
-			var_dump($this->reverseConf [$filename]);
-			echo "</pre>";die;
-		}*/
-		echo "getID : ".$host->getId().'pour le host avec ip : '.$ipBase.'<br/>';
   }
 
  /**
@@ -58,10 +43,7 @@ class Dns
    * @return void
    */
   public function apply ($path, $filesToChange = null)
-  {die;
-		/*echo "<pre>";
-		var_dump($this->reverseConf);
-		echo "</pre>";*/
+  {
       $startTag = '; MANITOU_CONF_BEGIN';
       $endTag   = '; MANITOU_CONF_END';
       $tagRegex = '/\n*'.$startTag.'.*'.$endTag.'\n*/s';
