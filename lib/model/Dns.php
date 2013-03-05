@@ -80,7 +80,6 @@ class Dns
               $regex = '/\s+IN\s+PTR\s/i';
               $regexCom = '/^;+\s/i';
 
-						echo "on regarde ".$content[$i];
               if(preg_match($regex,$content[$i]) === 1)
               {
                   //on récupère le numéro pour le mettre en clé dans le tableau final
@@ -106,7 +105,6 @@ class Dns
               }
               elseif(preg_match('/^;\s+UPDATED\s+BY\s+MANITOU\s+/i', $content[$i]) === 1)
               {
-								echo "on a trouve un truc manitou<br/>";
                   $i = $i+1;
               }
               //sinon si elle est marquée "DELETION MARKED", on la supprime
