@@ -237,6 +237,9 @@ EOF
 
           uksort($arrayDns, 'compare');
 
+						echo "<pre>";
+						var_dump($arrayDns);
+						echo "</pre>";die;
           $data = array();
           //on écrit dans le fichier les lignes
           foreach($arrayDns as $key => $ligne)
