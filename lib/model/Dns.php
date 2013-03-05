@@ -117,9 +117,6 @@ class Dns
                       $comment[] = $content[$i];
               }
           }
-						echo "<pre>";
-						var_dump($arrayDns);
-						echo "</pre>";die;
 
           //on rajoute les fichiers de Manitou puis on trie le tableau
           foreach ($entries as $entry)
@@ -235,6 +232,10 @@ EOF
               }
             }
           }
+
+						echo "<pre>";
+						var_dump($arrayDns);
+						echo "</pre>";die;
 
           uksort($arrayDns, 'compare');
 
