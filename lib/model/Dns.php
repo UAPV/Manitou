@@ -118,93 +118,84 @@ class Dns
               }
           }
 
-
-						echo "Avant : <pre>";
-						var_dump($arrayDns);
-						echo "</pre>";
           //on rajoute les fichiers de Manitou puis on trie le tableau
           foreach ($entries as $cle => $entry)
           {
-						echo "la clé est $cle";
 							if($cle != '')
 							{
-              foreach($arrayDns as $key => $line)
-              {
+								foreach($arrayDns as $key => $line)
+								{
 
-              // Si une entrée STRICTEMENT identique existe on écrit la nouvelle et on envoie un mail pour donner le nom de la machine remplacée
-              $regex = '/^'.preg_quote($entry['ip']).'\s+IN\s+PTR\s+'.preg_quote($entry['fqdn']).'\.\s*$/m';
-              if (preg_match($regex, $line[1], $matches) === 1)
-              {
-                  //on récupère l'entrée dans le tableau et on la supprime du tableau d'origine (arrayDns)
-                  $key = str_pad ($entry['ip'], 16);
-                  unset($arrayDns["$key"]);
-              }
-              //sinon si l'ip existe deja
-              else if (preg_match('/^'.preg_quote($entry['ip']).'\s+IN\s+PTR+\s*/', $line[1], $matches)  === 1 )
-              {
-                  //on supprime l'entrée du tableau
-                  unset($arrayDns["$key"]);
+								// Si une entrée STRICTEMENT identique existe on écrit la nouvelle et on envoie un mail pour donner le nom de la machine remplacée
+								$regex = '/^'.preg_quote($entry['ip']).'\s+IN\s+PTR\s+'.preg_quote($entry['fqdn']).'\.\s*$/m';
+								if (preg_match($regex, $line[1], $matches) === 1)
+								{
+										//on récupère l'entrée dans le tableau et on la supprime du tableau d'origine (arrayDns)
+										$key = str_pad ($entry['ip'], 16);
+										unset($arrayDns["$key"]);
+								}
+								//sinon si l'ip existe deja
+								else if (preg_match('/^'.preg_quote($entry['ip']).'\s+IN\s+PTR+\s*/', $line[1], $matches)  === 1 )
+								{
+										//on supprime l'entrée du tableau
+										unset($arrayDns["$key"]);
 
-                  //on envoie un mail
-                  $host = $entry['fqdn'];
-                  $message = sfContext::getInstance()->getMailer()->compose(
-                      array('manitou@univ-avignon.fr' => 'Manitou'),
-                      'fanny.marcel@univ-avignon.fr',
-                      //'root-admin@listes.univ-avignon.fr',
-                      'Modification DNS',
-                      <<<EOF
-Manitou a écrasé une ancienne adresse ip pour le fichier <b>$filename</b>.
+										//on envoie un mail
+										$host = $entry['fqdn'];
+										$message = sfContext::getInstance()->getMailer()->compose(
+												array('manitou@univ-avignon.fr' => 'Manitou'),
+												'fanny.marcel@univ-avignon.fr',
+												//'root-admin@listes.univ-avignon.fr',
+												'Modification DNS',
+												<<<EOF
+	Manitou a écrasé une ancienne adresse ip pour le fichier <b>$filename</b>.
 
-Ancienne ip : $lastIp
-Nouvelle ip :   $key
-Ancien host :   $host
-Nouvel host :   $host
+	Ancienne ip : $lastIp
+	Nouvelle ip :   $key
+	Ancien host :   $host
+	Nouvel host :   $host
 
 
-Ce message a été envoyé automatiquement. Merci de ne pas y répondre.
+	Ce message a été envoyé automatiquement. Merci de ne pas y répondre.
 EOF
-                  );
+										);
 
-                //sfContext::getInstance()->getMailer()->send($message);
-              }
-              else if (preg_match('/^[^;].*IN\s+PTR\s+'.preg_quote($entry['fqdn']).'.*$/m', $line[1]) > 0)
-              {
-                  //on supprime l'entrée du tableau
-                  unset($arrayDns["$key"]);
+									//sfContext::getInstance()->getMailer()->send($message);
+								}
+								else if (preg_match('/^[^;].*IN\s+PTR\s+'.preg_quote($entry['fqdn']).'.*$/m', $line[1]) > 0)
+								{
+										//on supprime l'entrée du tableau
+										unset($arrayDns["$key"]);
 
-                  //on envoie un mail
-                  $newFqdn = $entry['fqdn'];
-                  $ip = $entry['ip'];
-                  $message = sfContext::getInstance()->getMailer()->compose(
-                      array('manitou@univ-avignon.fr' => 'Manitou'),
-                      'fanny.marcel@univ-avignon.fr',//'root-admin@listes.univ-avignon.fr',
-                      'Modification DNS',
-                      <<<EOF
-Manitou a écrasé une ligne pour le fichier $filename.
+										//on envoie un mail
+										$newFqdn = $entry['fqdn'];
+										$ip = $entry['ip'];
+										$message = sfContext::getInstance()->getMailer()->compose(
+												array('manitou@univ-avignon.fr' => 'Manitou'),
+												'fanny.marcel@univ-avignon.fr',//'root-admin@listes.univ-avignon.fr',
+												'Modification DNS',
+												<<<EOF
+	Manitou a écrasé une ligne pour le fichier $filename.
 
-Ancienne ip :   $ip
-Nouvelle ip :   $ip
-Nouvel host :   $newFqdn
+	Ancienne ip :   $ip
+	Nouvelle ip :   $ip
+	Nouvel host :   $newFqdn
 
 
-Ce message a été envoyé automatiquement. Merci de ne pas y répondre.
+	Ce message a été envoyé automatiquement. Merci de ne pas y répondre.
 EOF
-                  );
+										);
 
-                //sfContext::getInstance()->getMailer()->send($message);
-              }
-              }
-              $key = $entry['ip'];
-              $com = array("; UPDATED BY MANITOU --> DON'T TOUCH ;)");
-              //$newContent = str_pad ($entry['ip'], 16).' IN PTR '.$entry['fqdn'].".\n";
+									//sfContext::getInstance()->getMailer()->send($message);
+								}
+							}
+							$key = $entry['ip'];
+							$com = array("; UPDATED BY MANITOU --> DON'T TOUCH ;)");
+							//$newContent = str_pad ($entry['ip'], 16).' IN PTR '.$entry['fqdn'].".\n";
 							$newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".\n";
-              $arrayDns["$key"] = array($com, $newContent);
+							$arrayDns["$key"] = array($com, $newContent);
          	 }
 					}
-
-						echo "Apres : <pre>";
-						var_dump($arrayDns);
-						echo "</pre>";die;
 
           if(!function_exists('compare'))
           {
