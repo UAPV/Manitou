@@ -37,10 +37,7 @@ class Dns
 			);
 		}
 		else
-		{
-			echo "ok le remove est a true";
 			$this->reverseConf [$filename][] = array();
-		}
   }
 
  /**
@@ -56,16 +53,11 @@ class Dns
       $endTag   = '; MANITOU_CONF_END';
       $tagRegex = '/\n*'.$startTag.'.*'.$endTag.'\n*/s';
 
-		echo "<pre>";
-		var_dump($filesToChange);
-		echo "</pre>";
       foreach ($this->reverseConf as $filename => $entries)
       {
-										echo "on regarde si $filename est dans le tableau";
           //si il s'agit du fichier à modifier
           if(in_array($filename, $filesToChange))
           {
-echo "ahaha, $filename est dans le tableau";
               $contentTest = file_get_contents($path.$filename);
           $content = preg_replace ($tagRegex, '', $contentTest);
           $content = $this->updateSerial($content);
@@ -125,15 +117,9 @@ echo "ahaha, $filename est dans le tableau";
                       $comment[] = $content[$i];
               }
           }
-echo '<pre>';
-						var_dump($arrayDns);
-						echo "</pre>";
               /*echo "array Dns : <br/>";
               print_r($arrayDns);die;*/
 
-						echo "Entree de manitou hahaha ! <pre>";
-						var_dump($entries);
-						echo "</pre>";
           //on rajoute les fichiers de Manitou puis on trie le tableau
           foreach ($entries as $entry)
           {
@@ -270,16 +256,13 @@ EOF
               }
           }
 
-						echo "<pre>";
-						var_dump($data);
-						echo "</pre>";
           //on récupère le tableau de content en string puis on l'écrit dans le fichier
           $nvContent = implode("\n",$data);
           $contentHeader = implode("\n", $header);
 
           file_put_contents ($path.$filename, $contentHeader."\n".$nvContent);
         }
-      }die;
+      }
 
       foreach ($this->conf as $filename => $entries)
       {
