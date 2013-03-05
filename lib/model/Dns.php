@@ -119,9 +119,9 @@ class Dns
           }
 
 
-						echo "<pre>";
+						echo "Avant : <pre>";
 						var_dump($arrayDns);
-						echo "</pre>";die;
+						echo "</pre>";
           //on rajoute les fichiers de Manitou puis on trie le tableau
           foreach ($entries as $entry)
           {
@@ -197,6 +197,10 @@ EOF
 							$newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".\n";
               $arrayDns["$key"] = array($com, $newContent);
           }
+
+						echo "Apres : <pre>";
+						var_dump($arrayDns);
+						echo "</pre>";die;
 
           if(!function_exists('compare'))
           {
