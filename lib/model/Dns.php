@@ -11,7 +11,7 @@ class Dns
       $this->addHost($host);
   }
 
-  public function addHost ($host)
+  public function addHost ($host, $remove = false)
   {
     $filename = 'db.'.$host->getDomainName ();
     if (! array_key_exists($filename, $this->conf))
@@ -28,11 +28,19 @@ class Dns
     if (! array_key_exists($filename, $this->reverseConf))
       $this->reverseConf [$filename] = array();
 
-    $ip = substr ($host->getIpAddress (), strlen($ipBase) + 1);
-    $this->reverseConf [$filename][] = array (
-      'ip'        => implode ('.', array_reverse( explode ('.', $ip))),
-      'fqdn'      => $host->getFqdn (),
-    );
+		if(!$remove)
+		{
+			$ip = substr ($host->getIpAddress (), strlen($ipBase) + 1);
+			$this->reverseConf [$filename][] = array (
+				'ip'        => implode ('.', array_reverse( explode ('.', $ip))),
+				'fqdn'      => $host->getFqdn (),
+			);
+		}
+		else
+		{
+			echo "ok le remove est a true";
+			$this->reverseConf [$filename][] = array();
+		}
   }
 
  /**
