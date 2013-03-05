@@ -175,8 +175,8 @@ class CommandPeer extends BaseCommandPeer {
     $dnsConf = new Dns ();
     $dnsConf->setHosts ($hosts);
 
-		/*if($other != null)
-			$dnsConf->addHost($other);*/
+		if($other != null)
+			$dnsConf->addHost($other);
 
     $dnsConf->apply ($path, $arrayFilesToChange);
 
