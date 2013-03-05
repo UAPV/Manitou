@@ -123,9 +123,10 @@ class Dns
 						var_dump($arrayDns);
 						echo "</pre>";
           //on rajoute les fichiers de Manitou puis on trie le tableau
-          foreach ($entries as $entry)
+          foreach ($entries as $cle => $entry)
           {
-							if($entry != '')
+						echo "la clé est $cle";
+							if($cle != '')
 							{
               foreach($arrayDns as $key => $line)
               {
