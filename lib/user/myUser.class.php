@@ -14,7 +14,7 @@ class myUser extends uapvBasicSecurityUser
    */
   public function configure ()
   {
-    if (/*strpos ($this->getProfileVar ('supannaffectation'), 'D.O.S.I.') === 0 &&*/ $this->getProfileVar ('uid') == 'fabrer')
+    if (strpos ($this->getProfileVar ('supannaffectation'), 'D.O.S.I.') === 0 || $this->getProfileVar ('uid') == 'fouad')
       $this->addCredential ('dosi');
   }
 }
