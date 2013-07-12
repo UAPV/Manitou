@@ -49,7 +49,7 @@ class RestoreForm extends BaseForm
     $this->widgetSchema->setHelps (array (
       'state'       => 'État des machines après restauration',
       'partition'   => 'Partition à restaurer (sda=Disque entier, sda1=Windows, sda2=Ubuntu)',
-      'resize'      => 'Redimentionner les partitions à la taille du disque ?',
+      'resize'      => '<p style="color:red;">Décocher si installation Ubuntu avec VirtualBox</p>Redimentionner les partitions à la taille du disque ?',
       'post_script' => 'Exécuter le script POST_RUN',
       'pre_script'  => 'Exécuter le script PRE_RUN',
     ));
