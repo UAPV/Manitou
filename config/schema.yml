@@ -4,7 +4,7 @@ propel:
     id:             ~
     name:           { type: varchar, size: 30 }
     domain_name:    { type: varchar, size: 30 }
-    dns_server:     { type: varchar, size: 15, required: true }
+    dns_server:     { type: varchar, size: 40, required: true }
     gateway:        { type: varchar, size: 15, required: true }
     ip_address:     { type: varchar, size: 15, required: true }
     netmask:        { type: varchar, size: 15, required: true }
@@ -63,6 +63,7 @@ propel:
     id:             ~
     comment:        { type: varchar, size: 200, required: true }
     filename:       { type: varchar, size: 50, required: true }
+    author:         { type: varchar, size: 50, required: true }
     host_id:        { type: integer, foreignReference: id, foreignTable: host, fkPhpName: Host }
     image_server_id: ~
     _uniques:
