@@ -88,7 +88,7 @@ class CommandPeer extends BaseCommandPeer {
     else if($action == "d")
       $command->setLabel ('Suppression de la machine '.$cn.' du LDAP');
 
-    return $command;
+      $command->exec ();
   }
 
   public static function getCreateImageCommand (Image $image)
