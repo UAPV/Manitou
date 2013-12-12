@@ -80,6 +80,7 @@ class CommandPeer extends BaseCommandPeer {
   {
     $command = new Command ();
     $command->setCommand (sfConfig::get('sf_manitou_dhcp_ldap_command'));
+      echo "commande : ".sfConfig::get('sf_manitou_dhcp_ldap_command');die;
     $command->setArgument ('action', $action);
     $command->setArgument ('cn', $cn);
 
