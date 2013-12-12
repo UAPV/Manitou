@@ -202,7 +202,6 @@ class hostActions extends autoHostActions
             //On veut ajouter/supprimer la machine dans le ldap
             if(is_array($ldap) && $ldap[0] == 1)
             {
-              echo "on veut ajouter dans le ldap";die;
               CommandPeer::getLdapCommand('a',$Host->getHostname());
             }
             else
