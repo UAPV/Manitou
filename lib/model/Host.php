@@ -20,9 +20,10 @@
 class Host extends BaseHost {
 
   protected $needDnsUpdate = null;
-	protected $oldSubnet = null;
-	protected static $commentSvn = 'Mise a jour SVN';
-	protected $new = null;
+  protected $oldSubnet = null;
+  protected static $commentSvn = 'Mise a jour SVN';
+  protected $new = null;
+  protected static $cn = null;
 
   public function __toString ()
   {
@@ -38,6 +39,12 @@ class Host extends BaseHost {
   public function getHostname ()
   {
     return $this->getProfile().'-'.$this->getRoom ().'-'.$this->getNumber ();
+  }
+
+  public static function setCn($cn)
+  {
+    if( self::$cn == null)
+      self::$cn = $cn;
   }
 
   public function getDomainName ()
@@ -186,6 +193,13 @@ class Host extends BaseHost {
 		return parent::preSave ($con);
   }
 
+  public function delete(PropelPDO $conn = null)
+  {
+    self::setCn($this->getHostname());
+
+    return parent::delete($conn);
+  }
+
   /**
    * Code to be after before deleting the object in database
    * @param PropelPDO $con
@@ -193,9 +207,20 @@ class Host extends BaseHost {
    */
   public function postDelete(PropelPDO $con = null)
   {
-    parent::postDelete ($con);
+      parent::postDelete ($con);
 
-    CommandPeer::runDnsUpdate (array($this),null, self::$commentSvn, $this);
+		$arrayFilesToChange = array();
+		$filenameReverse = 'db.'.$this->getDomainName();
+		$ipBase = $this->getSubnet ()->getIpAddress();
+		$ipBase = substr ($ipBase, 0, strpos ($ipBase, '.0'));
+		$filename = 'db.'.$ipBase;
+		$arrayFilesToChange[] = $filenameReverse;
+		$arrayFilesToChange[] = $filename;
+
+    //On supprime la machine du ldap
+    self::supressionLdapHost(self::$cn);
+
+    CommandPeer::runDnsUpdate (array($this),$arrayFilesToChange, self::$commentSvn, $this);
     CommandPeer::runDhcpdUpdate (self::$commentSvn);
   }
 
@@ -251,5 +276,32 @@ class Host extends BaseHost {
        return true;
      else
        return false;
+  }
+
+ /**
+  * On ajoute la machine dans le ldap
+  */
+  public function ajoutLdap()
+  {
+    echo "on ajoute la machine dans le ldap et on veut lancer la commande suivante : sh ldap_machine.sh -a ".$this->getHostname();die;
+    exec('sh ldap_machine.sh -a '.$this->getHostname());
+  }
+
+ /**
+  * On supprime la machine dans le ldap
+  */
+  public function supressionLdap()
+  {
+    echo "on supprime la machine dans le ldap et on veut lancer la commande suivante : sh ldap_machine.sh -d ".$this->getHostname();die;
+    exec('sh ldap_machine.sh -d '.$this->getHostname());
+  }
+
+ /**
+  * On supprime la machine dans le ldap
+  */
+  public static function supressionLdapHost($cn)
+  {
+    echo "on supprime la machine dans le ldap et on veut lancer la commande suivante : sh ldap_machine.sh -d ".$cn;die;
+    exec('sh ldap_machine.sh -d '.$cn);
   }
 } // Host

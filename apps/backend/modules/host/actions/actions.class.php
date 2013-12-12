@@ -193,10 +193,20 @@ class hostActions extends autoHostActions
 		if ($form->isValid())
 		{
 			$commentSVN = $form->getValue('commentSvn');
+            $ldap = $form->getValue('ldap');
 			$notice = $form->getObject()->isNew() ? 'The item was created successfully.' : 'The item was updated successfully.';
 
 			Host::setCommentSvn($commentSVN);
 			$Host = $form->save();
+
+            //On veut ajouter la machine dans le ldap
+            if(is_array($ldap) && $ldap[0] == 1)
+              $Host->ajoutLdap();
+            else
+            {
+              //On supprime la machine du ldap
+              $Host->supressionLdap();
+            }
 
 			$this->dispatcher->notify(new sfEvent($this, 'admin.save_object', array('object' => $Host)));
 

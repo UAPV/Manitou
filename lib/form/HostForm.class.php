@@ -29,7 +29,8 @@ class HostForm extends BaseHostForm
       'cloned_from_image_id' => 'Image système',
       'subnet_id'            => 'Subnet',
       'pxe_file_id'          => 'Fichier PXE',
-			'commentSvn'					 => 'Commentaires SVN'
+	  'commentSvn'			 => 'Commentaires SVN',
+      'ldap'                 => 'Ajout LDAP'
     ));
 
     $this->widgetSchema->setHelps (array (
@@ -42,14 +43,19 @@ class HostForm extends BaseHostForm
       'comment'              => 'Commentaire (ex: numéro de prise, etc)',
       'custom_conf'          => 'Conf DHCP personnalisée',
       'cloned_from_image_id' => 'Dernière image système appliquée',
+      'ldap'                 => 'Ajouter la machine dans le ldap',
       'pxe_file_id'          => 'Fichier PXE (par défaut celui configuré pour le subnet sera utilisé)',
-			'commentSvn'					 => 'Commentaire affiché lors du commit SVN'
+	  'commentSvn'			 => 'Commentaire affiché lors du commit SVN'
     ));
 
-		$this->widgetSchema['commentSvn'] = new sfWidgetFormInputText(array('label' => 'Commentaire SVN'));
+
+      $this->widgetSchema['ldap'] = new sfWidgetFormChoice(array('expanded' => true, 'multiple' => true, 'choices' => array(1 => '')));
+      $this->validatorSchema['ldap'] = new sfValidatorChoice(array('multiple'=>true,'choices' => array(1),'required'=>false));
+
+	$this->widgetSchema['commentSvn'] = new sfWidgetFormInputText(array('label' => 'Commentaire SVN'));
     $this->setValidator ('ip_address', new sfValidatorIpAddress(array('required' => true)));
     $this->setValidator ('mac_address', new sfValidatorMacAddress(array('required' => true)));
-		$this->setValidator('commentSvn', new sfValidatorString(array('required' => false)));
+	$this->setValidator('commentSvn', new sfValidatorString(array('required' => false)));
 
     $this->validatorSchema->setPostValidator(
       new sfValidatorAnd(array(
