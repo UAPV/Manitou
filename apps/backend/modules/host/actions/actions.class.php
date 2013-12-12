@@ -199,14 +199,11 @@ class hostActions extends autoHostActions
 			Host::setCommentSvn($commentSVN);
 			$Host = $form->save();
 
-            //On veut ajouter la machine dans le ldap
+            //On veut ajouter/supprimer la machine dans le ldap
             if(is_array($ldap) && $ldap[0] == 1)
-              $Host->ajoutLdap();
+              CommandPeer::getLdapCommand('a',$Host->getHostname());
             else
-            {
-              //On supprime la machine du ldap
-              $Host->supressionLdap();
-            }
+              CommandPeer::getLdapCommand('d',$Host->getHostname());
 
 			$this->dispatcher->notify(new sfEvent($this, 'admin.save_object', array('object' => $Host)));
 

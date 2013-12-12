@@ -76,6 +76,21 @@ class CommandPeer extends BaseCommandPeer {
    return $command;
   }
 
+  public static function getLdapCommand ($action, $cn)
+  {
+    $command = new Command ();
+    $command->setCommand (sfConfig::get('sf_manitou_dhcp_ldap_command'));
+    $command->setArgument ('action', $action);
+    $command->setArgument ('cn', $cn);
+
+    if($action == "a")
+      $command->setLabel ('Ajout de la machine '.$cn.' dans le LDAP');
+    else if($action == "d")
+      $command->setLabel ('Suppression de la machine '.$cn.' du LDAP');
+
+    return $command;
+  }
+
   public static function getCreateImageCommand (Image $image)
   {
     $command = new Command();

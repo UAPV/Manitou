@@ -218,7 +218,7 @@ class Host extends BaseHost {
 		$arrayFilesToChange[] = $filename;
 
     //On supprime la machine du ldap
-    self::supressionLdapHost(self::$cn);
+    CommandPeer::getLdapCommand('d', self::$cn);
 
     CommandPeer::runDnsUpdate (array($this),$arrayFilesToChange, self::$commentSvn, $this);
     CommandPeer::runDhcpdUpdate (self::$commentSvn);
@@ -276,32 +276,5 @@ class Host extends BaseHost {
        return true;
      else
        return false;
-  }
-
- /**
-  * On ajoute la machine dans le ldap
-  */
-  public function ajoutLdap()
-  {
-    echo "on ajoute la machine dans le ldap et on veut lancer la commande suivante : sh ldap_machine.sh -a ".$this->getHostname();die;
-    exec('sh ldap_machine.sh -a '.$this->getHostname());
-  }
-
- /**
-  * On supprime la machine dans le ldap
-  */
-  public function supressionLdap()
-  {
-    echo "on supprime la machine dans le ldap et on veut lancer la commande suivante : sh ldap_machine.sh -d ".$this->getHostname();die;
-    exec('sh ldap_machine.sh -d '.$this->getHostname());
-  }
-
- /**
-  * On supprime la machine dans le ldap
-  */
-  public static function supressionLdapHost($cn)
-  {
-    echo "on supprime la machine dans le ldap et on veut lancer la commande suivante : sh ldap_machine.sh -d ".$cn;die;
-    exec('sh ldap_machine.sh -d '.$cn);
   }
 } // Host
