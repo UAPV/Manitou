@@ -51,8 +51,8 @@ class HostForm extends BaseHostForm
 
     if($this->getObject()->inLdap())
     {
-      $this->setDefault('ldap',1);
       $this->widgetSchema['ldap'] = new sfWidgetFormChoice(array('expanded' => true, 'multiple' => true, 'choices' => array(1 => '')));
+      $this->setDefault('ldap',1);
     }
     else
       $this->widgetSchema['ldap'] = new sfWidgetFormChoice(array('expanded' => true, 'multiple' => true, 'choices' => array(1 => '')));
