@@ -284,9 +284,13 @@ class Host extends BaseHost {
   {
     $retour = array();
     $command = "ldapsearch -x -LLL -h ldap.univ-avignon.fr -b 'ou=people,dc=univ-avignon,dc=fr' '(cn=".$this->getHostname().")'";
-    echo "on regarde ce que nous renvoie $command";
+    //echo "on regarde ce que nous renvoie $command";
     exec($command, $retour);
 
-    var_dump($retour);
+     if(count($retour) == 0)
+         return false;
+      else
+          return true;
+    //var_dump($retour);
   }
 } // Host
