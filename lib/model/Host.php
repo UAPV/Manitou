@@ -287,6 +287,6 @@ class Host extends BaseHost {
     echo "on regarde ce que nous renvoie $command";
     exec($command, $retour);
 
-    var_dump($retour);die;
+    var_dump($retour);
   }
 } // Host
