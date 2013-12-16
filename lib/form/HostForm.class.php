@@ -49,13 +49,12 @@ class HostForm extends BaseHostForm
     ));
 
 
-      if($this->getObject())
-          echo "on a un objet deja";
-      else
-          echo "pas d'objet";
-
+    if($this->getObject()->inLdap())
       $this->widgetSchema['ldap'] = new sfWidgetFormChoice(array('expanded' => true, 'multiple' => true, 'choices' => array(1 => '')));
-      $this->validatorSchema['ldap'] = new sfValidatorChoice(array('multiple'=>true,'choices' => array(1),'required'=>false));
+    else
+      $this->widgetSchema['ldap'] = new sfWidgetFormChoice(array('expanded' => true, 'multiple' => true, 'choices' => array(1 => '')));
+
+    $this->validatorSchema['ldap'] = new sfValidatorChoice(array('multiple'=>true,'choices' => array(1),'required'=>false));
 
 	$this->widgetSchema['commentSvn'] = new sfWidgetFormInputText(array('label' => 'Commentaire SVN'));
     $this->setValidator ('ip_address', new sfValidatorIpAddress(array('required' => true)));
