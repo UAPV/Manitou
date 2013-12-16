@@ -206,7 +206,6 @@ class hostActions extends autoHostActions
             }
             else
             {
-              echo "on veut supprimer dans le ldap";die;
               CommandPeer::getLdapCommand('d',$Host->getHostname());
             }
 
