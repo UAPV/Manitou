@@ -282,15 +282,18 @@ class Host extends BaseHost {
   //On vérifie que l'hôte est dans le ldap pour cocher la checkbox associée
   public function inLdap()
   {
-    $retour = array();
+    /*$retour = array();
     $command = "ldapsearch -x -LLL -h ldap.univ-avignon.fr -b 'ou=people,dc=univ-avignon,dc=fr' '(cn=".$this->getHostname().")'";
     //echo "on regarde ce que nous renvoie $command";
-    exec($command, $retour);
+    exec($command, $retour);*/
 
-     if(count($retour) == 0)
-         return false;
-      else
-          return true;
-    //var_dump($retour);
+    $ldap = new uapvLdap();
+    sfContext::getInstance()->set('ldap', $ldap);
+    $tab = $ldap->search('cn='.$this->getHostname());
+
+    if(count($tab) > 0)
+      return true;
+    else
+      return false;
   }
 } // Host
