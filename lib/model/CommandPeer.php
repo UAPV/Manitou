@@ -91,6 +91,17 @@ class CommandPeer extends BaseCommandPeer {
       $command->exec ();
   }
 
+    public static function getSuppressionImageCommand ($host, $file)
+    {
+        $command = new Command ();
+        $command->setCommand (sfConfig::get('sf_manitou_image_suppression_command'));
+        $command->setArgument ('host', $host);
+        $command->setArgument ('file', $file);
+        $command->setLabel ('Supp de l\'image '.$file.' ('.$host.')');
+
+        $command->exec ();
+    }
+
   public static function getCreateImageCommand (Image $image)
   {
     $command = new Command();

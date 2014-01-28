@@ -19,10 +19,44 @@
  */
 class Image extends BaseImage {
 
+  protected static $fileName;
+  protected static $host;
+
   public function __toString()
   {
     return $this->getFilename().' ('.$this->getComment().')';
     //return $this->getComment().' ('.$this->getFilename().')';
+  }
+
+  public function delete(PropelPDO $conn = null)
+  {
+    self::setFile($this->getFilename());
+    self::setHostImage($this->getHost());
+
+    return parent::delete($conn);
+  }
+
+  public static function setFile($val)
+  {
+    self::$fileName = $val;
+  }
+
+  public static function setHostImage($val)
+  {
+    self::$host = $val;
+  }
+
+ /**
+  * Code to be after before deleting the object in database
+  * @param PropelPDO $con
+  * @return boolean
+  */
+  public function postDelete(PropelPDO $con = null)
+  {
+    parent::postDelete ($con);
+
+    //On lance le script de suppression
+    CommandPeer::getSuppressionImageCommand(self::$host, self::$fileName);
   }
 
 } //ge
