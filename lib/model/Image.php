@@ -31,7 +31,7 @@ class Image extends BaseImage {
   public function delete(PropelPDO $conn = null)
   {
     self::setFile($this->getFilename());
-    self::setHostImage($this->getHost());
+    self::setHostServer($this->getImageServer()->getHostname());
 
     return parent::delete($conn);
   }
@@ -41,7 +41,7 @@ class Image extends BaseImage {
     self::$fileName = $val;
   }
 
-  public static function setHostImage($val)
+  public static function setHostServer($val)
   {
     self::$host = $val;
   }
