@@ -64,6 +64,7 @@ class MultipleHostForm extends BaseForm
   {
     $macAddresses = $values['mac_addresses']; // Tableau (transformé depuis un string par le sfValidatorMacAddress)
 
+      var_dump($macAddresses);die;
     $hostNumber = count ($macAddresses);
     $ipBase = explode ('.', $values['first_ip_address']);
     $ipCounter = (int) array_pop ($ipBase);
