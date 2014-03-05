@@ -62,6 +62,7 @@ class MultipleHostForm extends BaseForm
 
   public function checkHosts ($validator, $values)
   {
+      var_dump($validator);
       echo "<pre>";var_dump($values);echo "</pre>";die;
     $macAddresses = $values[mac_addresses]; // Tableau (transformé depuis un string par le sfValidatorMacAddress)
 
