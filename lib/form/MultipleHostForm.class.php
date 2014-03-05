@@ -62,10 +62,8 @@ class MultipleHostForm extends BaseForm
 
   public function checkHosts ($validator, $values)
   {
-      echo "<pre>";var_dump($values);echo "</pre>";die;
     $macAddresses = $values[mac_addresses]; // Tableau (transformé depuis un string par le sfValidatorMacAddress)
 
-      var_dump($macAddresses);die;
     $hostNumber = count ($macAddresses);
     $ipBase = explode ('.', $values['first_ip_address']);
     $ipCounter = (int) array_pop ($ipBase);
