@@ -62,7 +62,7 @@ class sfValidatorMacAddress extends sfValidatorString
         echo "la";
     }
 
-      var_dump($matches[0]);die;
+      var_dump($matches);die;
     return $matches[0];
   }
 }
