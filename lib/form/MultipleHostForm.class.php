@@ -30,7 +30,7 @@ class MultipleHostForm extends BaseForm
       'first_ip_address'     => new sfValidatorIpAddress(array('required' => true)),
       'subnet_id'            => new sfValidatorPropelChoice(array('model' => 'Subnet', 'column' => 'id', 'required' => false, 'required' => true)),
       'pxe_file_id'          => new sfValidatorPropelChoice(array('model' => 'PxeFile', 'column' => 'id', 'required' => false)),
-      'mac_addresses'        => new sfValidatorMacAddress(array('multiple' => true)),
+      'mac_addresses'        => new sfValidatorMacAddress(array('multiple' => true, 'masse' => true)),
     ));
 
     $this->widgetSchema->setLabels(array(
