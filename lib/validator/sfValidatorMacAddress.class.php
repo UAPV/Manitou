@@ -50,6 +50,7 @@ class sfValidatorMacAddress extends sfValidatorString
           if (preg_match_all ($pattern.'m', $value, $matches) < 1)
               throw new sfValidatorError($this, 'Format "%value%" des adresses MAC incorrect', array('value' => $value));
 
+          var_dump($matches);
           return $matches;
       }
     else
