@@ -44,7 +44,7 @@ class sfValidatorMacAddress extends sfValidatorString
         throw new sfValidatorError($this, 'Format "%value%" des adresses MAC incorrect', array('value' => $value));
 
         echo "dans 1 :";
-        var_dump($matches);
+        var_dump($matches);die;
       $matches = $matches[0];
     }
     elseif ($this->getOption('multiple') && $this->getOption('masse'))
@@ -53,7 +53,7 @@ class sfValidatorMacAddress extends sfValidatorString
         throw new sfValidatorError($this, 'Format "%value%" des adresses MAC incorrect', array('value' => $value));
 
         echo "dans 2 :";
-        var_dump($matches);
+        var_dump($matches);die;
         $matches = $matches[0];
     }
     else
