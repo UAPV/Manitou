@@ -48,7 +48,6 @@ class sfValidatorMacAddress extends sfValidatorString
     }
     else
     {
-        echo "option : la ".$this->getOption('masse');die;
       if (preg_match ($pattern, $value, $matches) !== 1)
         throw new sfValidatorError($this, 'Format "%value%" de l\'adresse MAC incorrect', array('value' => $value));
     }
