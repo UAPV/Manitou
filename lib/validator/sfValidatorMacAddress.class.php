@@ -34,6 +34,7 @@ class sfValidatorMacAddress extends sfValidatorString
   protected function doClean($value)
   {
     parent::doClean($value);
+      echo "option : ".$this->getOption('masse');die;
 
     $pattern = '/^\s*[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}\s*$/i';
     $matches = array ();
@@ -43,23 +44,12 @@ class sfValidatorMacAddress extends sfValidatorString
       if (preg_match_all ($pattern.'m', $value, $matches) < 1)
         throw new sfValidatorError($this, 'Format "%value%" des adresses MAC incorrect', array('value' => $value));
 
-        echo "ici";
      $matches = $matches[0];
     }
-   /* elseif ($this->getOption('multiple') && $this->getOption('masse'))
-      {
-          if (preg_match_all ($pattern.'m', $value, $matches) < 1)
-              throw new sfValidatorError($this, 'Format "%value%" des adresses MAC incorrect', array('value' => $value));
-
-          var_dump($matches);
-          return $matches;
-      }*/
     else
     {
       if (preg_match ($pattern, $value, $matches) !== 1)
         throw new sfValidatorError($this, 'Format "%value%" de l\'adresse MAC incorrect', array('value' => $value));
-
-        echo "la";
     }
 
       var_dump($matches);die;
