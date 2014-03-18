@@ -20,6 +20,7 @@ generator:
         subnet:            { label: Subnet }
         pxe:               { label: Fichier Pxe }
         commentSvn:        { label: Commentaire SVN }
+        ldap:              { label: Poste authentifié ? }
       list:
         title: Gestion des machines
         display: [=hostname, ip_address, mac_address, subnet, pxe]
