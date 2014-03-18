@@ -30,7 +30,7 @@ class HostForm extends BaseHostForm
       'subnet_id'            => 'Subnet',
       'pxe_file_id'          => 'Fichier PXE',
 	  'commentSvn'			 => 'Commentaires SVN',
-      'ldap'                 => 'Ajout LDAP'
+      'ldap'                 => 'Poste authentifié ?'
     ));
 
     $this->widgetSchema->setHelps (array (
@@ -43,7 +43,7 @@ class HostForm extends BaseHostForm
       'comment'              => 'Commentaire (ex: numéro de prise, etc)',
       'custom_conf'          => 'Conf DHCP personnalisée',
       'cloned_from_image_id' => 'Dernière image système appliquée',
-      'ldap'                 => 'Ajouter la machine dans le ldap',
+      'ldap'                 => 'Ajouter la machine au domaine',
       'pxe_file_id'          => 'Fichier PXE (par défaut celui configuré pour le subnet sera utilisé)',
 	  'commentSvn'			 => 'Commentaire affiché lors du commit SVN'
     ));
