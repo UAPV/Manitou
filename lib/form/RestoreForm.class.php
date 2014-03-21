@@ -17,7 +17,7 @@ class RestoreForm extends BaseForm
     // $diskChoices = array ('sda' => 'Disque entier', 'sda1' => 'Windows', 'sda2' => 'Ubuntu');
 
     $this->setWidgets (array(
-      'image'       => new sfWidgetFormPropelChoice (array('model' => 'Image', 'order_by' => array('filename','desc'))),
+      'image'       => new sfWidgetFormPropelChoice (array('model' => 'Image', 'order_by' => array('Filename','desc'))),
       'hosts'       => new sfWidgetFormPropelChoice (array('model' => 'Host', 'multiple' => true, 'expanded' => true)),
       'state'       => new sfWidgetFormChoice (array('choices' => $stateChoices)),
       'partition'   => new sfWidgetFormInputText(array('default'=>'sda')),
