@@ -334,7 +334,7 @@ EOF
            }
        }
 
-          $tmp = ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;";
+          $arrayDns['separation'] = ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;";
           foreach ($entries as $entry)
           {
              foreach($arrayDns as $key => $line)
@@ -422,7 +422,6 @@ EOF
              $arrayDns[$key] = array($newContent);
          }
 
-             //print_r($arrayDns);die;
          $data = array();
 
          //on écrit dans le fichier les lignes
@@ -448,7 +447,7 @@ EOF
           $contentHeader = implode("\n", $header);
           $filePath = $path.$filename;
 
-          file_put_contents ($filePath, $contentHeader."\nTESTTTTTT\n".$nvContent);
+          file_put_contents ($filePath, $contentHeader."\n".$nvContent);
         }
       }
   }
