@@ -339,6 +339,8 @@ EOF
           $key = key($lastElement);
           $arrayDns[$key] = $lastElement."\n$separateur";
 
+             var_dump($arrayDns);die;
+
           foreach ($entries as $entry)
           {
              foreach($arrayDns as $key => $line)
