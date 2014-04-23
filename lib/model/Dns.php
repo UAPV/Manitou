@@ -417,20 +417,20 @@ EOF
              $key = str_pad($entry['hostname'], 24);
              $com = array("; UPDATED BY MANITOU --> DON'T TOUCH ;)");
              $key = str_replace(' ','',$key);
-    		 $newContent = $entry['hostname']."\t\t".'IN'."\t".'A'."\t".$entry['ip']."  $com\n";
-             $arrayDns[$key] = $newContent;
+            // $newContent = str_pad ($entry['hostname'], 24).'    IN    A    '.$entry['ip']."\n";
+		     $newContent = $entry['hostname']."\t\t".'IN'."\t".'A'."\t".$entry['ip']."  $key\n";
+             $arrayDns[$key] = array($newContent);
          }
 
              //print_r($arrayDns);die;
          $data = array();
 
          //on écrit dans le fichier les lignes
-         foreach($arrayDns as $key => $ligne)
+         foreach($arrayDns as $key=>$ligne)
          {
            if($key != "")
            {
-               $data[] = $ligne;
-             /*foreach($ligne as $nvLigne)
+             foreach($ligne as $nvLigne)
              {
                if(is_array($nvLigne))
                {
@@ -439,7 +439,7 @@ EOF
                }
                else
                   $data[] = $nvLigne;
-              }*/
+              }
             }
           }
 
