@@ -447,7 +447,6 @@ EOF
                          $separation = true;
                          $separateur = ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;";
                          $data[] = $nvLigne."\n".$separateur;
-                           echo "on est la";die;
                        }
                        else
                          $data[] = $nvLigne;
@@ -460,6 +459,7 @@ EOF
             }
           }
 
+             var_dump($data);die;
           //on récupère le tableau de content en string puis on l'écrit dans le fichier
           $nvContent = implode("\n",$data);
           $contentHeader = implode("\n", $header);
