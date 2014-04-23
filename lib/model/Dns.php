@@ -103,12 +103,12 @@ class Dns
                     $comment[] = $content[$i];
                 }
               }
-              elseif(preg_match('/^;\s+UPDATED\s+BY\s+MANITOU\s+/i', $content[$i]) === 1)
+              elseif(preg_match('/;\s+UPDATED\s+BY\s+MANITOU\s+/i', $content[$i]) === 1)
               {
                   $i = $i+1;
               }
               //sinon si elle est marquée "DELETION MARKED", on la supprime
-              elseif(preg_match('/^;\s+\[MANITOU\]\s+MARKED\s+FOR\s+DELETION/i', $content[$i]) === 0)
+              elseif(preg_match('/;\s+\[MANITOU\]\s+MARKED\s+FOR\s+DELETION/i', $content[$i]) === 0)
               {
                   //on sauvergarde le commentaire en cours pour l'assigner à l'host suivant
                   if(isset($content[$i]) && $content[$i] != '')
@@ -116,7 +116,7 @@ class Dns
               }
           }
 
-
+          $tmp = ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;";
           //on rajoute les fichiers de Manitou puis on trie le tableau
           foreach ($entries as $cle => $entry)
           {
@@ -191,10 +191,10 @@ EOF
 							$key = $entry['ip'];
 							$com = array("; UPDATED BY MANITOU --> DON'T TOUCH ;)");
 							//$newContent = str_pad ($entry['ip'], 16).' IN PTR '.$entry['fqdn'].".\n";
-							$newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".\n";
+							$newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'];
 							$arrayDns["$key"] = array($com, $newContent);
          	 }
-					}
+		    }
 
           if(!function_exists('compare'))
           {
@@ -260,7 +260,7 @@ EOF
           $nvContent = implode("\n",$data);
           $contentHeader = implode("\n", $header);
 
-          file_put_contents ($path.$filename, $contentHeader."\n".$nvContent);
+          file_put_contents ($path.$filename, $contentHeader."\n".$tmp."\n".$nvContent);
         }
       }
 
