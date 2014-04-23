@@ -312,7 +312,7 @@ EOF
               $first = false;
            }
            //on est tjs dans le header mais on croise le premier commentaire
-           elseif($first && preg_match('/^;\s+UPDATED\s+BY\s+MANITOU\s+/', $content[$i]) === 0)
+           elseif($first && preg_match('/;\s+UPDATED\s+BY\s+MANITOU\s+/', $content[$i]) === 0)
            {
                if(preg_match($regexCom,$content[$i]) === 1)
                {
@@ -321,12 +321,12 @@ EOF
                    $comment[] = $content[$i];
                }
            }
-           elseif(preg_match('/^;\s+UPDATED\s+BY\s+MANITOU\s+/', $content[$i]) === 1)
+           elseif(preg_match('/;\s+UPDATED\s+BY\s+MANITOU\s+/', $content[$i]) === 1)
            {
               $i = $i+1;
            }
            //sinon si elle est marquée "DELETION MARKED", on la supprime
-           elseif(preg_match('/^;\s+\[MANITOU\]\s+MARKED\s+FOR\s+DELETION/', $content[$i]) === 0)
+           elseif(preg_match('/;\s+\[MANITOU\]\s+MARKED\s+FOR\s+DELETION/', $content[$i]) === 0)
            {
              //on sauvergarde le commentaire en cours pour l'assigner à l'host suivant
              if(isset($content[$i]))
@@ -418,7 +418,7 @@ EOF
              $com = "; UPDATED BY MANITOU --> DON'T TOUCH ;)";
              $key = str_replace(' ','',$key);
             // $newContent = str_pad ($entry['hostname'], 24).'    IN    A    '.$entry['ip']."\n";
-					 $newContent = $entry['hostname']."\t\t".'IN'."\t".'A'."\t".$entry['ip']."  $com";
+		     $newContent = $entry['hostname']."\t\t".'IN'."\t".'A'."\t".$entry['ip']."  $com";
              $arrayDns[$key] = array($newContent);
          }
 
@@ -444,7 +444,7 @@ EOF
           }
 
           //on récupère le tableau de content en string puis on l'écrit dans le fichier
-          $nvContent = implode("\n",$data);
+          $nvContent = implode("",$data);
           $contentHeader = implode("\n", $header);
           $filePath = $path.$filename;
 
