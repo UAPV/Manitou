@@ -334,13 +334,7 @@ EOF
            }
        }
 
-          $separateur = ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;";
-          $lastElement = end($arrayDns);
-          $key = key($lastElement);
-          $arrayDns[$key] = $lastElement."\n$separateur";
-
-             var_dump($arrayDns);die;
-
+          $separation = false;
           foreach ($entries as $entry)
           {
              foreach($arrayDns as $key => $line)
@@ -431,6 +425,7 @@ EOF
          $data = array();
 
          //on écrit dans le fichier les lignes
+         $separation = false;
          foreach($arrayDns as $key=>$ligne)
          {
            if($key != "")
@@ -443,7 +438,22 @@ EOF
                       $data[] = $comment;
                }
                else
-                  $data[] = $nvLigne;
+               {
+                   if(!$separation)
+                   {
+                       if(preg_match('/;\s+UPDATED\s+BY\s+MANITOU\s+/', $nvLigne) === 1)
+                       {
+                         $separation = true;
+                         $separateur = ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;";
+                         $data[] = $nvLigne."\n".$separateur;
+                       }
+                       else
+                         $data[] = $nvLigne;
+                   }
+                   else
+                       $data[] = $nvLigne;
+               }
+
               }
             }
           }
