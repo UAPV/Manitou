@@ -334,7 +334,11 @@ EOF
            }
        }
 
-          $arrayDns['separation'] = ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;";
+          $separateur = ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;";
+          $lastElement = end($arrayDns);
+          $key = key($lastElement);
+          $arrayDns[$key] = $lastElement."\n";
+
           foreach ($entries as $entry)
           {
              foreach($arrayDns as $key => $line)
