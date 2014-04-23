@@ -332,8 +332,10 @@ EOF
              //on sauvergarde le commentaire en cours pour l'assigner à l'host suivant
              if(isset($content[$i]))
                $comment[] = $content[$i];
+
            }
        }
+
 
          foreach ($entries as $entry)
          {
@@ -418,8 +420,8 @@ EOF
              $com = array("; UPDATED BY MANITOU --> DON'T TOUCH ;)");
              $key = str_replace(' ','',$key);
             // $newContent = str_pad ($entry['hostname'], 24).'    IN    A    '.$entry['ip']."\n";
-		     $newContent = $entry['hostname']."\t\t".'IN'."\t".'A'."\t".$entry['ip']."  $key\n";
-             $arrayDns[$key] = array($newContent);
+					 $newContent = $entry['hostname']."\t\t".'IN'."\t".'A'."\t".$entry['ip']."\n";
+             $arrayDns[$key] = array($com, $newContent);
          }
 
              //print_r($arrayDns);die;
