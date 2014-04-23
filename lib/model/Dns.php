@@ -337,7 +337,7 @@ EOF
           $separateur = ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;";
           $lastElement = end($arrayDns);
           $key = key($lastElement);
-          $arrayDns[$key] = $lastElement."\n";
+          $arrayDns[$key] = $lastElement."\n$separateur";
 
           foreach ($entries as $entry)
           {
