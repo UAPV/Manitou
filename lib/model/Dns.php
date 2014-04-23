@@ -446,7 +446,7 @@ EOF
                        {
                          $separation = true;
                          $separateur = ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;";
-                         $data[] = "\n".$separateur."\n".$nvLigne;
+                         $data[] = "\n".$separateur."\n\n".$nvLigne;
                        }
                        else
                          $data[] = $nvLigne;
