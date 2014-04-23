@@ -116,7 +116,6 @@ class Dns
               }
           }
 
-          $tmp = ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;";
           //on rajoute les fichiers de Manitou puis on trie le tableau
           foreach ($entries as $cle => $entry)
           {
@@ -191,7 +190,7 @@ EOF
 							$key = $entry['ip'];
 							$com = array("; UPDATED BY MANITOU --> DON'T TOUCH ;)");
 							//$newContent = str_pad ($entry['ip'], 16).' IN PTR '.$entry['fqdn'].".\n";
-							$newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'];
+							$newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn']."\n";
 							$arrayDns["$key"] = array($com, $newContent);
          	 }
 		    }
@@ -260,7 +259,7 @@ EOF
           $nvContent = implode("\n",$data);
           $contentHeader = implode("\n", $header);
 
-          file_put_contents ($path.$filename, $contentHeader."\n".$tmp."\n".$nvContent);
+          file_put_contents ($path.$filename, $contentHeader."\n".$nvContent);
         }
       }
 
@@ -332,13 +331,12 @@ EOF
              //on sauvergarde le commentaire en cours pour l'assigner à l'host suivant
              if(isset($content[$i]))
                $comment[] = $content[$i];
-
            }
        }
 
-
-         foreach ($entries as $entry)
-         {
+          $tmp = ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;";
+          foreach ($entries as $entry)
+          {
              foreach($arrayDns as $key => $line)
              {
 
@@ -420,7 +418,7 @@ EOF
              $com = "; UPDATED BY MANITOU --> DON'T TOUCH ;)";
              $key = str_replace(' ','',$key);
             // $newContent = str_pad ($entry['hostname'], 24).'    IN    A    '.$entry['ip']."\n";
-					 $newContent = $entry['hostname']."\t\t".'IN'."\t".'A'."\t".$entry['ip']."  $com\n";
+					 $newContent = $entry['hostname']."\t\t".'IN'."\t".'A'."\t".$entry['ip']."  $com";
              $arrayDns[$key] = array($newContent);
          }
 
@@ -450,7 +448,7 @@ EOF
           $contentHeader = implode("\n", $header);
           $filePath = $path.$filename;
 
-          file_put_contents ($filePath, $contentHeader."\n".$nvContent);
+          file_put_contents ($filePath, $contentHeader."\n".$tmp."\n".$nvContent);
         }
       }
   }
