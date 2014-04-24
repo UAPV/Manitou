@@ -38,7 +38,10 @@ class Host extends BaseHost {
 
   public function getHostname ()
   {
-    return $this->getProfile().'-'.$this->getRoom ().'-'.$this->getNumber ();
+    if($this->getProfile() != '')
+      return $this->getProfile().'-'.$this->getRoom ().'-'.$this->getNumber ();
+    else
+      return $this->getRoom ().'-'.$this->getNumber ();
   }
 
   public static function setCn($cn)
