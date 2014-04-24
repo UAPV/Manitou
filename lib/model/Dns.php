@@ -292,28 +292,7 @@ EOF
            $regex = '/^[A-Za-z0-9].*\s+IN\s+A/';
            $regexCom = '/^;+\s/';
 
-           //on est tjs dans le header mais on croise le premier commentaire
-           if($first && preg_match('/;\s+UPDATED\s+BY\s+MANITOU\s+/', $content[$i]) === 0)
-           {
-               if(preg_match($regexCom,$content[$i]) === 1)
-               {
-                   $first = false;
-                   unset($header[$i]);
-                   $comment[] = $content[$i];
-               }
-           }
-           elseif(preg_match('/;\s+UPDATED\s+BY\s+MANITOU\s+/', $content[$i]) === 1)
-           {
-               $i = $i+1;
-           }
-           //sinon si elle est marquée "DELETION MARKED", on la supprime
-           elseif(preg_match('/;\s+\[MANITOU\]\s+MARKED\s+FOR\s+DELETION/', $content[$i]) === 0)
-           {
-               //on sauvergarde le commentaire en cours pour l'assigner à l'host suivant
-               if(isset($content[$i]))
-                   $comment[] = $content[$i];
-           }
-           elseif(preg_match($regex,$content[$i]) === 1)
+           if(!$first && preg_match('/;\s+UPDATED\s+BY\s+MANITOU\s+/', $content[$i]) === 0)
            {
               //on récupère l'adresse ip pour le mettre en clé dans le tableau final
               $hostname = preg_replace('/\s+IN\s+A\s+.*/','',$content[$i]);
@@ -345,6 +324,7 @@ EOF
            }
            elseif(preg_match('/;\s+UPDATED\s+BY\s+MANITOU\s+/', $content[$i]) === 1)
            {
+               echo "on est la";die;
               $i = $i+1;
            }
            //sinon si elle est marquée "DELETION MARKED", on la supprime
@@ -354,7 +334,7 @@ EOF
              if(isset($content[$i]))
                $comment[] = $content[$i];
            }
-       }
+       }die;
 
           foreach ($entries as $entry)
           {
