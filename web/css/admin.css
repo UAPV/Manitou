@@ -167,3 +167,8 @@ ul#image_server_status li .hostname {
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
     background-color: #E1E1E1;
 }
+
+
+#noProfile {
+    color: #AAAAAA;
+}
