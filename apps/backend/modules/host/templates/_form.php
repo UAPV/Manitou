@@ -64,7 +64,7 @@
     })
 
     //la case "pas de profil" à été cochée
-    $('#noProfile').checked(function(){
+    $('#noProfile').click(function(){
         alert('ok');
         return false;
     })
