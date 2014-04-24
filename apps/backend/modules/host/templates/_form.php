@@ -65,12 +65,11 @@
 
     //la case "pas de profil" à été cochée
     $('#noProfile').click(function(){
-   /*     if( $(this).is(':checked') )
+        if( $(this).is(':checked') )
         {
-            $(this).attr('checked','checked');
-            $('#host_profile_id').append('<option value="no" selected="selected"></option>');
+           // $('#host_profile_id').append('<option value="no" selected="selected"></option>');
             return false;
-        }*/
+        }
     })
   });
 
