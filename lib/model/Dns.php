@@ -334,12 +334,11 @@ EOF
            }
        }
 
-          $separation = false;
           foreach ($entries as $entry)
           {
              foreach($arrayDns as $key => $line)
              {
-
+                 var_dump($line);die;
                  $ipClean = trim($entry['ip']);
 
                  // Si une entrée STRICTEMENT identique existe on écrit la nouvelle et on envoie un mail pour donner le nom de la machine remplacée
