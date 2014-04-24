@@ -62,6 +62,12 @@
         checkDns(profile, room, suffixe, true);
          return false;
     })
+
+    //la case "pas de profil" à été cochée
+    $('#noProfile').checked(function(){
+        alert('ok');
+        return false;
+    })
   });
 
   function checkDns(profile, room, suffixe, test)
