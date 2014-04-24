@@ -63,7 +63,7 @@ class HostForm extends BaseHostForm
     $this->widgetSchema['cloned_from_image_id'] = new sfWidgetFormPropelChoice (array('model' => 'Image', 'order_by' => array('Filename','asc')));
     $this->widgetSchema['cloned_from_image_id']->setLabel('Image système');
 
-    $this->widgetSchema['profile_id'] = new sfWidgetFormPropelChoice(array('model' => 'Profile', 'order_by' => array('Name','asc'), 'add_empty' => true));
+    $this->setValidator('profile_id', null);
 
 	$this->widgetSchema['commentSvn'] = new sfWidgetFormInputText(array('label' => 'Commentaire SVN'));
     $this->setValidator ('ip_address', new sfValidatorIpAddress(array('required' => true)));
