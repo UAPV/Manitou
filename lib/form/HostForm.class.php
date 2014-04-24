@@ -58,7 +58,10 @@ class HostForm extends BaseHostForm
       $this->widgetSchema['ldap'] = new sfWidgetFormChoice(array('expanded' => true, 'multiple' => true, 'choices' => array(1 => '')));
 
     $this->validatorSchema['ldap'] = new sfValidatorChoice(array('multiple'=>true,'choices' => array(1),'required'=>false));
-
+    $this->validatorSchema['profile_id'] = new sfValidatorString(
+          array('required' => false),
+          array()
+      );
 
     $this->widgetSchema['cloned_from_image_id'] = new sfWidgetFormPropelChoice (array('model' => 'Image', 'order_by' => array('Filename','asc')));
     $this->widgetSchema['cloned_from_image_id']->setLabel('Image système');
