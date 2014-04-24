@@ -320,6 +320,7 @@ EOF
                    $first = false;
                    unset($header[$i]);
                    $comment[] = $content[$i];
+                   echo "first devient false";die;
                }
            }
            elseif(preg_match('/;\s+UPDATED\s+BY\s+MANITOU\s+/', $content[$i]) === 1)
