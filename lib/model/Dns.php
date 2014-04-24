@@ -464,7 +464,7 @@ EOF
           $contentHeader = implode("\n", $header);
           $filePath = $path.$filename;
 
-          file_put_contents ($filePath, $contentHeader."\n".$nvContent);
+          file_put_contents ($filePath, $contentHeader."\n".$nvContent."\n");
         }
       }
   }
