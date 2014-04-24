@@ -190,7 +190,7 @@ EOF
 							$key = $entry['ip'];
 							$com = array("; UPDATED BY MANITOU --> DON'T TOUCH ;)");
 							//$newContent = str_pad ($entry['ip'], 16).' IN PTR '.$entry['fqdn'].".\n";
-							$newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn']."\n";
+							$newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".\n";
 							$arrayDns["$key"] = array($com, $newContent);
          	 }
 		    }
