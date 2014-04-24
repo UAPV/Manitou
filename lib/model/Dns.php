@@ -283,6 +283,7 @@ EOF
 
          for($i=0; $i < $lengh; $i++)
          {
+             echo $content[$i]."<br/>";
            //on garde le header tant qu'on n'a pas trouvé le premier host
            if($first)
              $header[] = $content[$i];
@@ -333,7 +334,7 @@ EOF
              if(isset($content[$i]))
                $comment[] = $content[$i];
            }
-       }
+       }die;
 
           foreach ($entries as $entry)
           {
