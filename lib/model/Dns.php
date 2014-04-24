@@ -283,7 +283,6 @@ EOF
 
          for($i=0; $i < $lengh; $i++)
          {
-             echo $content[$i]."<br/>";
            //on garde le header tant qu'on n'a pas trouvé le premier host
            if($first)
              $header[] = $content[$i];
@@ -292,7 +291,9 @@ EOF
            $regex = '/^[A-Za-z0-9].*\s+IN\s+A/';
            $regexCom = '/^;+\s/';
 
-           if(!$first && preg_match('/;\s+UPDATED\s+BY\s+MANITOU\s+/', $content[$i]) === 0)
+           if(preg_match('/^;;;;;/', $content[$i]) === 1)
+               $i = $i+1;
+           elseif(!$first && preg_match('/;\s+UPDATED\s+BY\s+MANITOU\s+/', $content[$i]) === 0)
            {
               //on récupère l'adresse ip pour le mettre en clé dans le tableau final
               $hostname = preg_replace('/\s+IN\s+A\s+.*/','',$content[$i]);
