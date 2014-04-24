@@ -55,7 +55,7 @@
         })
 
     //on regarde quand il fait save si l'hote existe deja et on lui demande validation apres un confirm
-     $('#testDns').click(function(){
+     $('#testDns').change(function(){
         var profile = $("#host_profile_id").val();
         var room = $("#host_room_id").val();
         var suffixe = $("#host_number").val();
