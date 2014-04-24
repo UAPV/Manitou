@@ -333,7 +333,7 @@ EOF
              if(isset($content[$i]))
                $comment[] = $content[$i];
            }
-       }die;
+       }
 
           foreach ($entries as $entry)
           {
