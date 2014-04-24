@@ -19,7 +19,7 @@ class HostForm extends BaseHostForm
     
     $this->widgetSchema->setLabels (array (
       'hostname'             => 'Nom',
-      'profile_id'           => 'Profil',
+      'profile_id'           => 'Profil2',
       'room_id'              => 'Salle',
       'number'               => 'Suffixe',
       'ip_address'           => 'Adresse IP',
