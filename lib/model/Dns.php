@@ -324,7 +324,6 @@ EOF
            }
            elseif(preg_match('/;\s+UPDATED\s+BY\s+MANITOU\s+/', $content[$i]) === 1)
            {
-               echo "on est la";die;
               $i = $i+1;
            }
            //sinon si elle est marquée "DELETION MARKED", on la supprime
