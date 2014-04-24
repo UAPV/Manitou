@@ -65,7 +65,7 @@
 
     //la case "pas de profil" à été cochée
     $('#noProfile').click(function(){
-        alert('ok');
+        $('#host_profile_id').append('<option value="no" selected="selected"></option>');
         return false;
     })
   });
