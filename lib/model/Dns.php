@@ -120,7 +120,6 @@ class Dns
           //on rajoute les fichiers de Manitou puis on trie le tableau
           foreach ($entries as $cle => $entry)
           {
-              echo "<pre>";var_dump($entry);echo "</pre>";die;
 							if(count($entry) > 0)
 							{
 								foreach($arrayDns as $key => $line)
@@ -189,10 +188,18 @@ EOF
 									//sfContext::getInstance()->getMailer()->send($message);
 								}
 							}
+
+                            //On récupère le commentaire si il existe
+                            $dataComm = explode(';', $line);
+
 							$key = $entry['ip'];
 							$com = "; UPDATED BY MANITOU --> DON'T TOUCH ;)";
-							//$newContent = str_pad ($entry['ip'], 16).' IN PTR '.$entry['fqdn'].".\n";
-							$newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".;".$com."\n";
+
+                            if(isset($dataComm[2]))
+							    $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".;".$com.";".$dataComm[2]."\n";
+                            else
+                                $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".;".$com."\n";
+
 							$arrayDns["$key"] = array($com, $newContent);
          	 }
 		    }
