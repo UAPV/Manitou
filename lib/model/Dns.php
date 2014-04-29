@@ -192,7 +192,11 @@ EOF
                             //On récupère le commentaire si il existe
                             $obj = HostQuery::create()->findOneByIpAddress($entry['ip']);
 							$com = "; UPDATED BY MANITOU --> DON'T TOUCH ;)";
-						    $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".;".$com.";".$obj->getComment()."\n";
+
+                            if(count($obj) > 0)
+						        $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".;".$com.";".$obj->getComment()."\n";
+                            else
+                                $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".;".$com."\n";
 
 							$arrayDns["$key"] = array($com, $newContent);
          	 }
