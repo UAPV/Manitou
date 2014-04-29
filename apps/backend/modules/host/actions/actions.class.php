@@ -163,6 +163,19 @@ class hostActions extends autoHostActions
      return $this->returnJSON($data);
   }
 
+  public function executeCommentProfil(sfWebRequest $request)
+  {
+      $profileId = $request->getParameter('profile');
+      $data = array();
+
+      $profile = ProfileQuery::create()
+          ->findPk($profileId);
+
+      $data['profil'] = $profile->getComment();
+
+      return $this->returnJSON($data);
+  }
+
   /**
    * Return in JSON when requested via AJAX or as plain text when requested directly in debug mode
    *

@@ -54,6 +54,13 @@
             checkDns(profile, room, suffixe, false);
         })
 
+    $('#host_profile_id').live('change', function(){
+        //On va chercher le commentaire associé à ce profil
+        var profile = $("#host_profile_id").val();
+        getCommentProfil(profile);
+        return false;
+    })
+
     //on regarde quand il fait save si l'hote existe deja et on lui demande validation apres un confirm
      $('#testDns').change(function(){
         var profile = $("#host_profile_id").val();
@@ -66,7 +73,12 @@
     //la case "pas de profil" à été cochée
     $('#noProfile').click(function(){
         if( $(this).is(':checked') )
-           $('#host_profile_id').append('<option value="no" selected="selected"></option>');
+        {
+          $('#host_profile_id').val('');
+          $('#host_profile_id').attr('disabled', true);
+        }
+        else
+          $('#host_profile_id').attr('disabled', false);
     })
   });
 
@@ -95,6 +107,21 @@
           }
       })
       return false;
+  }
+
+  function getCommentProfil(profile)
+  {
+    var url = '<?php echo url_for("@commentProfil") ?>';
+    $.ajax({
+       url:    url,
+       data:    { profile: profile },
+       success: function(data){
+          if(data.profil != "")
+             $(this).parent().append(data.profil);
+          else
+              $(this).parent().append('(Pas de commentaire)');
+       })
+    return false;
   }
 
 </script>

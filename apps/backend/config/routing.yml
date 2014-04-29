@@ -121,6 +121,10 @@ inDnsHostname:
   url:    /host/inDnsHostname
   param:  { module: host, action: inDnsHostname }
 
+commentProfil:
+  url:    /host/commentProfil
+  param:  { module: host, action: commentProfil }
+
 # default rules
 homepage:
   url:   /
