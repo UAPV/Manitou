@@ -73,7 +73,7 @@
     //la case "pas de profil" à été cochée
     $('#noProfile').click(function(){
         if( $(this).is(':checked') )
-        {console.log('on est la');
+        {
           $('#host_profile_id').val('');
           $('#host_profile_id').attr('disabled', true);
         }
@@ -121,14 +121,14 @@
               if($('#commentaire').length == 0)
                   $('#host_profile_id').parent().append("<span id='commentaire' style='margin-left: 30%;font-style: italic;'>"+data.profil+"</span>");
               else
-                  $('#commentaire').html("<span id='commentaire' style='margin-left: 30%;font-style: italic;'>"+data.profil+"</span>");
+                  $('#commentaire').html(data.profil);
           }
           else
           {
               if($('#commentaire').length == 0)
                   $('#host_profile_id').parent().append("<span id='commentaire' style='margin-left: 30%;font-style: italic;'>(Pas de commentaire)");
               else
-                  $('#commentaire').html("<span id='commentaire' style='margin-left: 30%;font-style: italic;'>(Pas de commentaire)");
+                  $('#commentaire').html("(Pas de commentaire)");
           }
 
        }
