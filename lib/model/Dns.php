@@ -190,15 +190,9 @@ EOF
 							}
 
                             //On récupère le commentaire si il existe
-                            $dataComm = explode(';', $line);
-
-							$key = $entry['ip'];
+                            $obj = HostQuery::create()->findOneByIpAddress($entry['ip']);
 							$com = "; UPDATED BY MANITOU --> DON'T TOUCH ;)";
-
-                            if(isset($dataComm[2]))
-							    $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".;".$com.";".$dataComm[2]."\n";
-                            else
-                                $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".;".$com."\n";
+						    $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".;".$com.";".$obj->getComment()."\n";
 
 							$arrayDns["$key"] = array($com, $newContent);
          	 }
