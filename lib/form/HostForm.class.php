@@ -67,6 +67,7 @@ class HostForm extends BaseHostForm
     $this->widgetSchema['cloned_from_image_id']->setLabel('Image système');
 
 	$this->widgetSchema['commentSvn'] = new sfWidgetFormInputText(array('label' => 'Commentaire SVN'));
+    $this->widgetSchema['comment'] = new sfWidgetFormInputText(array('label' => 'Commentaires'));
     $this->setValidator ('ip_address', new sfValidatorIpAddress(array('required' => true)));
     $this->setValidator ('mac_address', new sfValidatorMacAddress(array('required' => true)));
 	$this->setValidator('commentSvn', new sfValidatorString(array('required' => false)));
