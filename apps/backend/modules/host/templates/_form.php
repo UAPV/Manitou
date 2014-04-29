@@ -120,7 +120,8 @@
              $(this).parent().append(data.profil);
           else
               $(this).parent().append('(Pas de commentaire)');
-       })
+       }
+     })
     return false;
   }
 
