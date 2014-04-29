@@ -73,7 +73,7 @@
     //la case "pas de profil" à été cochée
     $('#noProfile').click(function(){
         if( $(this).is(':checked') )
-        {
+        {console.log('on est la');
           $('#host_profile_id').val('');
           $('#host_profile_id').attr('disabled', true);
         }
@@ -116,10 +116,10 @@
        url:    url,
        data:    { profile: profile },
        success: function(data){
-          if(data.profil != "")
-             $('#host_profile_id').parent().append(data.profil);
+          if(data.profil != null)
+             $('#host_profile_id').parent().append("<span style='margin-left: 30%;font-style: italic;'>"+data.profil+"</span>");
           else
-             $('#host_profile_id').parent().append('(Pas de commentaire)');
+             $('#host_profile_id').parent().append("<span style='margin-left: 30%;font-style: italic;'>(Pas de commentaire)");
        }
      })
     return false;
