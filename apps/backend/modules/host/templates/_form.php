@@ -117,9 +117,20 @@
        data:    { profile: profile },
        success: function(data){
           if(data.profil != null)
-             $('#host_profile_id').parent().append("<span style='margin-left: 30%;font-style: italic;'>"+data.profil+"</span>");
+          {
+              if($('#commentaire').length == 0)
+                  $('#host_profile_id').parent().append("<span id='commentaire' style='margin-left: 30%;font-style: italic;'>"+data.profil+"</span>");
+              else
+                  $('#commentaire').html("<span id='commentaire' style='margin-left: 30%;font-style: italic;'>"+data.profil+"</span>");
+          }
           else
-             $('#host_profile_id').parent().append("<span style='margin-left: 30%;font-style: italic;'>(Pas de commentaire)");
+          {
+              if($('#commentaire').length == 0)
+                  $('#host_profile_id').parent().append("<span id='commentaire' style='margin-left: 30%;font-style: italic;'>(Pas de commentaire)");
+              else
+                  $('#commentaire').html("<span id='commentaire' style='margin-left: 30%;font-style: italic;'>(Pas de commentaire)");
+          }
+
        }
      })
     return false;
