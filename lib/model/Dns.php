@@ -441,7 +441,6 @@ EOF
                {
                    if(!$separation)
                    {
-                       echo "nouvelle ligne : ".$nvLigne."<br/>";
                        if(preg_match('/;\s+UPDATED\s+BY\s+MANITOU\s+/', $nvLigne) === 1)
                        {
                          $separation = true;
