@@ -116,9 +116,11 @@ class Dns
               }
           }
 
+
           //on rajoute les fichiers de Manitou puis on trie le tableau
           foreach ($entries as $cle => $entry)
           {
+              echo "<pre>";var_dump($entry);echo "</pre>";die;
 							if(count($entry) > 0)
 							{
 								foreach($arrayDns as $key => $line)
