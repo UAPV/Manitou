@@ -117,9 +117,9 @@
        data:    { profile: profile },
        success: function(data){
           if(data.profil != "")
-             $(this).parent().append(data.profil);
+             $('#host_profile_id').parent().append(data.profil);
           else
-              $(this).parent().append('(Pas de commentaire)');
+             $('#host_profile_id').parent().append('(Pas de commentaire)');
        }
      })
     return false;
