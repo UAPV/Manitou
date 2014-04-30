@@ -168,7 +168,10 @@ ul#image_server_status li .hostname {
     background-color: #E1E1E1;
 }
 
-
 #noProfile {
     color: #AAAAAA;
+}
+
+#host_comment {
+   width: 500px;
 }
