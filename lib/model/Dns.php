@@ -90,7 +90,6 @@ class Dns
               }
               elseif(preg_match($regex,$content[$i]) === 1)
               {
-                  echo $content[$i]."<br/>";die;
                 //on récupère le numéro pour le mettre en clé dans le tableau final
   			    $tmp = preg_split("/[\s]+/", $content[$i]);
 				$keyArray = str_replace(';','',$tmp[0]);
@@ -118,7 +117,6 @@ class Dns
               }
           }
 
-              echo "<pre>";var_dump($arrayDns);echo "</pre>";die;
           //on rajoute les fichiers de Manitou puis on trie le tableau
           foreach ($entries as $cle => $entry)
           {
