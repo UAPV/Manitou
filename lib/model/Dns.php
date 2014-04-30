@@ -93,6 +93,10 @@ class Dns
                 $comment = array();
                 $first = false;
               }
+              elseif(preg_match('/^;;;;;/', $content[$i]) === 1)
+              {
+                  $i = $i+1;
+              }
               //on est tjs dans le header mais on croise le premier commentaire
               elseif($first)
               {
@@ -116,10 +120,10 @@ class Dns
               }
           }
 
-echo "<pre>";var_dump($arrayDns);echo "</pre>";die;
           //on rajoute les fichiers de Manitou puis on trie le tableau
           foreach ($entries as $cle => $entry)
           {
+              echo "<pre>";var_dump($entries); echo "</pre>";die;
 							if(count($entry) > 0)
 							{
 								foreach($arrayDns as $key => $line)
