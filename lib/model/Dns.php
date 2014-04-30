@@ -90,12 +90,10 @@ class Dns
               }
               elseif(preg_match($regex,$content[$i]) === 1)
               {
-                  //on récupère le numéro pour le mettre en clé dans le tableau final
-                  //$content[$i] = preg_replace("/(\s)+/",' ',$content[$i]);
-								//$data = preg_replace('/\s+/g', ' ', $content[$i]);
-								$tmp = preg_split("/[\s]+/", $content[$i]);
-								//$tmp = explode(' ',$content[$i]);
-								$keyArray = str_replace(';','',$tmp[0]);
+                  echo $content[$i]."<br/>";die;
+                //on récupère le numéro pour le mettre en clé dans le tableau final
+  			    $tmp = preg_split("/[\s]+/", $content[$i]);
+				$keyArray = str_replace(';','',$tmp[0]);
                 $arrayDns["$keyArray"] = array($comment,$content[$i]);
                 unset($comment);
                 $comment = array();
