@@ -25,7 +25,7 @@ subnet <?php echo $subnet->getIpAddress() ?> netmask <?php echo $subnet->getNetm
         hardware ethernet           <?php echo $host->getMacAddress() ?>;
         fixed-address               <?php echo $host->getIpAddress() ?>;
         option host-name            "<?php echo $host->getHostname() ?>";
-        <?php if ($host->getPxeFileId() !== null) echo 'filename = "'.$host->getPxeFile ()->getFilename()."\";\n"; ?>
+        <?php //if ($host->getPxeFileId() !== null) echo 'filename = "'.$host->getPxeFile ()->getFilename()."\";\n"; ?>
         <?php //if($host->getCustomConf() !== null && $host->getCustomConf() != "" ) echo str_replace("\n", "\n        ", $host->getCustomConf())."\n" ?>
     }
   <?php endforeach ?>
