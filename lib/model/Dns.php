@@ -212,7 +212,6 @@ EOF
                             if(count($obj) > 0)
                             {
                                 $commentObj = str_replace("\n",' ', $obj->getComment());
-                                echo "nouveau : ".$commentObj;die;
                                 $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".".$com." ; ".$commentObj;
                             }
                             else
