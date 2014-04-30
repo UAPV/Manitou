@@ -123,7 +123,6 @@ class Dns
           //on rajoute les fichiers de Manitou puis on trie le tableau
           foreach ($entries as $cle => $entry)
           {
-              echo "<pre>";var_dump($entries); echo "</pre>";die;
 							if(count($entry) > 0)
 							{
 								foreach($arrayDns as $key => $line)
@@ -255,6 +254,7 @@ EOF
 
           uksort($arrayDns, 'compare');
 
+              var_dump($arrayDns);die;
           $data = array();
           //on écrit dans le fichier les lignes
           foreach($arrayDns as $key => $ligne)
