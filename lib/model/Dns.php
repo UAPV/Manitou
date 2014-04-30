@@ -93,10 +93,6 @@ class Dns
                 $comment = array();
                 $first = false;
               }
-              elseif(preg_match('/^;;;;;/', $content[$i]) === 1)
-              {
-                  $i = $i+1;
-              }
               //on est tjs dans le header mais on croise le premier commentaire
               elseif($first)
               {
@@ -122,6 +118,8 @@ class Dns
                   if(isset($content[$i]) && $content[$i] != '')
                       $comment[] = $content[$i];
               }
+              elseif(preg_match($regexCom,$content[$i]) === 1)
+                  $comment[] = $content[$i];
           }
 
           //on rajoute les fichiers de Manitou puis on trie le tableau
