@@ -203,7 +203,7 @@ EOF
                             if(count($tmp) == 2)
                                 $ip = $tmp[1].'.'.$tmp[2].'.'.$tmpIp[1].'.'.$tmpIp[0];
                             else
-                                $ip = $tmp[1].'.'.$tmp[1].'.'.$tmp[3].'.'.$tmpIp[0];
+                                $ip = $tmp[1].'.'.$tmp[2].'.'.$tmp[3].'.'.$tmpIp[0];
 
                                 echo $ip.'<br/>';
                             $obj = HostQuery::create()->findOneByIpAddress($ip);
@@ -211,8 +211,6 @@ EOF
 
                             if(count($obj) > 0)
                             {
-                                echo $obj->getComment();
-
                                 $commentObj = str_replace("\n",' ', $obj->getComment());
                                 echo "nouveau : ".$commentObj;die;
                                 $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".".$com." ; ".$commentObj;
@@ -222,7 +220,7 @@ EOF
 
 							$arrayDns["$cle"] = array($newContent);
          	 }
-		    }die;
+		    }
 
           if(!function_exists('compare'))
           {
