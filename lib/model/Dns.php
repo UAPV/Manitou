@@ -191,6 +191,7 @@ EOF
 
                             //On récupère le commentaire si il existe
                             $obj = HostQuery::create()->findOneByIpAddress($entry['ip']);
+                                echo $entry['ip'];die;
 							$com = "; UPDATED BY MANITOU --> DON'T TOUCH ;)";
 
                             if(count($obj) > 0)
