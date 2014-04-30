@@ -13,9 +13,7 @@ subnet <?php echo $subnet->getIpAddress() ?> netmask <?php echo $subnet->getNetm
     option routers      <?php echo $subnet->getGateway() ?>;
     option domain-name  "<?php echo $subnet->getDomainName() ?>";
     option domain-name-servers  <?php echo $subnet->getDnsServer() ?>;
-
     <?php if ($subnet->getPxeFileId() !== null) echo 'filename = "'.$subnet->getPxeFile ()->getFilename()."\";\n"; ?>
-
     <?php echo str_replace("\n", "\n    ", $subnet->getCustomConf())."\n" ?>
 
   <?php foreach ($subnet->getAllHosts () as $host): ?>
@@ -28,7 +26,7 @@ subnet <?php echo $subnet->getIpAddress() ?> netmask <?php echo $subnet->getNetm
         fixed-address               <?php echo $host->getIpAddress() ?>;
         option host-name            "<?php echo $host->getHostname() ?>";
         <?php if ($host->getPxeFileId() !== null) echo 'filename = "'.$host->getPxeFile ()->getFilename()."\";\n"; ?>
-        <?php if($host->getCustomConf() !== null && $host->getCustomConf() != "" ) echo str_replace("\n", "\n        ", $host->getCustomConf())."\n" ?>
+        <?php //if($host->getCustomConf() !== null && $host->getCustomConf() != "" ) echo str_replace("\n", "\n        ", $host->getCustomConf())."\n" ?>
     }
   <?php endforeach ?>
 
