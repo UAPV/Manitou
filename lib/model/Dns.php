@@ -187,31 +187,33 @@ EOF
 
 									//sfContext::getInstance()->getMailer()->send($message);
 								}
-
-                                    //On récupère le commentaire si il existe
-                                    $tmp = explode('.',$filename);
-                                    $tmpIp = explode('.',$entry['ip']);
-
-                                    if(count($tmp) == 2)
-                                        $ip = $tmp[1].'.'.$tmp[2].'.'.$tmpIp[1].'.'.$tmpIp[0];
-                                    else
-                                        $ip = $tmp[1].'.'.$tmp[2].'.'.$tmp[3].'.'.$tmpIp[0];
-
-                                    $obj = HostQuery::create()->findOneByIpAddress($ip);
-                                    $com = "; UPDATED BY MANITOU --> DON'T TOUCH";
-
-                                    if(count($obj) > 0)
-                                    {
-                                        $commentObj = str_replace("\n",' ', $obj->getComment());
-                                        $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".".$com." ; ".$commentObj;
-                                    }
-                                    else
-                                        $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".".$com;
-
-                                    $arrayDns["$key"] = array($newContent);
 							}
+
+                                //On récupère le commentaire si il existe
+                                $tmp = explode('.',$filename);
+                                $tmpIp = explode('.',$entry['ip']);
+
+                                if(count($tmp) == 2)
+                                    $ip = $tmp[1].'.'.$tmp[2].'.'.$tmpIp[1].'.'.$tmpIp[0];
+                                else
+                                    $ip = $tmp[1].'.'.$tmp[2].'.'.$tmp[3].'.'.$tmpIp[0];
+
+                                $obj = HostQuery::create()->findOneByIpAddress($ip);
+                                $com = "; UPDATED BY MANITOU --> DON'T TOUCH";
+
+                                if(count($obj) > 0)
+                                {
+                                    $commentObj = str_replace("\n",' ', $obj->getComment());
+                                    $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".".$com." ; ".$commentObj;
+                                }
+                                else
+                                    $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".".$com;
+
+                                $arrayDns["$cle"] = array($newContent);
          	 }
 		    }
+
+              echo "<pre>";var_dump($arrayDns);echo "</pre>";die;
 
           if(!function_exists('compare'))
           {
