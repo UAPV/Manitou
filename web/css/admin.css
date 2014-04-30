@@ -173,5 +173,5 @@ ul#image_server_status li .hostname {
 }
 
 #host_comment {
-   width: 500px;
+   width: 500px !important;
 }
