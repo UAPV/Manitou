@@ -199,7 +199,6 @@ EOF
                                 $ip = $tmp[1].'.'.$tmp[2].'.'.$tmpIp[1].'.'.$tmpIp[0];
 
                             $obj = HostQuery::create()->findOneByIpAddress($ip);
-                                echo $ip;die;
 							$com = "; UPDATED BY MANITOU --> DON'T TOUCH ;)";
 
                             if(count($obj) > 0)
