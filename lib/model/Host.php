@@ -177,6 +177,7 @@ class Host extends BaseHost {
                             $this->isColumnModified (HostPeer::ROOM_ID)    ||
                             $this->isColumnModified (HostPeer::SUBNET_ID)  ||
                             $this->isColumnModified (HostPeer::NUMBER)     ||
+                            $this->isColumnModified (HostPeer::COMMENT)    ||
                             $this->isColumnModified (HostPeer::IP_ADDRESS  ));
 
 		$this->subnetChanged = $this->isColumnModified (HostPeer::SUBNET_ID);
