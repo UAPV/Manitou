@@ -193,9 +193,7 @@ EOF
                                 $tmp = explode('.',$filename);
                                 $tmpIp = explode('.',$entry['ip']);
 
-                                var_dump($tmp);
-                                var_dump($tmpIp);die;
-                                if(count($tmp) == 2)
+                                if(count($tmp) == 3)
                                     $ip = $tmp[1].'.'.$tmp[2].'.'.$tmpIp[1].'.'.$tmpIp[0];
                                 else
                                     $ip = $tmp[1].'.'.$tmp[2].'.'.$tmp[3].'.'.$tmpIp[0];
