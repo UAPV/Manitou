@@ -205,6 +205,7 @@ EOF
                             else
                                 $ip = $tmp[1].'.'.$tmp[2].'.'.$tmpIp[1].'.'.$tmpIp[0];
 
+                                echo $ip;die;
                             $obj = HostQuery::create()->findOneByIpAddress($ip);
 							$com = "; UPDATED BY MANITOU --> DON'T TOUCH";
 
