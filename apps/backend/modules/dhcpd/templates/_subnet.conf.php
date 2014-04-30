@@ -28,7 +28,7 @@ subnet <?php echo $subnet->getIpAddress() ?> netmask <?php echo $subnet->getNetm
         fixed-address               <?php echo $host->getIpAddress() ?>;
         option host-name            "<?php echo $host->getHostname() ?>";
         <?php if ($host->getPxeFileId() !== null) echo 'filename = "'.$host->getPxeFile ()->getFilename()."\";\n"; ?>
-      <?php echo $host->getCustomConf(); ?>
+      <?php echo "custom conf : ".$host->getCustomConf()." fin"; ?>
         <?php if($host->getCustomConf() !== null) echo str_replace("\n", "\n        ", $host->getCustomConf())."\n" ?>
     }
   <?php endforeach ?>
