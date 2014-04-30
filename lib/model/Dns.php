@@ -209,12 +209,11 @@ EOF
                                 else
                                     $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".".$com;
 
-                                echo $entry['ip'];die;
-                                $arrayDns["$cle"] = array($newContent);
+                                $key = $entry['ip'];
+                                $arrayDns["$key"] = array($newContent);
          	 }
 		    }
 
-              echo "<pre>";var_dump($arrayDns);echo "</pre>";die;
 
           if(!function_exists('compare'))
           {
