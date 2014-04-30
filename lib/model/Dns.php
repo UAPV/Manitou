@@ -200,10 +200,10 @@ EOF
                             $tmp = explode('.',$filename);
                             $tmpIp = explode('.',$entry['ip']);
 
-                            if(count($tmpIp) == 1)
-                                $ip = $tmp[1].'.'.$tmp[2].'.'.$tmpIp[0];
+                            if(count($tmp) == 2)
+                                $ip = $tmp[0].'.'.$tmp[1].'.'.$tmpIp[1].'.'.$tmpIp[0];
                             else
-                                $ip = $tmp[1].'.'.$tmp[2].'.'.$tmpIp[1].'.'.$tmpIp[0];
+                                $ip = $tmp[0].'.'.$tmp[1].'.'.$tmp[2].'.'.$tmpIp[0];
 
                                 echo $ip;die;
                             $obj = HostQuery::create()->findOneByIpAddress($ip);
