@@ -84,6 +84,10 @@ class Dns
               {
                   $i = $i+1;
               }
+              elseif(preg_match('/;\s+UPDATED\s+BY\s+MANITOU\s+/i', $content[$i]) === 1)
+              {
+                  $i = $i+1;
+              }
               elseif(preg_match($regex,$content[$i]) === 1)
               {
                   //on récupère le numéro pour le mettre en clé dans le tableau final
@@ -107,10 +111,6 @@ class Dns
                     $comment[] = $content[$i];
                 }
               }
-              elseif(preg_match('/;\s+UPDATED\s+BY\s+MANITOU\s+/i', $content[$i]) === 1)
-              {
-                  $i = $i+1;
-              }
               //sinon si elle est marquée "DELETION MARKED", on la supprime
               elseif(preg_match('/;\s+\[MANITOU\]\s+MARKED\s+FOR\s+DELETION/i', $content[$i]) === 0)
               {
@@ -118,8 +118,6 @@ class Dns
                   if(isset($content[$i]) && $content[$i] != '')
                       $comment[] = $content[$i];
               }
-              elseif(preg_match($regexCom,$content[$i]) === 1)
-                  $comment[] = $content[$i];
           }
 
               echo "<pre>";var_dump($arrayDns);echo "</pre>";die;
