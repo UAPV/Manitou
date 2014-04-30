@@ -190,9 +190,16 @@ EOF
 							}
 
                             //On récupère le commentaire si il existe
-                            $obj = HostQuery::create()->findOneByIpAddress($entry['ip']);
-                                echo $filename;
-                                echo $entry['ip'];die;
+                            $tmp = explode('.',$filename);
+                            $tmpIp = explode('.',$entry['ip']);
+
+                            if(count($tmpIp) == 1)
+                                $ip = $tmp[1].'.'.$tmp[2].'.'.$tmpIp[0];
+                            else
+                                $ip = $tmp[1].'.'.$tmp[2].'.'.$tmpIp[1].'.'.$tmpIp[0];
+
+                            $obj = HostQuery::create()->findOneByIpAddress($ip);
+                                echo $ip;die;
 							$com = "; UPDATED BY MANITOU --> DON'T TOUCH ;)";
 
                             if(count($obj) > 0)
