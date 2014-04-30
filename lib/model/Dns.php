@@ -80,7 +80,11 @@ class Dns
               $regex = '/\s+IN\s+PTR\s/i';
               $regexCom = '/^;+\s/i';
 
-              if(preg_match($regex,$content[$i]) === 1)
+              if(preg_match('/^;\s+UPDATED\s+BY\s+MANITOU\s+/i', $content[$i]) === 1)
+              {
+                  $i = $i+1;
+              }
+              elseif(preg_match($regex,$content[$i]) === 1)
               {
                   //on récupère le numéro pour le mettre en clé dans le tableau final
                   //$content[$i] = preg_replace("/(\s)+/",' ',$content[$i]);
@@ -102,10 +106,6 @@ class Dns
                     unset($header[$i]);
                     $comment[] = $content[$i];
                 }
-              }
-              elseif(preg_match('/^;\s+UPDATED\s+BY\s+MANITOU\s+/i', $content[$i]) === 1)
-              {
-                  $i = $i+1;
               }
               elseif(preg_match('/;\s+UPDATED\s+BY\s+MANITOU\s+/i', $content[$i]) === 1)
               {
