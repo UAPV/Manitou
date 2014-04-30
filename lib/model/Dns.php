@@ -107,6 +107,10 @@ class Dns
                     $comment[] = $content[$i];
                 }
               }
+              elseif(preg_match('/^;\s+UPDATED\s+BY\s+MANITOU\s+/i', $content[$i]) === 1)
+              {
+                  $i = $i+1;
+              }
               elseif(preg_match('/;\s+UPDATED\s+BY\s+MANITOU\s+/i', $content[$i]) === 1)
               {
                   $i = $i+1;
@@ -193,7 +197,7 @@ EOF
 							}
 
                             //On récupère le commentaire si il existe
-                           /* $tmp = explode('.',$filename);
+                            $tmp = explode('.',$filename);
                             $tmpIp = explode('.',$entry['ip']);
 
                             if(count($tmpIp) == 1)
@@ -201,12 +205,12 @@ EOF
                             else
                                 $ip = $tmp[1].'.'.$tmp[2].'.'.$tmpIp[1].'.'.$tmpIp[0];
 
-                            $obj = HostQuery::create()->findOneByIpAddress($ip);*/
+                            $obj = HostQuery::create()->findOneByIpAddress($ip);
 							$com = "; UPDATED BY MANITOU --> DON'T TOUCH ;)";
 
-                           /* if(count($obj) > 0)
+                            if(count($obj) > 0)
 						        $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".".$com.";".$obj->getComment()."\n";
-                            else*/
+                            else
                                 $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".".$com."\n";
 
 							$arrayDns["$cle"] = array($com, $newContent);
