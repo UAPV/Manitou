@@ -209,9 +209,9 @@ EOF
 							$com = "; UPDATED BY MANITOU --> DON'T TOUCH ;)";
 
                             if(count($obj) > 0)
-						        $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".".$com.";".$obj->getComment()."\n";
+						        $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".".$com.";".$obj->getComment();
                             else
-                                $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".".$com."\n";
+                                $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".".$com;
 
 							$arrayDns["$cle"] = array($newContent);
          	 }
