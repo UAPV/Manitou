@@ -201,11 +201,11 @@ EOF
                             $tmpIp = explode('.',$entry['ip']);
 
                             if(count($tmp) == 2)
-                                $ip = $tmp[0].'.'.$tmp[1].'.'.$tmpIp[1].'.'.$tmpIp[0];
+                                $ip = $tmp[1].'.'.$tmp[2].'.'.$tmpIp[1].'.'.$tmpIp[0];
                             else
-                                $ip = $tmp[0].'.'.$tmp[1].'.'.$tmp[2].'.'.$tmpIp[0];
+                                $ip = $tmp[1].'.'.$tmp[1].'.'.$tmp[3].'.'.$tmpIp[0];
 
-                                echo $ip;die;
+                                echo $ip.'<br/>';
                             $obj = HostQuery::create()->findOneByIpAddress($ip);
 							$com = "; UPDATED BY MANITOU --> DON'T TOUCH";
 
@@ -222,7 +222,7 @@ EOF
 
 							$arrayDns["$cle"] = array($newContent);
          	 }
-		    }
+		    }die;
 
           if(!function_exists('compare'))
           {
