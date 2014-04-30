@@ -206,10 +206,11 @@ EOF
                                 $ip = $tmp[1].'.'.$tmp[2].'.'.$tmpIp[1].'.'.$tmpIp[0];
 
                             $obj = HostQuery::create()->findOneByIpAddress($ip);
-							$com = "; UPDATED BY MANITOU --> DON'T TOUCH ;)";
+							$com = "; UPDATED BY MANITOU --> DON'T TOUCH";
+                            $commentObj = str_replace('\n',' ', $obj->getComment());
 
                             if(count($obj) > 0)
-						        $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".".$com.";".$obj->getComment();
+						        $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".".$com." ; ".$commentObj;
                             else
                                 $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".".$com;
 
@@ -439,8 +440,9 @@ EOF
              }
 
              $key = str_pad($entry['hostname'], 24);
-             $com = "; UPDATED BY MANITOU --> DON'T TOUCH ;)";
+             $com = "; UPDATED BY MANITOU --> DON'T TOUCH";
              $key = str_replace(' ','',$key);
+
             // $newContent = str_pad ($entry['hostname'], 24).'    IN    A    '.$entry['ip']."\n";
 		     $newContent = $entry['hostname']."\t\t".'IN'."\t".'A'."\t".$entry['ip']."  $com";
              $arrayDns[$key] = array($newContent);
