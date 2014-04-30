@@ -207,10 +207,12 @@ EOF
 
                             $obj = HostQuery::create()->findOneByIpAddress($ip);
 							$com = "; UPDATED BY MANITOU --> DON'T TOUCH";
-                            $commentObj = str_replace('\n',' ', $obj->getComment());
 
                             if(count($obj) > 0)
-						        $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".".$com." ; ".$commentObj;
+                            {
+                                $commentObj = str_replace('\n',' ', $obj->getComment());
+                                $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".".$com." ; ".$commentObj;
+                            }
                             else
                                 $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".".$com;
 
