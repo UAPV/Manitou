@@ -315,6 +315,8 @@ EOF
 
            if(preg_match('/^;;;;;/', $content[$i]) === 1)
                $i = $i+1;
+           elseif($content[$i] == "")
+               $i = $i+1;
            elseif(!$first && preg_match('/;\s+UPDATED\s+BY\s+MANITOU\s+/', $content[$i]) === 0)
            {
               //on récupère l'adresse ip pour le mettre en clé dans le tableau final
