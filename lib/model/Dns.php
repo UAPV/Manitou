@@ -209,7 +209,6 @@ EOF
                             else*/
                                 $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".".$com."\n";
 
-                            echo "cle : ".$cle;
 							$arrayDns["$cle"] = array($com, $newContent);
          	 }
 		    }
@@ -255,7 +254,6 @@ EOF
 
           uksort($arrayDns, 'compare');
 
-              var_dump($arrayDns);die;
           $data = array();
           //on écrit dans le fichier les lignes
           foreach($arrayDns as $key => $ligne)
