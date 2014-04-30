@@ -209,6 +209,7 @@ EOF
                                 else
                                     $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".".$com;
 
+                                echo $entry['ip'];die;
                                 $arrayDns["$cle"] = array($newContent);
          	 }
 		    }
