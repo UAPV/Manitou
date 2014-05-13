@@ -279,7 +279,7 @@ EOF
           $nvContent = implode("\n",$data);
           $contentHeader = implode("\n", $header);
 
-          file_put_contents ($path.$filename, $contentHeader."\n".$nvContent);
+          file_put_contents ($path.$filename, $contentHeader."\n".$nvContent."\n");
         }
       }
 
