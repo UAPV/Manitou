@@ -284,7 +284,6 @@ EOF
 
       foreach ($this->conf as $filename => $entries)
       {
-          echo "<pre>";var_dump($this->conf);echo "</pre>";die;
          if(in_array($filename, $filesToChange))
          {
          $contentTest = file_get_contents($path.'/'.$filename);
