@@ -34,7 +34,7 @@ class CommandPeer extends BaseCommandPeer {
     HostQuery::create()->find(); // Juste pour remplir le cache de propel
     $subnets  = SubnetQuery::create ()->find ();
     $confPath = sfConfig::get('sf_manitou_dhcpd_conf_path');
-		$tabDrbl = array();
+	$tabDrbl = array();
 
     sfContext::getInstance()->getConfiguration()->loadHelpers('Partial');
     sfConfig::set('sf_escaping_strategy', false);
@@ -43,14 +43,12 @@ class CommandPeer extends BaseCommandPeer {
       $filename = $confPath.'/'.$subnet->getName().'.conf';
       file_put_contents ($filename, get_partial ('dhcpd/subnet.conf', array ('subnet' => $subnet)));
 
-			//On récupère le nom des serveurs associé au subnet
-			$hostnameDrbl = $subnet->getImageServer()->getHostname();
-			$tabHost = explode('.', $hostnameDrbl);
+	  //On récupère le nom des serveurs associé au subnet
+	  $hostnameDrbl = $subnet->getImageServer()->getHostname();
+	  $tabHost = explode('.', $hostnameDrbl);
 
-			if(!in_array($tabHost[0], $tabDrbl))
-			{
-				$tabDrbl[] = $tabHost[0];
-			}
+      if(!in_array($tabHost[0], $tabDrbl))
+		 $tabDrbl[] = $tabHost[0];
     }
 
     CommandPeer::getDhcpdUpdateCommand($tabDrbl,$comm)->exec ();
@@ -158,7 +156,7 @@ class CommandPeer extends BaseCommandPeer {
     if($host != null && is_array($host))
     {
         $arrayFilesToChange = array();
-				$tabDrbl = array();
+		$tabDrbl = array();
 
         foreach($host as $h)
         {
@@ -169,24 +167,24 @@ class CommandPeer extends BaseCommandPeer {
             $arrayFilesToChange[] = $filenameReverse;
             $arrayFilesToChange[] = $filenameConf;
 
-						//On récupère le nom des serveurs associé au subnet
-						$hostnameDrbl = $h->getSubnet ()->getImageServer()->getHostname();
-						$tabHost = explode('.', $hostnameDrbl);
+			//On récupère le nom des serveurs associé au subnet
+			$hostnameDrbl = $h->getSubnet ()->getImageServer()->getHostname();
+			$tabHost = explode('.', $hostnameDrbl);
 
-						if(!in_array($tabHost[0], $tabDrbl))
-							$tabDrbl[] = $tabHost[0];
-				}
+			if(!in_array($tabHost[0], $tabDrbl))
+				$tabDrbl[] = $tabHost[0];
+		}
 
-				if($otherFiles != null)
-				{
-					foreach($otherFiles as $file)
-					{
-						$filenameReverse = 'db.'.$file[0];
-						$filenameConf = 'db.'.substr ($file[1], 0, strpos ($file[1], '.0'));
-						$arrayFilesToChange[] = $filenameReverse;
-						$arrayFilesToChange[] = $filenameConf;
-					}
+		if($otherFiles != null)
+		{
+			foreach($otherFiles as $file)
+			{
+		    	$filenameReverse = 'db.'.$file[0];
+				$filenameConf = 'db.'.substr ($file[1], 0, strpos ($file[1], '.0'));
+				$arrayFilesToChange[] = $filenameReverse;
+				$arrayFilesToChange[] = $filenameConf;
 			}
+		}
     }
     //si une string contenant les filenames a changer est passée en paramètre
     elseif($host != null && !is_array($host))
@@ -194,15 +192,15 @@ class CommandPeer extends BaseCommandPeer {
 
     //on récupère les hosts modifiés
     $hosts = HostQuery::create()->withColumn('INET_ATON(Host.IpAddress)','a')->orderBy('a','asc')->find ();
-
-		array_unique($arrayFilesToChange);
-		$labelDrbl = implode(' , ',$tabDrbl);
+      echo "<pre>";var_dump($hosts);echo "</pre>";die;
+	array_unique($arrayFilesToChange);
+	$labelDrbl = implode(' , ',$tabDrbl);
 
     $dnsConf = new Dns ();
     $dnsConf->setHosts ($hosts);
 
-		if($other != null)
-			$dnsConf->addHost($other, true);
+	if($other != null)
+		$dnsConf->addHost($other, true);
 
     $dnsConf->apply ($path, $arrayFilesToChange);
 
