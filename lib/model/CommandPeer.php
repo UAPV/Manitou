@@ -192,14 +192,15 @@ class CommandPeer extends BaseCommandPeer {
 
     //on récupère les hosts modifiés
     $hosts = HostQuery::create()->withColumn('INET_ATON(Host.IpAddress)','a')->orderBy('a','asc')->find ();
-      echo "<pre>";var_dump($hosts);echo "</pre>";die;
 	array_unique($arrayFilesToChange);
 	$labelDrbl = implode(' , ',$tabDrbl);
 
     $dnsConf = new Dns ();
     $dnsConf->setHosts ($hosts);
 
-	if($other != null)
+      echo "<pre>";var_dump($other);echo "</pre>";die;
+
+      if($other != null)
 		$dnsConf->addHost($other, true);
 
     $dnsConf->apply ($path, $arrayFilesToChange);
