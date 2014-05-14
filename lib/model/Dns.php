@@ -14,13 +14,16 @@ class Dns
   public function addHost ($host, $remove = false)
   {
     $filename = 'db.'.$host->getDomainName ();
-    if (! array_key_exists($filename, $this->conf))
-      $this->conf [$filename] = array();
+    if(!$remove)
+    {
+        if (! array_key_exists($filename, $this->conf))
+          $this->conf [$filename] = array();
 
-    $this->conf [$filename][] = array (
-      'ip'        => $host->getIpAddress (),
-      'hostname'  => $host->getHostname (),
-    );
+        $this->conf [$filename][] = array (
+          'ip'        => $host->getIpAddress (),
+          'hostname'  => $host->getHostname (),
+        );
+    }
 
     $ipBase = $host->getSubnet ()->getIpAddress();
     $ipBase = substr ($ipBase, 0, strpos ($ipBase, '.0'));
@@ -28,16 +31,16 @@ class Dns
     if (! array_key_exists($filename, $this->reverseConf))
       $this->reverseConf [$filename] = array();
 
-		if(!$remove)
-		{
-			$ip = substr ($host->getIpAddress (), strlen($ipBase) + 1);
-			$this->reverseConf [$filename][] = array (
-				'ip'        => implode ('.', array_reverse( explode ('.', $ip))),
-				'fqdn'      => $host->getFqdn (),
-			);
-		}
-		else
-			$this->reverseConf [$filename][] = array();
+    if(!$remove)
+	{
+		$ip = substr ($host->getIpAddress (), strlen($ipBase) + 1);
+		$this->reverseConf [$filename][] = array (
+			'ip'        => implode ('.', array_reverse( explode ('.', $ip))),
+			'fqdn'      => $host->getFqdn (),
+		);
+	}
+	else
+		$this->reverseConf [$filename][] = array();
   }
 
  /**
