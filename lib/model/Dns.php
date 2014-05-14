@@ -442,6 +442,8 @@ EOF
 
          $data = array();
 
+             echo "<pre>";
+             var_dump($arrayDns);echo "</pre>";die;
          //on écrit dans le fichier les lignes
          $separation = false;
          foreach($arrayDns as $key=>$ligne)
