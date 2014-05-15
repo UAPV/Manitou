@@ -84,9 +84,7 @@ class Dns
               $regexCom = '/^;+\s/i';
 
               if(preg_match('/;\s+UPDATED\s+BY\s+MANITOU\s+/i', $content[$i]) === 1)
-              {
-                  $i = $i+1;
-              }
+                  continue;
               elseif(preg_match($regex,$content[$i]) === 1)
               {
                 //on récupère le numéro pour le mettre en clé dans le tableau final
