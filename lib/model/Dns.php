@@ -83,7 +83,7 @@ class Dns
               $regex = '/\s+IN\s+PTR\s/i';
               $regexCom = '/^;+\s/i';
 
-              if((preg_match($regex,$content[$i]) === 1) AND (preg_match('/;\s+UPDATED\s+BY\s+MANITOU\s+/i', $content[$i]) !== 1))
+              if((preg_match($regex,$content[$i]) === 1) AND (preg_match('/;\s+UPDATED\s+BY\s+MANITOU\s+/i', $content[$i]) === 0))
               {
                 //on récupère le numéro pour le mettre en clé dans le tableau final
   			    $tmp = preg_split("/[\s]+/", $content[$i]);
