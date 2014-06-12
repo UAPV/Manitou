@@ -212,6 +212,11 @@ class hostActions extends autoHostActions
             $mac = $form->getValue('host_mac_address');
             $commentaire = $form->getValue('host_comment');
 
+            echo "suffixe : ".$suffixe;
+            echo "ip : ".$ip;
+            echo "max : ".$mac;
+            echo "commentaire : ".$commentaire;die;
+
 			$notice = $form->getObject()->isNew() ? 'The item was created successfully.' : 'The item was updated successfully.';
 
 			Host::setCommentSvn($commentSVN);
