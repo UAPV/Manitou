@@ -202,10 +202,10 @@ EOF
                                 if(count($obj) > 0)
                                 {
                                     $commentObj = str_replace("\n",' ', $obj->getComment());
-                                    $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".".$com." ; ".$commentObj;
+                                    $newContent = $entry['ip']."\t\t".'IN'."\t".'PTR'."\t".$entry['fqdn'].". ".$com." ; ".$commentObj;
                                 }
                                 else
-                                    $newContent = $entry['ip']."\t \t".'IN'."\t".'PTR'."\t".$entry['fqdn'].".".$com;
+                                    $newContent = $entry['ip']."\t\t".'IN'."\t".'PTR'."\t".$entry['fqdn'].". ".$com;
 
                                 $key = $entry['ip'];
                                 $arrayDns["$key"] = array($newContent);

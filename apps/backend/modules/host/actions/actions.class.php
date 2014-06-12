@@ -207,10 +207,20 @@ class hostActions extends autoHostActions
 		{
 			$commentSVN = $form->getValue('commentSvn');
             $ldap = $form->getValue('ldap');
+            $suffixe = $form->getValue('host_number');
+            $ip = $form->getValue('host_ip_address');
+            $mac = $form->getValue('host_mac_address');
+            $commentaire = $form->getValue('host_comment');
+
 			$notice = $form->getObject()->isNew() ? 'The item was created successfully.' : 'The item was updated successfully.';
 
 			Host::setCommentSvn($commentSVN);
 			$Host = $form->save();
+            $Host->setNumber(trim($suffixe));
+            $Host->setIpAddress(trim($ip));
+            $Host->setMacAddress(trim($mac));
+            $Host->setComment(trim($commentaire));
+            $Host->save();
 
             //On veut ajouter/supprimer la machine dans le ldap
             if(is_array($ldap) && $ldap[0] == 1)
