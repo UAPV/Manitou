@@ -207,10 +207,10 @@ class hostActions extends autoHostActions
 		{
 			$commentSVN = $form->getValue('commentSvn');
             $ldap = $form->getValue('ldap');
-            $suffixe = $form->getValue('host_number');
-            $ip = $form->getValue('host_ip_address');
-            $mac = $form->getValue('host_mac_address');
-            $commentaire = $form->getValue('host_comment');
+            $suffixe = $form->getValue('number');
+            $ip = $form->getValue('ip_address');
+            $mac = $form->getValue('mac_address');
+            $commentaire = $form->getValue('comment');
 
             echo "suffixe : ".$suffixe;
             echo "ip : ".$ip;
