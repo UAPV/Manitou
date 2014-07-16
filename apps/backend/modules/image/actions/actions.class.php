@@ -14,6 +14,12 @@ require_once dirname(__FILE__).'/../lib/imageGeneratorHelper.class.php';
 class imageActions extends autoImageActions
 {
 
+    public function executeSetMaxPerPage(sfWebRequest $request)
+    {
+        $this->getUser()->setAttribute('image.max_per_page', $max = $request->getParameter('max'));
+        $this->redirect('@image');
+    }
+
   public function executeNew(sfWebRequest $request)
   {
     $host = HostQuery::create()->findPk ($request->getGetParameter('host_id'));
@@ -48,6 +54,8 @@ class imageActions extends autoImageActions
 
       if ($isNew)
       {
+         /* $Image->setAuthor('test');
+          $Image->save();*/
           $command = CommandPeer::getCreateImageCommand($Image);
           $command->setArgument('state', $form->getValue('state'));
           $command->exec();

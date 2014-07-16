@@ -1,7 +1,7 @@
 <div>
     Nombre maximum d'images :
     <?php foreach (sfConfig::get('app_const_max_per_page') as $value): ?>
-        <span class="max_per_page_selector"><?php echo link_to($value, 'host/setMaxPerPage?max='.$value) ?></span>
+        <span class="max_per_page_selector"><?php echo link_to($value, 'image/setMaxPerPage?max='.$value) ?></span>
     <?php endforeach; ?>
 </div>
 

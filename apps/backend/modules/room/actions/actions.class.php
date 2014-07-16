@@ -13,4 +13,9 @@ require_once dirname(__FILE__).'/../lib/roomGeneratorHelper.class.php';
  */
 class roomActions extends autoRoomActions
 {
+    public function executeSetMaxPerPage(sfWebRequest $request)
+    {
+        $this->getUser()->setAttribute('room.max_per_page', $max = $request->getParameter('max'));
+        $this->redirect('@room');
+    }
 }
