@@ -10,4 +10,16 @@
  */
 class roomGeneratorConfiguration extends BaseRoomGeneratorConfiguration
 {
+    public function getPagerMaxPerPage()
+    {
+        if ($max = sfContext::getInstance()->getUser()->getAttribute('room.max_per_page'))
+        {
+            if($max == "all")
+                return parent::getPagerMaxPerPage();
+            else
+                return $max;
+        }
+        else
+            return parent::getPagerMaxPerPage();
+    }
 }
