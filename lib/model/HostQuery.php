@@ -38,8 +38,10 @@ class HostQuery extends BaseHostQuery {
 
   public function filterByContain ($query)
   {
-      return $this->where("host.id REGEXP '".$query."' OR host.ip_address REGEXP '".$query."' OR host.mac_address REGEXP '".$query."' OR host.number REGEXP '".$query."' OR host.comment REGEXP '".$query."' ")
-                ->find();
+      return $this->joinProfile()
+                    ->joinRoom()
+                    ->where("CONCAT(profile.name,'-',room.name,'-',host.number) REGEXP '".$query."' OR host.id REGEXP '".$query."' OR host.ip_address REGEXP '".$query."' OR host.mac_address REGEXP '".$query."' OR host.number REGEXP '".$query."' OR host.comment REGEXP '".$query."' ")
+                    ->find();
   }
 
 } // HostQuery
