@@ -193,7 +193,6 @@ class CommandPeer extends BaseCommandPeer {
     {
         //On reload tous les hosts
         $arrayFilesToChange = HostQuery::create()->find();
-        var_dump($arrayFilesToChange);die;
     }
 
 
