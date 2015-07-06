@@ -226,7 +226,6 @@ class CommandPeer extends BaseCommandPeer {
     if($other != null)
       $dnsConf->addHost($other, true);
 
-      var_dump($arrayFilesToChange);die;
     $dnsConf->apply ($path, $arrayFilesToChange);
 
     $command = new Command ();
