@@ -192,7 +192,26 @@ class CommandPeer extends BaseCommandPeer {
     else
     {
         //On reload tous les hosts
-        $arrayFilesToChange = HostQuery::create()->find();
+        $host = HostQuery::create()->find();
+        $arrayFilesToChange = array();
+        $tabDrbl = array();
+
+        foreach($host as $h)
+        {
+            $filenameReverse = 'db.'.$h->getDomainName ();
+            $ipBase = $h->getSubnet ()->getIpAddress();
+            $ipBase = substr ($ipBase, 0, strpos ($ipBase, '.0'));
+            $filenameConf = 'db.'.$ipBase;
+            $arrayFilesToChange[] = $filenameReverse;
+            $arrayFilesToChange[] = $filenameConf;
+
+            //On récupère le nom des serveurs associé au subnet
+            $hostnameDrbl = $h->getSubnet ()->getImageServer()->getHostname();
+            $tabHost = explode('.', $hostnameDrbl);
+
+            if(!in_array($tabHost[0], $tabDrbl))
+                $tabDrbl[] = $tabHost[0];
+        }
     }
 
 
