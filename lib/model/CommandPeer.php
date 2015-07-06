@@ -189,6 +189,13 @@ class CommandPeer extends BaseCommandPeer {
     //si une string contenant les filenames a changer est passée en paramètre
     elseif($host != null && !is_array($host))
         $arrayFilesToChange = explode(' ',$host);
+    else
+    {
+        //On reload tous les hosts
+        $arrayFilesToChange = HostQuery::create()->findAll();
+        var_dump($arrayFilesToChange);die;
+    }
+
 
     //on récupère les hosts modifiés
     $hosts = HostQuery::create()->withColumn('INET_ATON(Host.IpAddress)','a')->orderBy('a','asc')->find ();
