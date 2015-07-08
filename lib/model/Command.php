@@ -46,7 +46,8 @@ class Command extends BaseCommand {
       .'  > '.$this->getStdOutFile()
       .' ; echo $? "`date --rfc-3339=seconds`" > '.$this->getExitFile() // On place le code d'erreur et la date de fin dans ce fichier
     ).' > /dev/null 2> /dev/null < /dev/null ';
-    
+
+
     if ($background)
       $command = 'nohup '.$command.' &' ;
 

@@ -114,7 +114,7 @@ class Host extends BaseHost {
 	 */
 	public function setComment($v)
 	{
-    parent::setComment(str_replace("\r", '', $v));
+    parent::setComment(trim(str_replace("\r", '', $v)));
   }
 
   /**
@@ -150,13 +150,13 @@ class Host extends BaseHost {
 
 	public function setIpAddress($v)
 	{
-		$this->oldIp = $this->getIpAddress();
+		$this->oldIp = trim($this->getIpAddress());
 		return parent::setIpAddress($v);
 	}
 
 	public function setSubnetId($v)
 	{
-		$oldSubnetId = $this->getSubnetId();
+		$oldSubnetId = trim($this->getSubnetId());
 		$this->oldSubnet = SubnetPeer::retrieveByPK($oldSubnetId);
 
 		return parent::setSubnetId($v);
