@@ -131,6 +131,19 @@ class Subnet extends BaseSubnet {
   }
 
   /**
+   * Code to be run before deleting the object
+   *
+   * On supprime le fichier de conf dhcp dans svn
+   *
+   * @param PropelPDO $con
+   */
+  public function preDelete(PropelPDO $con = null)
+  {
+    parent::preDelete ($con);
+    CommandPeer::getDhcpDeleteCommand ($this->getName());
+  }
+
+  /**
    * Code to be after before deleting the object in database
    * @param PropelPDO $con
    * @return boolean

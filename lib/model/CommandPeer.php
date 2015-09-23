@@ -74,6 +74,17 @@ class CommandPeer extends BaseCommandPeer {
    return $command;
   }
 
+  public static function getDhcpDeleteCommand ($fichier)
+  {
+      $command = new Command ();
+      $command->setCommand (sfConfig::get('sf_manitou_dhcp_delete_command'));
+      $command->setArgument ('conf_path', sfConfig::get('sf_manitou_dhcpd_conf_path'));
+      $command->setArgument ('file_name', $fichier);
+      $command->setLabel ('Suppression du fichier '.$fichier.'.conf pour le dhcp');
+
+      return $command;
+  }
+
   public static function getLdapCommand ($action, $cn)
   {
     $command = new Command ();

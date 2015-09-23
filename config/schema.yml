@@ -29,7 +29,7 @@ propel:
 
   host:
     id:             ~
-    profile_id:     { type: integer, foreignReference: id, foreignTable: profile, required: true }
+    profile_id:     { type: integer, foreignReference: id, foreignTable: profile, required: false }
     room_id:        { type: integer, foreignReference: id, foreignTable: room, required: true }
     number:         { type: varchar, size: 10 }
     ip_address:     { type: char, size: 15, required: true }
