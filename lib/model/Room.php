@@ -38,9 +38,9 @@ class Room extends BaseRoom {
    */
   public function preSave(PropelPDO $con = null)
   {
-    parent::preSave ($con);
-
     $this->needConfUpdate = $this->isColumnModified (RoomPeer::NAME);
+
+    return parent::preSave ($con);
   }
 
   /**
@@ -52,13 +52,13 @@ class Room extends BaseRoom {
    */
   public function postSave(PropelPDO $con = null)
   {
-    parent::postSave ($con);
-
     if ($this->needConfUpdate)
     {
-      CommandPeer::runDhcpdUpdate ();
-      CommandPeer::runDnsUpdate ();
+       CommandPeer::runDhcpdUpdate ();
+       CommandPeer::runDnsUpdate ();
     }
+
+    return parent::postSave ($con);
   }
 
 } // Room
