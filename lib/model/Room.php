@@ -38,8 +38,9 @@ class Room extends BaseRoom {
    */
   public function preSave(PropelPDO $con = null)
   {
-    $this->needConfUpdate = $this->isColumnModified (RoomPeer::NAME);die;
-    return parent::preSave ($con);
+    parent::preSave ($con);
+
+    $this->needConfUpdate = $this->isColumnModified (RoomPeer::NAME);
   }
 
   /**
