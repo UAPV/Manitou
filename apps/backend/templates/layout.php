@@ -11,7 +11,7 @@
     <?php use_javascript('jquery-1.6.1.min.js') ?>
     <?php include_stylesheets() ?>
     <?php include_javascripts() ?>
-    <link  href="http://fonts.googleapis.com/css?family=Carter+One:regular" rel="stylesheet" type="text/css" >
+    <link  href="https://fonts.googleapis.com/css?family=Carter+One:regular" rel="stylesheet" type="text/css" >
   </head>
   <body>
     <div id="header">
