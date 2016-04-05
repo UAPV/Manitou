@@ -20,6 +20,17 @@
 <script type="text/javascript">
     $(document).ready (function () {
 
+        host = '<?php echo $Host->getProfile(); ?>'
+
+        if(host == '')
+        {
+            $('#noProfile').attr('checked', 'checked');
+            $('#host_profile_id').attr('disabled', true);
+        }
+
+        addressIp = $("#host_ip_address").val();
+        hostname = $('#host_profile_id').val();
+
         $("#host_ip_address").css("border","1 px solid #ccc");
         $("#host_number").css("border","1 px solid #ccc");
         $("#alert").remove();
