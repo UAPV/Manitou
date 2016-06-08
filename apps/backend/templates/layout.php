@@ -19,11 +19,17 @@
       <ul>
         <li><?php echo link_to ('Logs', 'command_list') ?></li>
         <li><?php echo link_to ('Machines', 'host') ?></li>
-        <li><?php echo link_to ('Salles', 'room') ?></li>
-        <li><?php echo link_to ('Profils', 'profile') ?></li>
+        <?php if(sfContext::getInstance()->getUser()->hasCredential('superadmin')) { ?>
+          <li><?php echo link_to ('Salles', 'room') ?></li>
+          <li><?php echo link_to ('Profils', 'profile') ?></li>
+        <?php } ?>
         <li><?php echo link_to ('Serveurs d\'image', 'image_server') ?></li>
         <li><?php echo link_to ('Images', 'image') ?></li>
-        <li><?php echo link_to ('Subnets', 'subnet') ?></li>
+
+        <?php if(sfContext::getInstance()->getUser()->hasCredential('superadmin')) { ?>
+          <li><?php echo link_to ('Subnets', 'subnet') ?></li>
+        <?php } ?>
+
         <li><?php echo link_to ('Fichiers PXE', 'pxe_file') ?></li>
         <li><?php echo link_to ('Conf DHCP', 'dhcpd/index') ?></li>
         <li><?php echo link_to ('Erreurs DNS', 'dns/index') ?></li>
