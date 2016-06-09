@@ -27,11 +27,11 @@
           data = jQuery.parseJSON(data);
           alert(data.message)
 
-          /*if(!data.erreur)
+          if(!data.erreur)
           {
-            url = '<?php //echo url_for("dns/reload") ?>';
+            url = '<?php echo url_for("dns/reload") ?>';
             $(location).attr('href', url);
-          }*/
+          }
         }
       });
     });

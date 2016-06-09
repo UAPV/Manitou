@@ -444,7 +444,7 @@ class hostActions extends autoHostActions
         }
 
         //On relance l'ajout dans le DNS + DHCP
-        CommandPeer::runDnsUpdate();
+        //CommandPeer::runDnsUpdate();
 
         return $this->renderText(json_encode(array('message' => 'Import bien passé !', 'erreur' => false)));
     }
