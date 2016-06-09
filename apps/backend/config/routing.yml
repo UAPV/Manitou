@@ -15,6 +15,14 @@ add_pxe:
   url:    /addPxe
   param:  { module: pxe_file, action: add }
 
+csv_export:
+  url:    /csvExport
+  param:  { module: host, action: export }
+
+csv_import:
+  url:    /csvImport
+  param:  { module: host, action: import }
+
 image_server:
   class: sfPropel15RouteCollection
   options:

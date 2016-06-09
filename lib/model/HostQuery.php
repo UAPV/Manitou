@@ -25,7 +25,12 @@ class HostQuery extends BaseHostQuery {
    */
   public function findByHostname ($hostname)
   {
-    list ($profile, $room, $number) = explode ('-', $hostname);
+    $tmp = explode ('-', $hostname);
+    if(!isset($tmp[2]))
+      list ($profile, $room, $number) = explode ('-', $hostname);
+    else
+      list ($profile, $room, $number) = explode ('-', $hostname);
+
     return $this->filterByNumber($number)
                 ->useProfileQuery()
                   ->filterByName($profile)

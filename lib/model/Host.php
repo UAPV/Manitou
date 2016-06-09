@@ -239,7 +239,7 @@ class Host extends BaseHost {
   {
     parent::postSave ($con);
 
-    if($_SERVER['PATH_INFO'] != "/addPxe")
+    if($_SERVER['PATH_INFO'] != "/addPxe" && $_SERVER['PATH_INFO'] != "/csvImport")
     {
        CommandPeer::runDhcpdUpdate (self::$commentSvn);
 

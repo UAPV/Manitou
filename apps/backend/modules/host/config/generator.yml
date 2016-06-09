@@ -28,6 +28,7 @@ generator:
           _delete:    ~
           restore:    { label: Restaurer une image }
           addPxe:     { label: Modifier la conf PXE }
+          csvExport:  { label: Exporter la sélection (CSV) }
           ping:       { label: Tester le DNS et l\'état des machines }
         object_actions:
           createImage:     { label: Créer une image }

@@ -1,3 +1,37 @@
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#submit').click(function (e) {
+      // On empêche le navigateur de soumettre le formulaire
+      e.preventDefault();
+
+      var data = new FormData();
+      jQuery.each($('#file')[0].files, function(i, file) {
+        data.append('file', file);
+      });
+
+      $.ajax({
+        url: '<?php echo url_for('@csv_import'); ?>',
+        type: "POST",             // Type of request to be send, called as method
+        data: data, // Data sent to server, a set of key/value pairs (i.e. form fields and values)
+        contentType: false,       // The content type used when sending data to the server.
+        cache: false,             // To unable request pages to be cached
+        processData:false,        // To send DOMDocument or non processed data file it is set to false
+        success: function(data)   // A function to be called if request succeeds
+        {
+          data = jQuery.parseJSON(data);
+          alert(data.message)
+
+          /*if(!data.erreur)
+          {
+            url = '<?php echo url_for("dns/reload") ?>';
+            $(location).attr('href', url);
+          }*/
+        }
+      });
+    });
+  })
+</script>
+
 <div>
     Nombre maximum de machines :
     <?php foreach (sfConfig::get('app_const_max_per_page') as $value): ?>
@@ -43,6 +77,7 @@
     </table>
   <?php endif; ?>
 </div>
+
 <script type="text/javascript">
 /* <![CDATA[ */
 function checkAll()

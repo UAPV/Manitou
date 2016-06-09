@@ -270,17 +270,17 @@ class CommandPeer extends BaseCommandPeer {
   */
   public static function runPxeFilesDnsUpdate($host)
   {
-    $path = sfConfig::get('sf_manitou_dns_conf_path');
-		$hostnameDrbl = $host->getSubnet()->getImageServer()->getHostname();
-		$labelDrbl = explode('.',$hostnameDrbl);
+      $path = sfConfig::get('sf_manitou_dns_conf_path');
+      $hostnameDrbl = $host->getSubnet()->getImageServer()->getHostname();
+      $labelDrbl = explode('.', $hostnameDrbl);
 
-    $command = new Command ();
-    $command->setCommand (sfConfig::get('sf_manitou_dns_update_specific_files_command'));
-    $command->setArgument ('conf_path', $path);
-    $command->setArgument ('list_files', $host);
-    $command->setLabel ($labelDrbl[0].' - Modification fichier PXE- Mise à jour des entrées du DNS');
+      $command = new Command ();
+      $command->setCommand(sfConfig::get('sf_manitou_dns_update_specific_files_command'));
+      $command->setArgument('conf_path', $path);
+      $command->setArgument('list_files', $host);
+      $command->setLabel($labelDrbl[0] . ' - Modification fichier PXE- Mise à jour des entrées du DNS');
 
-    return $command->exec ();
+      return $command->exec();
   }
 
  /* public static function getSvnStatus()

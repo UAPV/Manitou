@@ -64,12 +64,21 @@ class hostActions extends autoHostActions
   }
 
  /**
-  * Action appelée par le biais du menu déroulant pour ajouter un fichier PXE sur plusieurs machines en un c  * oup
+  * Action appelée par le biais du menu déroulant pour ajouter un fichier PXE sur plusieurs machines en un coup
   */
   public function executeBatchAddPxe(sfWebRequest $request)
   {
     $ids = $request->getParameter('ids');;
     $this->redirect ($this->getContext()->getRouting()->generate('add_pxe', array ('ids' => $ids)));
+  }
+
+  /**
+   * Action appelée par le biais du menu déroulant pour exporter un CSV avec les machines sélectionnées
+   */
+  public function executeBatchCsvExport(sfWebRequest $request)
+  {
+    $ids = $request->getParameter('ids');
+    $this->redirect ($this->getContext()->getRouting()->generate('csv_export', array ('ids' => $ids)));
   }
 
   public function executeStatus ()
@@ -252,4 +261,190 @@ class hostActions extends autoHostActions
 			$this->getUser()->setFlash('error', 'The item has not been saved due to some errors.', false);
 		}
 	}
+
+    /**
+     * Récupère les ids des hosts passés en paramètres et les écrit dans un CSV
+     */
+    public function executeExport (sfWebRequest $request)
+    {
+        $ids = $request->getParameter ('ids');
+        $hosts = HostQuery::create()->filterById ($ids)->find ();
+        $fp = fopen(sfConfig::get('sf_root_dir').'/web/hosts.csv', 'w');
+        fputcsv($fp, array('Nom','IP','Mac','Subnet','Commentaires', 'LDAP'));
+
+        //Pour chaque machine, on écrit la ligne dans le CSV
+        foreach ($hosts as $host) {
+            $ligne = array($host->getHostname(),$host->getIpAddress(),$host->getMacAddress(),$host->getSubnet(),$host->getComment(), 0);
+            fputcsv($fp, $ligne);
+        }
+
+        fclose($fp);
+
+        header('Content-Type: application/octet-stream');
+        header('Content-disposition: attachment; filename=hosts.csv');
+        header('Pragma: no-cache');
+        header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+        header('Expires: 0');
+        readfile(sfConfig::get('sf_root_dir').'/web/hosts.csv');
+        exit();
+
+        return sfView::NONE;
+    }
+
+    /**
+     * Récupère le fichier importé + ajoute les machines après vérification
+     */
+    public function executeImport (sfWebRequest $request)
+    {
+        $file = $request->getFiles()['file'];
+        $sourcePath = $file['tmp_name'];
+
+        $erreur = false;
+        $row = 1;
+        $salles = RoomQuery::create()->find();
+        foreach($salles as $s)
+            $array['salle'][] = $s->getName();
+
+        $pro = ProfileQuery::create()->find();
+        foreach($pro as $p)
+            $array['profile'][] = $p->getName();
+
+        $sub = SubnetQuery::create()->find();
+        foreach($sub as $su)
+            $array['subnet'][] = $su->getName();
+
+        $message = "--- ERREURS ---\n\r\n\r";
+        if (($handle = fopen($sourcePath, "r")) !== FALSE)
+        {
+            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE)
+            {
+                //On passe la première ligne
+                if($row == 1)
+                {
+                    $nbLignes = count($data);
+                    if($nbLignes < 5)
+                        return $this->renderText(json_encode(array('message' => 'Le CSV donné ne comporte pas les 5 colonnes requises', 'erreur' => true)));
+                    else
+                        $row++;
+                }
+                else
+                {
+                    $row++;
+
+                    //On lit une machine
+                    $nom = $data[0];
+                    $ip = $data[1];
+                    $mac = $data[2];
+                    $subnet = $data[3];
+                    $comm = $data[4];
+                    $ldap = $data[5];
+
+                    // 1 => On teste l'existence du profil
+                    $tmp = explode('-', $nom);
+                    if(!in_array(trim($tmp[0]), $array['profile']))
+                    {
+                        $message .= "Le profil ".trim($tmp[0])." n'existe pas sur la ligne ".$row."\n\r";
+                        $erreur = true;
+                    }
+
+                    // 2 => On teste l'existence de la salle
+                    if(!in_array(trim($tmp[1]), $array['salle']))
+                    {
+                        $message .= "La salle ".trim($tmp[1])." n'existe pas sur la ligne ".$row."\n\r";
+                        $erreur = true;
+                    }
+
+                    // 3 => On teste l'existence du subnet
+                    if(!in_array(trim($subnet), $array['subnet']))
+                    {
+                        $message .= "Le subnet ".trim($subnet)." n'existe pas sur la ligne ".$row."\n\r";
+                        $erreur = true;
+                    }
+
+                    // 4 => On teste la non-existence de l'IP
+                    $host = HostQuery::create()->findOneByIpAddress(trim($ip));
+                    if(count($host) > 0)
+                    {
+                        $message .= "L'IP ".trim($ip)." existe déjà dans la base (ligne ".$row.")"."\n\r";
+                        $erreur = true;
+                    }
+
+                    // 5 => On teste la non-existence de la MAC
+                    $host = HostQuery::create()->findOneByMacAddress(trim($mac));
+                    if(count($host) > 0)
+                    {
+                        $message .= "L'adresse MAC ".trim($mac)." existe déjà dans la base (ligne ".$row.")"."\n\r";
+                        $erreur = true;
+                    }
+
+                    // 6 => On teste la non-existence du hostname
+                    if(isset($tmp[2]))
+                        $host = HostQuery::create()->findByHostname(trim($nom));
+                    else
+                    {
+                        $t = explode('.',$ip);
+                        $host = HostQuery::create()->findByHostname(trim($nom) . '-' .$t[3]);
+                    }
+
+                    if(count($host) > 0)
+                    {
+                        $message .= "Le hostname ".trim($nom)." existe déjà dans la base (ligne ".$row.")"."\n\r";
+                        $erreur = true;
+                    }
+
+                    // 7 => Tout est ok pour ce host, on garde les infos dans le tableau
+                    $profileObj = ProfileQuery::create()->findOneByName(trim($tmp[0]));
+                    $roomObj = RoomQuery::create()->findOneByName(trim($tmp[1]));
+                    $subnetObj = SubnetQuery::create()->findOneByName(trim($subnet));
+
+                    if(!$erreur)
+                    {
+                        if (!isset($tmp[2])) {
+                            $t = explode('.', $ip);
+                            $number = $t[3];
+                        } else
+                            $number = $tmp[2];
+
+                        if($ldap == '1')
+                            $ldap = true;
+                        else
+                            $ldap = false;
+
+                        $dataFinal[] = array('cn' => trim($nom), 'profile_id' => $profileObj->getId(), 'room_id' => $roomObj->getId(), 'number' => trim($number), 'ip_address' => $ip, 'mac_address' => $mac, 'comment' => $comm, 'subnet_id' => $subnetObj->getId(), 'ldap' => $ldap);
+                    }
+                    else
+                        $message .= "\n\r";
+                }
+            }
+
+            // Si on a rencontré une erreur, on affiche les messages d'erreur
+            if($erreur)
+                return $this->renderText(json_encode(array('message' => $message, 'erreur' => true)));
+
+            fclose($handle);
+        }
+
+        // Tout est ok, on ajoute les machines dans la base
+        foreach($dataFinal as $host)
+        {
+            $h = new Host();
+            $h->setProfileId(trim($host['profile_id']));
+            $h->setRoomId(trim($host['room_id']));
+            $h->setNumber(trim($host['number']));
+            $h->setIpAddress(trim($host['ip_address']));
+            $h->setMacAddress(trim($host['mac_address']));
+            $h->setComment(trim($host['comment']));
+            $h->setSubnetId(trim($host['subnet_id']));
+            $h->save();
+
+            //On ajoute la machine dans le LDAP
+            if($host['ldap'])
+                CommandPeer::getLdapCommand('a', $host['cn']);
+        }
+
+        //On relance l'ajout dans le DNS + DHCP
+        CommandPeer::runDnsUpdate();
+
+        return $this->renderText(json_encode(array('message' => 'Import bien passé !', 'erreur' => false)));
+    }
 }
