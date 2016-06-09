@@ -24,16 +24,19 @@
     </ul>
     </form>
   </div>
-  <div style="color: #555;font-weight: bold; border: 1px solid #ddd; background-color: white;padding: 5px; width: 40%; height: 30px;">
-    <span style="rgb(0,​ 0,​ 0);float: left;">Importer des machines en masse</span>
-    <div style="float: right;">
-      <form id="importMasse" method="post">
-        <input  type="file" value="Import en masse" id="file"/>
-        <input type="button" value="Envoyer" id="submit" />
-      </form>
+
+  <?php if(sfContext::getInstance()->getUser()->hasCredential('superadmin')): ?>
+    <div style="color: #555;font-weight: bold; border: 1px solid #ddd; background-color: white;padding: 5px; width: 40%; height: 30px;">
+      <span style="rgb(0,​ 0,​ 0);float: left;">Importer des machines en masse</span>
+      <div style="float: right;">
+        <form id="importMasse" method="post">
+          <input  type="file" value="Import en masse" id="file"/>
+          <input type="button" value="Envoyer" id="submit" />
+        </form>
+      </div>
+      <div style="clear: both;"></div>
     </div>
-    <div style="clear: both;"></div>
-  </div>
+  <?php endif; ?>
 
   <div id="sf_admin_footer">
     <?php include_partial('host/list_footer', array('pager' => $pager)) ?>
