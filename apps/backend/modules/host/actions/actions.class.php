@@ -303,15 +303,15 @@ class hostActions extends autoHostActions
         $row = 1;
         $salles = RoomQuery::create()->find();
         foreach($salles as $s)
-            $array['salle'][] = $s->getName();
+            $array['salle'][] = trim($s->getName());
 
         $pro = ProfileQuery::create()->find();
         foreach($pro as $p)
-            $array['profile'][] = $p->getName();
+            $array['profile'][] = trim($p->getName());
 
         $sub = SubnetQuery::create()->find();
         foreach($sub as $su)
-            $array['subnet'][] = $su->getName();
+            $array['subnet'][] = trim($su->getName());
 
         $message = "--- ERREURS ---\n\r\n\r";
         if (($handle = fopen($sourcePath, "r")) !== FALSE)
