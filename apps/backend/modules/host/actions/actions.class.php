@@ -322,8 +322,8 @@ class hostActions extends autoHostActions
                 if($row == 1)
                 {
                     $nbLignes = count($data);
-                    if($nbLignes < 5)
-                        return $this->renderText(json_encode(array('message' => 'Le CSV donné ne comporte pas les 5 colonnes requises', 'erreur' => true)));
+                    if($nbLignes < 6)
+                        return $this->renderText(json_encode(array('message' => 'Le CSV donné ne comporte pas les 6 colonnes requises', 'erreur' => true)));
                     else
                         $row++;
                 }
