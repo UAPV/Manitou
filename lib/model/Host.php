@@ -239,7 +239,8 @@ class Host extends BaseHost {
   {
     parent::postSave ($con);
 
-    if($_SERVER['PATH_INFO'] != "/addPxe" && $_SERVER['PATH_INFO'] != "/csvImport")
+    $url = sfContext::getInstance()->getRouting()->getCurrentInternalUri();
+    if($_SERVER['PATH_INFO'] != "/addPxe" && $url != "host/import")
     {
        CommandPeer::runDhcpdUpdate (self::$commentSvn);
 

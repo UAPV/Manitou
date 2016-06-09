@@ -339,6 +339,7 @@ class hostActions extends autoHostActions
                     $comm = $data[4];
                     $ldap = $data[5];
 
+                    echo "on cherche le subnet ".$subnet;
                     // 1 => On teste l'existence du profil
                     $tmp = explode('-', $nom);
                     if(!in_array(trim($tmp[0]), $array['profile']))
