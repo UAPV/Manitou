@@ -9,6 +9,11 @@
         data.append('file', file);
       });
 
+      $.loader({
+        className:"blue-with-image",
+        content:'<p style="margin-top: -20px;color: #4C4741;"><b>Traitement en cours ...</b></p>'
+      });
+
       $.ajax({
         url: '<?php echo url_for('@csv_import'); ?>',
         type: "POST",             // Type of request to be send, called as method
@@ -18,12 +23,13 @@
         processData:false,        // To send DOMDocument or non processed data file it is set to false
         success: function(data)   // A function to be called if request succeeds
         {
+          $.loader('close');
           data = jQuery.parseJSON(data);
           alert(data.message)
 
           /*if(!data.erreur)
           {
-            url = '<?php echo url_for("dns/reload") ?>';
+            url = '<?php //echo url_for("dns/reload") ?>';
             $(location).attr('href', url);
           }*/
         }
