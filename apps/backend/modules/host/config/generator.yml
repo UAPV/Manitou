@@ -14,7 +14,7 @@ generator:
     config:
       actions: ~
       fields:
-        hostname:          { label: Nom }
+        hostname:          { label: Nom, is_real: true }
         ip_address:        { label: Adresse Ip }
         mac_address:       { label: Adresse Mac }
         subnet:            { label: Subnet }
@@ -24,6 +24,7 @@ generator:
       list:
         title: Gestion des machines
         display: [=hostname, ip_address, mac_address, subnet, pxe]
+        sort: [=hostname]
         batch_actions:
           _delete:    ~
           restore:    { label: Restaurer une image }

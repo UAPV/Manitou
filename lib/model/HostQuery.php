@@ -41,6 +41,18 @@ class HostQuery extends BaseHostQuery {
                 ->findOne();
   }
 
+    public function orderByHostname ($order)
+    {
+        return $this->useProfileQuery()
+                        ->orderByName($order)
+                    ->endUse()
+                    ->useRoomQuery()
+                        ->orderByName($order)
+                    ->endUse()
+                    ->orderByNumber()
+                ->find();
+    }
+
   public function filterByContain ($query)
   {
       return $this->joinProfile()
