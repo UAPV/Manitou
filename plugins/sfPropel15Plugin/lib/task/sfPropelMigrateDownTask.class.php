@@ -41,7 +41,7 @@ class sfPropelMigrateDownTask extends sfPropelBaseTask
     $this->detailedDescription = <<<EOF
 The [propel:up|INFO] checks the version of the database structure, and looks for migration files already executed (i.e. with a lower version timestamp). The last executed migration found is reversed.
 
-The task reads the database connection settings in [config/databases.yml|COMMENT].
+The task reads the database connection settings in [config/databases-dev.yml|COMMENT].
 
 The task looks for migration classes in [lib/model/migration|COMMENT].
 EOF;

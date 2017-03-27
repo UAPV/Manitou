@@ -52,7 +52,7 @@ them as arguments:
 
   [./symfony propel:data-load data/fixtures/dev data/fixtures/users.yml|INFO]
 
-The task use the [propel|COMMENT] connection as defined in [config/databases.yml|COMMENT].
+The task use the [propel|COMMENT] connection as defined in [config/databases-dev.yml|COMMENT].
 You can use another connection by using the [--connection|COMMENT] option:
 
   [./symfony propel:data-load --connection="name"|INFO]

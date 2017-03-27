@@ -50,7 +50,7 @@ available schemas. If there is a difference, it creates a migration file:
 
   [./symfony propel:diff|INFO]
 
-The task reads the database connection settings in [config/databases.yml|COMMENT].
+The task reads the database connection settings in [config/databases-dev.yml|COMMENT].
 
 The task reads the schema information in [config/*schema.xml|COMMENT] and/or
 [config/*schema.yml|COMMENT] from the project and all installed plugins.
