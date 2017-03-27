@@ -53,7 +53,7 @@ option:
 
   [./symfony propel:insert-sql --no-confirmation|INFO]
 
-The task read the database configuration from `databases.yml`.
+The task read the database configuration from `databases-dev.yml`.
 You can use a specific application/environment by passing
 an [--application|INFO] or [--env|INFO] option.
 

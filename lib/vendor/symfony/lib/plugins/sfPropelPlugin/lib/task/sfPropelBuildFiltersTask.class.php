@@ -45,7 +45,7 @@ The [propel:build-filters|INFO] task creates filter form classes from the schema
 The task read the schema information in [config/*schema.xml|COMMENT] and/or
 [config/*schema.yml|COMMENT] from the project and all installed plugins.
 
-The task use the [propel|COMMENT] connection as defined in [config/databases.yml|COMMENT].
+The task use the [propel|COMMENT] connection as defined in [config/databases-dev.yml|COMMENT].
 You can use another connection by using the [--connection|COMMENT] option:
 
   [./symfony propel:build-filters --connection="name"|INFO]

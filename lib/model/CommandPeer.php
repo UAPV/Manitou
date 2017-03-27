@@ -142,7 +142,7 @@ class CommandPeer extends BaseCommandPeer {
   {
     $command = new Command ();
     $command->setCommand (sfConfig::get('sf_manitou_dns_pre_update_command'));
-    $command->setArgument ('conf_path', sfConfig::get('sf_manitou_dns_conf_path'));
+    $command->setArgument ('conf_path', sfConfig::get('app_svn_pathDns'));
     $command->setLabel ('Mise à jour des fichiers de conf du DNS');
 
     return $command->exec (false); // obligé d'attendre le retour de la commande pour que le svn commit
@@ -161,7 +161,7 @@ class CommandPeer extends BaseCommandPeer {
   public static function runDnsUpdate ($host = null, $otherFiles = null, $comment = null, $other = null)
   {
     self::runDnsPreUpdate();
-    $path = sfConfig::get('sf_manitou_dns_conf_path');
+    $path = sfConfig::get('app_svn_path');
 
     //si le filesHost n'est pas nul et qu'un tableau de hosts est passé en parametre (plusieurs hosts touchées par une même action)
     if($host != null && is_array($host))
@@ -225,7 +225,6 @@ class CommandPeer extends BaseCommandPeer {
         }
     }
 
-
     //on récupère les hosts modifiés
     $hosts = HostQuery::create()->withColumn('INET_ATON(Host.IpAddress)','a')->orderBy('a','asc')->find ();
     $arrayFilesToChange = array_unique($arrayFilesToChange);
@@ -239,9 +238,12 @@ class CommandPeer extends BaseCommandPeer {
 
     $dnsConf->apply ($path, $arrayFilesToChange);
 
+    error_log('path pour le dns : '.$path);
     $command = new Command ();
     $command->setCommand (sfConfig::get('sf_manitou_dns_update_command'));
     $command->setArgument ('conf_path', $path);
+    $command->setArgument('user_svn', sfConfig::get('app_svn_user'));
+    $command->setArgument('user_mdp',sfConfig::get('app_svn_mdp'));
     $command->setArgument ('user_name', sfContext::getInstance()->getUser()->getProfileVar('displayname') );
 
 		if(isset($comment))

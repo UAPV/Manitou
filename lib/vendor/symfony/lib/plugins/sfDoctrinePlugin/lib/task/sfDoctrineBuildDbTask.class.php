@@ -43,7 +43,7 @@ class sfDoctrineBuildDbTask extends sfDoctrineBaseTask
 
     $this->detailedDescription = <<<EOF
 The [doctrine:build-db|INFO] task creates one or more databases based on
-configuration in [config/databases.yml|COMMENT]:
+configuration in [config/databases-dev.yml|COMMENT]:
 
   [./symfony doctrine:build-db|INFO]
 

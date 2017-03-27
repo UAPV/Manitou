@@ -20,5 +20,9 @@ class myUser extends uapvBasicSecurityUser
     if (in_array($this->getProfileVar ('uid'), array('juanedam', 'charpenm', 'tranv', 'marcelf'))) {
       $this->addCredential('infra');
     }
+
+    if (in_array($this->getProfileVar ('uid'), array('juanedam', 'charpenm', 'charpinj', 'marcelf'))) {
+      $this->addCredential('superadmin');
+    }
   }
 }

@@ -242,7 +242,7 @@ class Host extends BaseHost {
     $url = sfContext::getInstance()->getRouting()->getCurrentInternalUri();
     if($_SERVER['PATH_INFO'] != "/addPxe" && $url != "host/import")
     {
-       CommandPeer::runDhcpdUpdate (self::$commentSvn);
+       //CommandPeer::runDhcpdUpdate (self::$commentSvn);
 
       // Mise à jour du DNS si nécessaire
       if ($this->needDnsUpdate === true)

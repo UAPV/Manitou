@@ -41,7 +41,7 @@ The [doctrine:build-sql|INFO] task creates SQL statements for table creation:
 
   [./symfony doctrine:build-sql|INFO]
 
-The generated SQL is optimized for the database configured in [config/databases.yml|COMMENT]:
+The generated SQL is optimized for the database configured in [config/databases-dev.yml|COMMENT]:
 
   [doctrine.database = mysql|INFO]
 EOF;

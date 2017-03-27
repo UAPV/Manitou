@@ -43,7 +43,7 @@ class sfDoctrineDropDbTask extends sfDoctrineBaseTask
 
     $this->detailedDescription = <<<EOF
 The [doctrine:drop-db|INFO] task drops one or more databases based on
-configuration in [config/databases.yml|COMMENT]:
+configuration in [config/databases-dev.yml|COMMENT]:
 
   [./symfony doctrine:drop-db|INFO]
 

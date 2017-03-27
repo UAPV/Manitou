@@ -11,5 +11,6 @@ class ImageServerForm extends BaseImageServerForm
 {
   public function configure()
   {
+
   }
 }

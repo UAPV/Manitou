@@ -56,7 +56,7 @@ The task will dump data in [data/fixtures/%target%|COMMENT]
 The dump file is in the YML format and can be re-imported by using
 the [propel:data-load|INFO] task.
 
-By default, the task use the [propel|COMMENT] connection as defined in [config/databases.yml|COMMENT].
+By default, the task use the [propel|COMMENT] connection as defined in [config/databases-dev.yml|COMMENT].
 You can use another connection by using the [connection|COMMENT] option:
 
   [./symfony propel:data-dump --connection="name"|INFO]
