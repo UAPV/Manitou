@@ -23,8 +23,6 @@
           <li><?php echo link_to ('Salles', 'room') ?></li>
           <li><?php echo link_to ('Profils', 'profile') ?></li>
         <?php } ?>
-        <li><?php echo link_to ('Serveurs d\'image', 'image_server') ?></li>
-        <li><?php echo link_to ('Images', 'image') ?></li>
 
         <?php if(sfContext::getInstance()->getUser()->hasCredential('superadmin')) { ?>
           <li><?php echo link_to ('Subnets', 'subnet') ?></li>
